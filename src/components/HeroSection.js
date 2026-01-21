@@ -1,28 +1,8 @@
+// Hero Section - Passt sich dem jeweiligen Theme an
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
+import { themes, isDarkTheme } from '../themes/themeDefinitions';
 
-const HeroSection = () => {
-  return (
-    <Container>
-      <BackgroundDecoration />
-      <Content>
-        <Badge>Coming Soon</Badge>
-        <Logo>S&I.</Logo>
-        <Tagline>
-          Digitale Hochzeitseinladungen, die so einzigartig sind wie eure Liebe
-        </Tagline>
-      </Content>
-      <ScrollIndicator>
-        Scroll
-        <span>↓</span>
-      </ScrollIndicator>
-    </Container>
-  );
-};
-
-export default HeroSection;
-
-// Animations
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
@@ -30,166 +10,255 @@ const fadeIn = keyframes`
 
 const float = keyframes`
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-15px); }
 `;
+
+const shimmer = keyframes`
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+`;
+
+const HeroSection = ({ currentTheme }) => {
+  const theme = themes[currentTheme];
+  const isDark = isDarkTheme(currentTheme);
+
+  return (
+    <Section $theme={currentTheme} $bg={theme.colors.bgGradient}>
+      <BackgroundDecor $theme={currentTheme} />
+      <Container>
+        <Badge $theme={currentTheme} $isDark={isDark}>Coming Soon</Badge>
+        <Logo $theme={currentTheme}>S&I.</Logo>
+        <Tagline $theme={currentTheme} $isDark={isDark}>
+          Digitale Hochzeitseinladungen, 
+          <br />
+          <span>die so einzigartig sind wie eure Liebe</span>
+        </Tagline>
+        <ScrollHint $isDark={isDark}>
+          <span>Scroll</span>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 4V16M10 16L5 11M10 16L15 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+          </svg>
+        </ScrollHint>
+      </Container>
+    </Section>
+  );
+};
+
+export default HeroSection;
 
 // Styles
-const Container = styled.section`
+const Section = styled.section`
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  padding: 6rem 2rem 4rem;
-  text-align: center;
+  justify-content: center;
   position: relative;
   overflow: hidden;
+  background: ${p => p.$bg};
+  padding: 100px 5%;
 `;
 
-const BackgroundDecoration = styled.div`
+const BackgroundDecor = styled.div`
   position: absolute;
   inset: 0;
   pointer-events: none;
-  overflow: hidden;
   
-  ${props => {
-    const style = props.theme.style;
-    if (style === 'cyberpunk') {
-      return `
-        &::before {
-          content: '';
-          position: absolute;
-          top: 20%;
-          left: -10%;
-          width: 50%;
-          height: 60%;
-          background: radial-gradient(ellipse, rgba(255,0,255,0.15) 0%, transparent 70%);
-        }
-        &::after {
-          content: '';
-          position: absolute;
-          bottom: 10%;
-          right: -10%;
-          width: 50%;
-          height: 60%;
-          background: radial-gradient(ellipse, rgba(0,255,255,0.15) 0%, transparent 70%);
-        }
-      `;
+  ${p => p.$theme === 'neon' && css`
+    background-image: 
+      linear-gradient(rgba(0,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    
+    &::before, &::after {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.12;
     }
-    if (style === 'luxury' || style === 'opulent') {
-      return `
-        &::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: radial-gradient(ellipse at center, rgba(201,169,98,0.05) 0%, transparent 60%);
-        }
-      `;
+    &::before { background: #00ffff; top: 10%; left: 10%; }
+    &::after { background: #ff00ff; bottom: 10%; right: 10%; }
+  `}
+  
+  ${p => (p.$theme === 'gold' || p.$theme === 'luxe') && css`
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(212,175,55,0.05) 0%, transparent 60%);
     }
-    if (style === 'organic') {
-      return `
-        &::before {
-          content: '🌿';
-          position: absolute;
-          font-size: 15rem;
-          opacity: 0.05;
-          top: 10%;
-          left: -5%;
-          transform: rotate(-30deg);
-        }
-        &::after {
-          content: '🌿';
-          position: absolute;
-          font-size: 12rem;
-          opacity: 0.05;
-          bottom: 10%;
-          right: -5%;
-          transform: rotate(30deg) scaleX(-1);
-        }
-      `;
+  `}
+  
+  ${p => p.$theme === 'botanical' && css`
+    &::before, &::after {
+      content: '🌿';
+      position: absolute;
+      font-size: 12rem;
+      opacity: 0.05;
     }
-    return '';
-  }}
+    &::before { top: 5%; left: -3%; transform: rotate(-30deg); }
+    &::after { bottom: 5%; right: -3%; transform: rotate(30deg) scaleX(-1); }
+  `}
 `;
 
-const Content = styled.div`
+const Container = styled.div`
   max-width: 900px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-  animation: ${fadeIn} 1s ease-out;
+  text-align: center;
   position: relative;
   z-index: 1;
+  animation: ${fadeIn} 1s ease-out;
 `;
 
 const Badge = styled.span`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1.25rem;
-  font-family: ${props => props.theme.fonts.body};
-  font-size: 0.8rem;
-  font-weight: 500;
+  display: inline-block;
+  padding: 10px 24px;
+  margin-bottom: 30px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-  border: 1px solid ${props => props.theme.colors.primary}60;
-  border-radius: ${props => props.theme.style === 'modern' ? '100px' : props.theme.borderRadius};
-  color: ${props => props.theme.colors.primary};
-  background: ${props => props.theme.colors.primary}10;
-  animation: ${float} 3s ease-in-out infinite;
+  animation: ${float} 4s ease-in-out infinite;
+  
+  ${p => p.$theme === 'editorial' && css`
+    font-family: 'Inter', sans-serif;
+    border: 1px solid #E0E0E0;
+    color: #666;
+    background: #fff;
+  `}
+  
+  ${p => p.$theme === 'gold' && css`
+    font-family: 'Montserrat', sans-serif;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    color: #D4AF37;
+    background: rgba(212, 175, 55, 0.05);
+  `}
+  
+  ${p => p.$theme === 'botanical' && css`
+    font-family: 'Lato', sans-serif;
+    border: 1px solid rgba(139, 157, 131, 0.4);
+    color: #8B9D83;
+    background: rgba(139, 157, 131, 0.1);
+    border-radius: 50px;
+  `}
+  
+  ${p => p.$theme === 'contemporary' && css`
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    border: 2px solid #0D0D0D;
+    color: #0D0D0D;
+    background: #FFE66D;
+  `}
+  
+  ${p => p.$theme === 'luxe' && css`
+    font-family: 'Montserrat', sans-serif;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: #D4AF37;
+    letter-spacing: 0.4em;
+  `}
+  
+  ${p => p.$theme === 'neon' && css`
+    font-family: 'Space Grotesk', sans-serif;
+    border: 1px solid rgba(255, 0, 255, 0.4);
+    color: #ff00ff;
+    background: rgba(255, 0, 255, 0.05);
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+  `}
 `;
 
 const Logo = styled.h1`
-  font-family: ${props => props.theme.fonts.heading};
-  font-size: clamp(3rem, 12vw, 8rem);
+  font-size: clamp(4rem, 15vw, 10rem);
   font-weight: 700;
-  font-style: normal;
-  letter-spacing: -0.02em;
   line-height: 1;
-  color: ${props => props.theme.colors.primary};
-  text-shadow: ${props => props.theme.colors.glow};
+  margin-bottom: 30px;
   
-  ${props => props.theme.style === 'cyberpunk' && `
-    background: linear-gradient(180deg, #FF00FF 0%, #00FFFF 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 30px rgba(255,0,255,0.5));
+  ${p => p.$theme === 'editorial' && css`
+    font-family: 'Instrument Serif', Georgia, serif;
+    color: #1A1A1A;
   `}
   
-  ${props => (props.theme.style === 'luxury' || props.theme.style === 'opulent') && `
-    background: linear-gradient(90deg, #8B7355 0%, #C9A962 25%, #F5E6C8 50%, #C9A962 75%, #8B7355 100%);
-    background-size: 200% auto;
+  ${p => p.$theme === 'gold' && css`
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    background: linear-gradient(90deg, #B8960C, #D4AF37, #F5E6C8, #D4AF37, #B8960C);
+    background-size: 200% 100%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    animation: ${shimmer} 4s linear infinite;
+  `}
+  
+  ${p => p.$theme === 'botanical' && css`
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #2D3B2D;
+  `}
+  
+  ${p => p.$theme === 'contemporary' && css`
+    font-family: 'Space Grotesk', sans-serif;
+    color: #0D0D0D;
+  `}
+  
+  ${p => p.$theme === 'luxe' && css`
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 400;
+    font-style: italic;
+    background: linear-gradient(180deg, #FFFFFF, #D4AF37);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  `}
+  
+  ${p => p.$theme === 'neon' && css`
+    font-family: 'Space Grotesk', sans-serif;
+    color: #00ffff;
+    text-shadow: 0 0 30px rgba(0, 255, 255, 0.5), 0 0 60px rgba(0, 255, 255, 0.3);
   `}
 `;
 
 const Tagline = styled.p`
-  font-family: ${props => props.theme.fonts.body};
-  font-size: clamp(1rem, 2.5vw, 1.5rem);
-  font-style: ${props => ['luxury', 'magazine', 'organic'].includes(props.theme.style) ? 'italic' : 'normal'};
-  color: ${props => props.theme.colors.textMuted};
-  max-width: 600px;
-  line-height: 1.6;
+  font-size: clamp(1rem, 2.5vw, 1.35rem);
+  line-height: 1.7;
+  margin-bottom: 60px;
+  color: ${p => p.$isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.6)'};
+  
+  ${p => p.$theme === 'editorial' && css`
+    font-family: 'Inter', sans-serif;
+    span { font-style: italic; }
+  `}
+  
+  ${p => p.$theme === 'gold' && css`
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  `}
+  
+  ${p => p.$theme === 'botanical' && css`
+    font-family: 'Lato', sans-serif;
+    span { font-style: italic; color: #8B9D83; }
+  `}
+  
+  ${p => p.$theme === 'contemporary' && css`
+    font-family: 'Space Grotesk', sans-serif;
+    span { color: #FF6B6B; font-weight: 600; }
+  `}
+  
+  ${p => p.$theme === 'luxe' && css`
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  `}
+  
+  ${p => p.$theme === 'neon' && css`
+    font-family: 'Space Grotesk', sans-serif;
+    span { color: #ff00ff; }
+  `}
 `;
 
-const ScrollIndicator = styled.div`
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
+const ScrollHint = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  color: ${props => props.theme.colors.textMuted};
-  font-family: ${props => props.theme.fonts.body};
+  gap: 8px;
+  color: ${p => p.$isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)'};
   font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  animation: ${float} 2s ease-in-out infinite;
-  
-  span {
-    font-size: 1.25rem;
-  }
+  letter-spacing: 0.15em;
+  animation: ${float} 3s ease-in-out infinite;
 `;

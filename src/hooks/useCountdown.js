@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 
-export const useCountdown = (targetDate) => {
+// LAUNCH DATE: 1. Oktober 2026
+const TARGET_DATE = '2026-10-01T00:00:00';
+
+export const useCountdown = (targetDate = TARGET_DATE) => {
   const calculateTimeLeft = useCallback(() => {
     const difference = new Date(targetDate) - new Date();
     
@@ -30,7 +33,5 @@ export const useCountdown = (targetDate) => {
   return timeLeft;
 };
 
-// Format number with leading zero
 export const formatNumber = (num) => String(num).padStart(2, '0');
-
 export default useCountdown;

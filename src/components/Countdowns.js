@@ -1,774 +1,984 @@
+// Countdown Komponenten - EXAKT wie in den Wedding Website Themes
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { useCountdown, formatNumber } from '../hooks/useCountdown';
 
-const TARGET_DATE = '2026-01-01T00:00:00';
-
 // ============================================
-// NEON COUNTDOWN - Cyberpunk Style
+// SHARED KEYFRAMES
 // ============================================
-const flicker = keyframes`
-  0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
-    opacity: 1;
-  }
-  20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
-    opacity: 0.4;
-  }
+const fadeInUp = keyframes`
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 `;
 
-const pulse = keyframes`
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-`;
-
-export const NeonCountdown = () => {
-  const timeLeft = useCountdown(TARGET_DATE);
-  
-  return (
-    <NeonContainer>
-      <NeonTitle>System Launch In</NeonTitle>
-      <NeonWrapper>
-        {[
-          { val: timeLeft.days, label: 'Days' },
-          { val: timeLeft.hours, label: 'Hours' },
-          { val: timeLeft.minutes, label: 'Minutes' },
-          { val: timeLeft.seconds, label: 'Seconds' }
-        ].map((item, i) => (
-          <React.Fragment key={i}>
-            <NeonUnit>
-              <NeonNumber>{formatNumber(item.val)}</NeonNumber>
-              <NeonLabel>{item.label}</NeonLabel>
-            </NeonUnit>
-            {i < 3 && <NeonSeparator>:</NeonSeparator>}
-          </React.Fragment>
-        ))}
-      </NeonWrapper>
-    </NeonContainer>
-  );
-};
-
-const NeonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-  padding: 3rem 2rem;
-`;
-
-const NeonTitle = styled.h2`
-  font-family: 'Orbitron', sans-serif;
-  font-size: clamp(1rem, 3vw, 1.5rem);
-  text-transform: uppercase;
-  letter-spacing: 0.5em;
-  color: #00FFFF;
-  animation: ${pulse} 2s ease-in-out infinite;
-`;
-
-const NeonWrapper = styled.div`
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
-  
-  @media (min-width: 768px) {
-    gap: 2rem;
-  }
-`;
-
-const NeonUnit = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const NeonNumber = styled.span`
-  font-family: 'Orbitron', sans-serif;
-  font-size: clamp(3rem, 8vw, 6rem);
-  font-weight: 900;
-  background: linear-gradient(180deg, #FF00FF 0%, #00FFFF 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 20px rgba(255, 0, 255, 0.8));
-  animation: ${flicker} 4s linear infinite;
-`;
-
-const NeonLabel = styled.span`
-  font-family: 'Rajdhani', sans-serif;
-  font-size: clamp(0.7rem, 2vw, 1rem);
-  text-transform: uppercase;
-  letter-spacing: 0.3em;
-  color: #00FFFF;
-  margin-top: 0.5rem;
-`;
-
-const NeonSeparator = styled.span`
-  font-family: 'Orbitron', sans-serif;
-  font-size: clamp(3rem, 8vw, 6rem);
-  color: #FFFF00;
-  animation: ${pulse} 1s ease-in-out infinite;
-  align-self: flex-start;
-`;
-
-// ============================================
-// LUXE COUNTDOWN - Elegant Gold Style
-// ============================================
 const shimmer = keyframes`
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
 `;
 
-export const LuxeCountdown = () => {
-  const timeLeft = useCountdown(TARGET_DATE);
-  
-  return (
-    <LuxeContainer>
-      <LuxeOrnament>✦</LuxeOrnament>
-      <LuxeTitle>The Wait Begins</LuxeTitle>
-      <LuxeWrapper>
-        {[
-          { val: timeLeft.days, label: 'Days' },
-          { val: timeLeft.hours, label: 'Hours' },
-          { val: timeLeft.minutes, label: 'Minutes' },
-          { val: timeLeft.seconds, label: 'Seconds' }
-        ].map((item, i) => (
-          <LuxeUnit key={i} $index={i}>
-            <LuxeNumber>{formatNumber(item.val)}</LuxeNumber>
-            <LuxeLabel>{item.label}</LuxeLabel>
-          </LuxeUnit>
-        ))}
-      </LuxeWrapper>
-      <LuxeDate>January 1st, 2026</LuxeDate>
-      <LuxeOrnament>✦</LuxeOrnament>
-    </LuxeContainer>
-  );
-};
-
-const LuxeContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-  padding: 4rem 2rem;
+const goldPulse = keyframes`
+  0%, 100% { border-color: rgba(212, 175, 55, 0.2); }
+  50% { border-color: rgba(212, 175, 55, 0.5); }
 `;
 
-const LuxeOrnament = styled.div`
-  color: #C9A962;
-  font-size: 1rem;
-  letter-spacing: 1rem;
+const pulse = keyframes`
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
 `;
 
-const LuxeTitle = styled.h2`
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.4em;
-  color: rgba(245, 245, 245, 0.6);
-`;
-
-const LuxeWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-`;
-
-const LuxeUnit = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 clamp(1rem, 4vw, 3rem);
-  position: relative;
-  
-  &:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 20%;
-    height: 60%;
-    width: 1px;
-    background: linear-gradient(180deg, transparent, rgba(201, 169, 98, 0.3), transparent);
+const neonFlicker = keyframes`
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    text-shadow: 0 0 10px rgba(0,255,255,0.8), 0 0 20px rgba(0,255,255,0.5), 0 0 40px rgba(0,255,255,0.3);
+  }
+  20%, 24%, 55% {
+    text-shadow: none;
   }
 `;
 
-const LuxeNumber = styled.span`
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(3.5rem, 10vw, 7rem);
-  font-weight: 400;
-  font-style: italic;
-  background: linear-gradient(90deg, #8B7355 0%, #C9A962 25%, #F5E6C8 50%, #C9A962 75%, #8B7355 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: ${shimmer} 4s linear infinite;
-  line-height: 1;
+const holographicShift = keyframes`
+  0%, 100% { 
+    text-shadow: 0 0 10px rgba(0,255,255,0.8), 0 0 20px rgba(0,255,255,0.5);
+  }
+  50% { 
+    text-shadow: 0 0 20px rgba(255,0,255,0.8), 0 0 40px rgba(255,0,255,0.5);
+  }
 `;
 
-const LuxeLabel = styled.span`
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+// ============================================
+// EDITORIAL COUNTDOWN
+// Instrument Serif + Inter, Schwarz/Weiß, Clean minimal boxes
+// ============================================
+const EditorialSection = styled.section`
+  padding: 120px 5%;
+  background: #FFFFFF;
+  text-align: center;
+`;
+
+const EditorialContainer = styled.div`
+  max-width: 1000px;
+  margin: 0 auto;
+`;
+
+const EditorialEyebrow = styled.div`
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  letter-spacing: 0.4em;
-  color: rgba(201, 169, 98, 0.7);
-  margin-top: 1rem;
+  color: #999;
+  margin-bottom: 20px;
 `;
 
-const LuxeDate = styled.p`
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1rem, 2vw, 1.25rem);
+const EditorialTitle = styled.h2`
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 400;
+  color: #1A1A1A;
+  margin-bottom: 60px;
+  
+  span {
+    font-style: italic;
+  }
+`;
+
+const EditorialGrid = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-bottom: 50px;
+`;
+
+const EditorialUnit = styled.div`
+  opacity: 0;
+  animation: ${fadeInUp} 0.6s ease forwards;
+  animation-delay: ${p => p.$delay}s;
+`;
+
+const EditorialBox = styled.div`
+  min-width: 120px;
+  padding: 35px 30px;
+  border: 1px solid #E0E0E0;
+  background: #FFFFFF;
+  
+  @media (max-width: 600px) {
+    min-width: 80px;
+    padding: 25px 20px;
+  }
+`;
+
+const EditorialNumber = styled.span`
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: clamp(3rem, 8vw, 5rem);
   font-style: italic;
-  color: rgba(245, 245, 245, 0.4);
+  color: #1A1A1A;
+  line-height: 1;
+  display: block;
 `;
 
-// ============================================
-// BOTANICAL COUNTDOWN - Organic Style
-// ============================================
-export const BotanicalCountdown = () => {
-  const timeLeft = useCountdown(TARGET_DATE);
+const EditorialLabel = styled.span`
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #999;
+  margin-top: 15px;
+  display: block;
+`;
+
+const EditorialDate = styled.p`
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #666;
+`;
+
+export const EditorialCountdown = () => {
+  const time = useCountdown();
+  const units = [
+    { value: time.days, label: 'Tage' },
+    { value: time.hours, label: 'Stunden' },
+    { value: time.minutes, label: 'Minuten' },
+    { value: time.seconds, label: 'Sekunden' },
+  ];
   
   return (
-    <BotanicalContainer>
-      <BotanicalDecor>🌿 ✿ 🌿</BotanicalDecor>
-      <BotanicalTitle>
-        A new chapter blooms
-        <span>Launching Soon</span>
-      </BotanicalTitle>
-      <BotanicalWrapper>
-        {[
-          { val: timeLeft.days, label: 'days' },
-          { val: timeLeft.hours, label: 'hours' },
-          { val: timeLeft.minutes, label: 'minutes' },
-          { val: timeLeft.seconds, label: 'seconds' }
-        ].map((item, i) => (
-          <BotanicalUnit key={i}>
-            <BotanicalCircle>
-              <BotanicalNumber>{formatNumber(item.val)}</BotanicalNumber>
-            </BotanicalCircle>
-            <BotanicalLabel>{item.label}</BotanicalLabel>
-          </BotanicalUnit>
-        ))}
-      </BotanicalWrapper>
-      <BotanicalBanner>
-        <span>🌱</span>
-        <span>1. Januar 2026</span>
-        <span>🌱</span>
-      </BotanicalBanner>
-    </BotanicalContainer>
+    <EditorialSection>
+      <EditorialContainer>
+        <EditorialEyebrow>Coming Soon</EditorialEyebrow>
+        <EditorialTitle>Der große <span>Tag</span> naht</EditorialTitle>
+        <EditorialGrid>
+          {units.map((unit, i) => (
+            <EditorialUnit key={i} $delay={i * 0.1}>
+              <EditorialBox>
+                <EditorialNumber>{formatNumber(unit.value)}</EditorialNumber>
+              </EditorialBox>
+              <EditorialLabel>{unit.label}</EditorialLabel>
+            </EditorialUnit>
+          ))}
+        </EditorialGrid>
+        <EditorialDate>1. Oktober 2026</EditorialDate>
+      </EditorialContainer>
+    </EditorialSection>
   );
 };
 
-const BotanicalContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2.5rem;
-  padding: 4rem 2rem;
+// ============================================
+// GOLD COUNTDOWN
+// Cormorant Garamond + Montserrat, Gold gradient shimmer, Flip cards
+// ============================================
+const GoldSection = styled.section`
+  padding: 120px 5%;
+  background: linear-gradient(180deg, #0A0A0A 0%, #151510 100%);
+  text-align: center;
+  position: relative;
 `;
 
-const BotanicalDecor = styled.div`
-  font-size: 1.5rem;
-  color: #2D5A3D;
+const GoldContainer = styled.div`
+  max-width: 1000px;
+  margin: 0 auto;
+`;
+
+const GoldDivider = styled.div`
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+  margin: 0 auto 30px;
+  position: relative;
+
+  &::before {
+    content: '◆';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #D4AF37;
+    font-size: 8px;
+    background: #0A0A0A;
+    padding: 0 10px;
+  }
+`;
+
+const GoldEyebrow = styled.div`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: #D4AF37;
+  margin-bottom: 20px;
+`;
+
+const GoldTitle = styled.h2`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 300;
+  color: #FFFFFF;
+  margin-bottom: 60px;
+  
+  span {
+    background: linear-gradient(90deg, #B8960C, #D4AF37, #F5E6C8, #D4AF37, #B8960C);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: ${shimmer} 4s linear infinite;
+  }
+`;
+
+const GoldGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  max-width: 900px;
+  margin: 0 auto 50px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 400px;
+  }
+`;
+
+const GoldUnit = styled.div`
+  opacity: 0;
+  animation: ${fadeInUp} 0.8s ease forwards;
+  animation-delay: ${p => p.$delay}s;
+`;
+
+const GoldBox = styled.div`
+  position: relative;
+  background: linear-gradient(180deg, #1A1A1A 0%, #0F0F0F 100%);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  padding: 40px 20px;
+  animation: ${goldPulse} 3s ease-in-out infinite;
+  animation-delay: ${p => p.$delay}s;
+  transition: all 0.4s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(212, 175, 55, 0.05) 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: rgba(212, 175, 55, 0.1);
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(212, 175, 55, 0.2);
+    border-color: rgba(212, 175, 55, 0.5);
+  }
+
+  @media (max-width: 768px) {
+    padding: 30px 15px;
+  }
+`;
+
+const GoldNumber = styled.div`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(3rem, 8vw, 5rem);
+  font-weight: 300;
+  line-height: 1;
+  background: linear-gradient(180deg, #F5E6C8 0%, #D4AF37 50%, #B8960C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+`;
+
+const GoldLabel = styled.div`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-top: 20px;
+`;
+
+const GoldDate = styled.p`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.2rem;
+  font-style: italic;
+  color: rgba(255,255,255,0.5);
+`;
+
+export const GoldCountdown = () => {
+  const time = useCountdown();
+  const units = [
+    { value: time.days, label: 'Tage' },
+    { value: time.hours, label: 'Stunden' },
+    { value: time.minutes, label: 'Minuten' },
+    { value: time.seconds, label: 'Sekunden' },
+  ];
+  
+  return (
+    <GoldSection>
+      <GoldContainer>
+        <GoldDivider />
+        <GoldEyebrow>Der große Tag</GoldEyebrow>
+        <GoldTitle>Noch <span>{time.days}</span> Tage</GoldTitle>
+        <GoldGrid>
+          {units.map((unit, i) => (
+            <GoldUnit key={i} $delay={i * 0.15}>
+              <GoldBox $delay={i * 0.5}>
+                <GoldNumber>{formatNumber(unit.value)}</GoldNumber>
+              </GoldBox>
+              <GoldLabel>{unit.label}</GoldLabel>
+            </GoldUnit>
+          ))}
+        </GoldGrid>
+        <GoldDate>1. Oktober 2026</GoldDate>
+        <GoldDivider style={{ marginTop: '40px' }} />
+      </GoldContainer>
+    </GoldSection>
+  );
+};
+
+// ============================================
+// BOTANICAL COUNTDOWN
+// Playfair Display + Lato, Sage Green, Kreisförmige Zähler
+// ============================================
+const BotanicalSection = styled.section`
+  padding: 120px 5%;
+  background: #F5F1EB;
+  text-align: center;
+  position: relative;
+`;
+
+const BotanicalLeaf = styled.div`
+  position: absolute;
+  font-size: 5rem;
+  opacity: 0.08;
+  color: #2D3B2D;
+  
+  &:nth-child(1) { top: 10%; left: 3%; transform: rotate(-30deg); }
+  &:nth-child(2) { top: 15%; right: 3%; transform: rotate(30deg) scaleX(-1); }
+  &:nth-child(3) { bottom: 10%; left: 8%; transform: rotate(-15deg); }
+`;
+
+const BotanicalContainer = styled.div`
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+`;
+
+const BotanicalEyebrow = styled.div`
+  font-family: 'Lato', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #8B9D83;
+  margin-bottom: 15px;
 `;
 
 const BotanicalTitle = styled.h2`
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 400;
   font-style: italic;
-  color: #2D5A3D;
-  text-align: center;
+  color: #2D3B2D;
+  margin-bottom: 60px;
   
   span {
-    display: block;
-    font-size: 0.7em;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    font-style: normal;
-    color: #8FBC8F;
-    margin-top: 0.5rem;
+    color: #8B9D83;
   }
 `;
 
-const BotanicalWrapper = styled.div`
+const BotanicalGrid = styled.div`
   display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
   justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-bottom: 50px;
 `;
 
 const BotanicalUnit = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  opacity: 0;
+  animation: ${fadeInUp} 0.6s ease forwards;
+  animation-delay: ${p => p.$delay}s;
 `;
 
 const BotanicalCircle = styled.div`
-  width: clamp(70px, 18vw, 120px);
-  height: clamp(70px, 18vw, 120px);
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 2px solid #8B9D83;
+  background: rgba(255,255,255,0.8);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #FFFBF5;
-  border: 2px solid #8FBC8F;
-  border-radius: 50%;
-  box-shadow: 0 4px 20px rgba(45, 90, 61, 0.1);
+  position: relative;
+  animation: ${pulse} 4s ease-in-out infinite;
+  animation-delay: ${p => p.$delay}s;
+  
+  /* Decorative dashed ring */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    border: 1px dashed rgba(139, 157, 131, 0.3);
+    border-radius: 50%;
+  }
+  
+  @media (max-width: 600px) {
+    width: 90px;
+    height: 90px;
+  }
 `;
 
 const BotanicalNumber = styled.span`
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2rem, 6vw, 3.5rem);
-  font-weight: 600;
-  color: #2D5A3D;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 500;
+  color: #2D3B2D;
 `;
 
 const BotanicalLabel = styled.span`
-  font-family: 'Lora', serif;
-  font-size: clamp(0.7rem, 1.8vw, 0.9rem);
-  color: #8FBC8F;
-  margin-top: 1rem;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+  font-style: italic;
+  color: #8B9D83;
+  margin-top: 15px;
   text-transform: lowercase;
-  font-style: italic;
 `;
 
-const BotanicalBanner = styled.div`
-  display: flex;
+const BotanicalDate = styled.div`
+  display: inline-flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 2rem;
-  background: rgba(45, 90, 61, 0.05);
-  border-radius: 100px;
-  border: 1px solid rgba(143, 188, 143, 0.3);
+  gap: 15px;
+  padding: 15px 30px;
+  background: rgba(139, 157, 131, 0.1);
+  border-radius: 50px;
   
   span {
-    font-family: 'Cormorant Garamond', serif;
-    color: #2D5A3D;
-    letter-spacing: 0.1em;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1rem;
+    color: #2D3B2D;
   }
 `;
 
-// ============================================
-// EDITORIAL COUNTDOWN - Magazine Style
-// ============================================
-export const EditorialCountdown = () => {
-  const timeLeft = useCountdown(TARGET_DATE);
+export const BotanicalCountdown = () => {
+  const time = useCountdown();
+  const units = [
+    { value: time.days, label: 'tage' },
+    { value: time.hours, label: 'stunden' },
+    { value: time.minutes, label: 'minuten' },
+    { value: time.seconds, label: 'sekunden' },
+  ];
   
   return (
-    <EditorialContainer>
-      <EditorialHeader>
-        <EditorialIssue>Issue No. 001</EditorialIssue>
-        <EditorialTitle>Coming Soon</EditorialTitle>
-        <EditorialSubtitle>The countdown has begun</EditorialSubtitle>
-      </EditorialHeader>
-      <EditorialGrid>
-        {[
-          { val: timeLeft.days, label: 'Days' },
-          { val: timeLeft.hours, label: 'Hours' },
-          { val: timeLeft.minutes, label: 'Mins' },
-          { val: timeLeft.seconds, label: 'Secs' }
-        ].map((item, i) => (
-          <EditorialUnit key={i}>
-            <EditorialNumber>{formatNumber(item.val)}</EditorialNumber>
-            <EditorialLabel>{item.label}</EditorialLabel>
-          </EditorialUnit>
-        ))}
-      </EditorialGrid>
-      <EditorialDateLine>
-        <span>1. Januar 2026</span>
-      </EditorialDateLine>
-    </EditorialContainer>
+    <BotanicalSection>
+      <BotanicalLeaf>🌿</BotanicalLeaf>
+      <BotanicalLeaf>🌿</BotanicalLeaf>
+      <BotanicalLeaf>🌿</BotanicalLeaf>
+      <BotanicalContainer>
+        <BotanicalEyebrow>Coming Soon</BotanicalEyebrow>
+        <BotanicalTitle>Noch so viele <span>Momente</span></BotanicalTitle>
+        <BotanicalGrid>
+          {units.map((unit, i) => (
+            <BotanicalUnit key={i} $delay={i * 0.1}>
+              <BotanicalCircle $delay={i * 0.5}>
+                <BotanicalNumber>{formatNumber(unit.value)}</BotanicalNumber>
+              </BotanicalCircle>
+              <BotanicalLabel>{unit.label}</BotanicalLabel>
+            </BotanicalUnit>
+          ))}
+        </BotanicalGrid>
+        <BotanicalDate>
+          <span>🌱</span>
+          <span>1. Oktober 2026</span>
+          <span>🌱</span>
+        </BotanicalDate>
+      </BotanicalContainer>
+    </BotanicalSection>
   );
 };
 
-const EditorialContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3rem;
-  padding: 4rem 2rem;
-`;
-
-const EditorialHeader = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-`;
-
-const EditorialIssue = styled.span`
-  font-family: 'Source Serif 4', serif;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.3em;
-  color: #e63946;
-  border: 1px solid #e63946;
-  padding: 0.25rem 1rem;
-`;
-
-const EditorialTitle = styled.h2`
-  font-family: 'Bodoni Moda', serif;
-  font-size: clamp(2.5rem, 8vw, 5rem);
-  font-weight: 400;
-  font-style: italic;
-  color: #1a1a1a;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-`;
-
-const EditorialSubtitle = styled.p`
-  font-family: 'Source Serif 4', serif;
-  font-size: clamp(0.85rem, 2vw, 1rem);
-  font-style: italic;
-  color: rgba(26, 26, 26, 0.6);
-`;
-
-const EditorialGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  border: 1px solid #1a1a1a;
-  background: #fefefe;
-  max-width: 700px;
-  width: 100%;
-`;
-
-const EditorialUnit = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: clamp(1rem, 4vw, 2rem);
-  border-right: 1px solid #1a1a1a;
-  
-  &:last-child {
-    border-right: none;
-  }
-`;
-
-const EditorialNumber = styled.span`
-  font-family: 'Bodoni Moda', serif;
-  font-size: clamp(2.5rem, 8vw, 5rem);
-  font-weight: 400;
-  color: #1a1a1a;
-  line-height: 1;
-`;
-
-const EditorialLabel = styled.span`
-  font-family: 'Source Serif 4', serif;
-  font-size: clamp(0.6rem, 1.5vw, 0.75rem);
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: #e63946;
-  margin-top: 0.75rem;
-  font-weight: 600;
-`;
-
-const EditorialDateLine = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  
-  &::before, &::after {
-    content: '';
-    width: 60px;
-    height: 1px;
-    background: #1a1a1a;
-  }
-  
-  span {
-    font-family: 'Bodoni Moda', serif;
-    font-size: clamp(1rem, 2.5vw, 1.25rem);
-    font-style: italic;
-    color: #1a1a1a;
-  }
-`;
-
 // ============================================
-// CONTEMPORARY COUNTDOWN - Modern Style
+// CONTEMPORARY COUNTDOWN
+// Space Grotesk, Bold colors (Coral, Teal, Yellow), Heavy boxes
 // ============================================
-export const ContemporaryCountdown = () => {
-  const timeLeft = useCountdown(TARGET_DATE);
-  
-  return (
-    <ContemporaryContainer>
-      <ContemporaryHeader>
-        <ContemporaryEyebrow>Coming Soon</ContemporaryEyebrow>
-        <ContemporaryTitle>Wir arbeiten daran</ContemporaryTitle>
-      </ContemporaryHeader>
-      <ContemporaryWrapper>
-        {[
-          { val: timeLeft.days, label: 'Tage' },
-          { val: timeLeft.hours, label: 'Stunden' },
-          { val: timeLeft.minutes, label: 'Minuten' },
-          { val: timeLeft.seconds, label: 'Sekunden' }
-        ].map((item, i) => (
-          <ContemporaryUnit key={i}>
-            <ContemporaryCard>
-              <ContemporaryNumber>{formatNumber(item.val)}</ContemporaryNumber>
-            </ContemporaryCard>
-            <ContemporaryLabel>{item.label}</ContemporaryLabel>
-          </ContemporaryUnit>
-        ))}
-      </ContemporaryWrapper>
-      <ContemporaryPill>
-        <span>🚀</span>
-        <span>Launch: 01.01.2026</span>
-      </ContemporaryPill>
-    </ContemporaryContainer>
-  );
-};
-
-const ContemporaryContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3rem;
-  padding: 4rem 2rem;
-`;
-
-const ContemporaryHeader = styled.div`
+const ContemporarySection = styled.section`
+  padding: 120px 5%;
+  background: #FFFFFF;
   text-align: center;
 `;
 
-const ContemporaryEyebrow = styled.span`
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 500;
+const ContemporaryContainer = styled.div`
+  max-width: 1000px;
+  margin: 0 auto;
+`;
+
+const ContemporaryEyebrow = styled.div`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  letter-spacing: 0.3em;
-  color: #A3B18A;
-  display: block;
-  margin-bottom: 0.75rem;
+  color: #FF6B6B;
+  margin-bottom: 15px;
 `;
 
 const ContemporaryTitle = styled.h2`
-  font-family: 'DM Sans', sans-serif;
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
-  font-weight: 500;
-  color: #2d2d2d;
-  letter-spacing: -0.02em;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  font-weight: 700;
+  color: #0D0D0D;
+  margin-bottom: 60px;
+  text-transform: uppercase;
+  
+  span {
+    color: #FF6B6B;
+  }
 `;
 
-const ContemporaryWrapper = styled.div`
+const ContemporaryGrid = styled.div`
   display: flex;
-  gap: clamp(0.75rem, 3vw, 1.5rem);
-  flex-wrap: wrap;
   justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 50px;
 `;
+
+const contemporaryColors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#A855F7'];
 
 const ContemporaryUnit = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  opacity: 0;
+  animation: ${fadeInUp} 0.5s ease forwards;
+  animation-delay: ${p => p.$delay}s;
 `;
 
-const ContemporaryCard = styled.div`
-  width: clamp(70px, 18vw, 110px);
-  height: clamp(70px, 18vw, 110px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #E8E0D5;
-  border-radius: 24px;
-  box-shadow: 0 4px 24px rgba(45, 45, 45, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+const ContemporaryBox = styled.div`
+  min-width: 100px;
+  padding: 30px 25px;
+  background: #0D0D0D;
+  border: 3px solid #0D0D0D;
+  box-shadow: 6px 6px 0 ${p => p.$color};
+  transition: all 0.3s ease;
   
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(45, 45, 45, 0.12);
+    transform: translate(-4px, -4px);
+    box-shadow: 10px 10px 0 ${p => p.$color};
+  }
+  
+  @media (max-width: 600px) {
+    min-width: 75px;
+    padding: 22px 18px;
   }
 `;
 
 const ContemporaryNumber = styled.span`
-  font-family: 'DM Sans', sans-serif;
-  font-size: clamp(1.75rem, 5vw, 2.75rem);
-  font-weight: 600;
-  color: #2d2d2d;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.5rem, 7vw, 4rem);
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1;
+  display: block;
 `;
 
 const ContemporaryLabel = styled.span`
-  font-family: 'DM Sans', sans-serif;
-  font-size: clamp(0.65rem, 1.5vw, 0.8rem);
-  font-weight: 500;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: rgba(45, 45, 45, 0.5);
-  margin-top: 0.75rem;
+  color: ${p => p.$color};
+  margin-top: 15px;
+  display: block;
 `;
 
-const ContemporaryPill = styled.div`
+const ContemporaryDate = styled.div`
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background: #2d2d2d;
-  border-radius: 100px;
-  
-  span {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: #F5F2EE;
-    letter-spacing: 0.05em;
-  }
+  gap: 10px;
+  padding: 15px 30px;
+  background: #0D0D0D;
+  color: #FFFFFF;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
 `;
 
-// ============================================
-// GOLD COUNTDOWN - Opulent Style
-// ============================================
-const float = keyframes`
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
-`;
-
-export const GoldCountdown = () => {
-  const timeLeft = useCountdown(TARGET_DATE);
+export const ContemporaryCountdown = () => {
+  const time = useCountdown();
+  const units = [
+    { value: time.days, label: 'Tage' },
+    { value: time.hours, label: 'Stunden' },
+    { value: time.minutes, label: 'Minuten' },
+    { value: time.seconds, label: 'Sekunden' },
+  ];
   
   return (
-    <GoldContainer>
-      <GoldCrown>👑</GoldCrown>
-      <GoldFlourish>❦ ❦ ❦</GoldFlourish>
-      <GoldTitle>Der große Tag naht</GoldTitle>
-      <GoldWrapper>
-        {[
-          { val: timeLeft.days, label: 'Tage' },
-          { val: timeLeft.hours, label: 'Stunden' },
-          { val: timeLeft.minutes, label: 'Minuten' },
-          { val: timeLeft.seconds, label: 'Sekunden' }
-        ].map((item, i) => (
-          <GoldUnit key={i}>
-            <GoldFrame>
-              <GoldStar>✦</GoldStar>
-              <GoldNumber>{formatNumber(item.val)}</GoldNumber>
-            </GoldFrame>
-            <GoldLabel>{item.label}</GoldLabel>
-          </GoldUnit>
-        ))}
-      </GoldWrapper>
-      <GoldBanner>
-        <span>❧</span>
-        <span>1. Januar 2026</span>
-        <span>❧</span>
-      </GoldBanner>
-    </GoldContainer>
+    <ContemporarySection>
+      <ContemporaryContainer>
+        <ContemporaryEyebrow>Coming Soon</ContemporaryEyebrow>
+        <ContemporaryTitle>Time is <span>ticking</span></ContemporaryTitle>
+        <ContemporaryGrid>
+          {units.map((unit, i) => (
+            <ContemporaryUnit key={i} $delay={i * 0.1}>
+              <ContemporaryBox $color={contemporaryColors[i]}>
+                <ContemporaryNumber>{formatNumber(unit.value)}</ContemporaryNumber>
+              </ContemporaryBox>
+              <ContemporaryLabel $color={contemporaryColors[i]}>{unit.label}</ContemporaryLabel>
+            </ContemporaryUnit>
+          ))}
+        </ContemporaryGrid>
+        <ContemporaryDate>
+          <span>🚀</span>
+          <span>1. Oktober 2026</span>
+        </ContemporaryDate>
+      </ContemporaryContainer>
+    </ContemporarySection>
   );
 };
 
-const GoldContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2.5rem;
-  padding: 4rem 2rem;
+// ============================================
+// LUXE COUNTDOWN
+// Cormorant Garamond + Montserrat, Dramatic numbers, Grid layout
+// ============================================
+const LuxeSection = styled.section`
+  padding: 120px 5%;
+  background: #0A0A0A;
+  text-align: center;
+  position: relative;
 `;
 
-const GoldCrown = styled.div`
-  font-size: 2rem;
-  animation: ${float} 3s ease-in-out infinite;
+const LuxeCorner = styled.div`
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  
+  &.tl { top: 40px; left: 40px; border-right: none; border-bottom: none; }
+  &.tr { top: 40px; right: 40px; border-left: none; border-bottom: none; }
+  &.bl { bottom: 40px; left: 40px; border-right: none; border-top: none; }
+  &.br { bottom: 40px; right: 40px; border-left: none; border-top: none; }
+  
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+    &.tl, &.tr, &.bl, &.br { top: 20px; bottom: 20px; left: 20px; right: 20px; }
+  }
 `;
 
-const GoldFlourish = styled.div`
-  font-size: 1.5rem;
-  color: #D4AF37;
+const LuxeContainer = styled.div`
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
 `;
 
-const GoldTitle = styled.h2`
-  font-family: 'Cinzel Decorative', serif;
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
-  font-weight: 400;
+const LuxeEyebrow = styled.div`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.5em;
   text-transform: uppercase;
-  letter-spacing: 0.3em;
-  background: linear-gradient(90deg, #B8860B 0%, #D4AF37 20%, #FFF8DC 40%, #D4AF37 60%, #B8860B 80%, #D4AF37 100%);
-  background-size: 200% auto;
+  color: #D4AF37;
+  margin-bottom: 25px;
+`;
+
+const LuxeTitle = styled.h2`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 300;
+  font-style: italic;
+  color: #FFFFFF;
+  margin-bottom: 60px;
+`;
+
+const LuxeGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(212, 175, 55, 0.15);
+  max-width: 900px;
+  margin: 0 auto 60px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 400px;
+  }
+`;
+
+const LuxeUnit = styled.div`
+  background: #0A0A0A;
+  padding: 50px 25px;
+  opacity: 0;
+  animation: ${fadeInUp} 0.8s ease forwards;
+  animation-delay: ${p => p.$delay}s;
+`;
+
+const LuxeNumber = styled.div`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(3.5rem, 10vw, 6rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1;
+  background: linear-gradient(180deg, #FFFFFF 0%, #D4AF37 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: ${shimmer} 4s linear infinite;
-  text-align: center;
 `;
 
-const GoldWrapper = styled.div`
-  display: flex;
-  gap: clamp(1rem, 3vw, 2rem);
-  flex-wrap: wrap;
-  justify-content: center;
+const LuxeLabel = styled.div`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-top: 20px;
 `;
 
-const GoldUnit = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const GoldFrame = styled.div`
-  width: clamp(80px, 20vw, 130px);
-  height: clamp(100px, 25vw, 160px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  background: linear-gradient(180deg, rgba(212, 175, 55, 0.1) 0%, transparent 50%, rgba(212, 175, 55, 0.1) 100%);
-  border: 2px solid #D4AF37;
+const LuxeDate = styled.p`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.3rem;
+  font-style: italic;
+  color: rgba(255,255,255,0.5);
   
+  span {
+    color: #D4AF37;
+  }
+`;
+
+export const LuxeCountdown = () => {
+  const time = useCountdown();
+  const units = [
+    { value: time.days, label: 'Tage' },
+    { value: time.hours, label: 'Stunden' },
+    { value: time.minutes, label: 'Minuten' },
+    { value: time.seconds, label: 'Sekunden' },
+  ];
+  
+  return (
+    <LuxeSection>
+      <LuxeCorner className="tl" />
+      <LuxeCorner className="tr" />
+      <LuxeCorner className="bl" />
+      <LuxeCorner className="br" />
+      <LuxeContainer>
+        <LuxeEyebrow>Until Forever Begins</LuxeEyebrow>
+        <LuxeTitle>The Countdown</LuxeTitle>
+        <LuxeGrid>
+          {units.map((unit, i) => (
+            <LuxeUnit key={i} $delay={i * 0.15}>
+              <LuxeNumber>{formatNumber(unit.value)}</LuxeNumber>
+              <LuxeLabel>{unit.label}</LuxeLabel>
+            </LuxeUnit>
+          ))}
+        </LuxeGrid>
+        <LuxeDate><span>1.</span> Oktober <span>2026</span></LuxeDate>
+      </LuxeContainer>
+    </LuxeSection>
+  );
+};
+
+// ============================================
+// NEON COUNTDOWN
+// Space Grotesk, Cyan/Magenta, Holographic glow, Grid background
+// ============================================
+const NeonSection = styled.section`
+  padding: 120px 5%;
+  background: #0a0a0f;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+`;
+
+const NeonGridBg = styled.div`
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(0,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+`;
+
+const NeonGlow = styled.div`
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+  
+  &:nth-child(1) { background: #00ffff; top: 0; left: 10%; }
+  &:nth-child(2) { background: #ff00ff; bottom: 0; right: 10%; }
+`;
+
+const NeonContainer = styled.div`
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+`;
+
+const NeonEyebrow = styled.div`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #ff00ff;
+  margin-bottom: 20px;
+  
+  &::before { content: '[ '; color: rgba(255,255,255,0.3); }
+  &::after { content: ' ]'; color: rgba(255,255,255,0.3); }
+`;
+
+const NeonTitle = styled.h2`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 60px;
+  text-transform: uppercase;
+  
+  span {
+    color: #00ffff;
+    text-shadow: 0 0 20px rgba(0,255,255,0.5);
+  }
+`;
+
+const NeonGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  max-width: 900px;
+  margin: 0 auto 50px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 350px;
+  }
+`;
+
+const NeonUnit = styled.div`
+  opacity: 0;
+  animation: ${fadeInUp} 0.6s ease forwards;
+  animation-delay: ${p => p.$delay}s;
+`;
+
+const NeonBox = styled.div`
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(0,255,255,0.3);
+  padding: 35px 20px;
+  position: relative;
+  
+  /* Scanline effect at top */
   &::before {
     content: '';
     position: absolute;
-    inset: 4px;
-    border: 1px solid rgba(212, 175, 55, 0.4);
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ffff, transparent);
+    opacity: 0.6;
   }
-`;
-
-const GoldStar = styled.span`
-  position: absolute;
-  top: -8px;
-  color: #D4AF37;
-  font-size: 0.75rem;
-  background: #1C1C1C;
-  padding: 0 0.5rem;
-`;
-
-const GoldNumber = styled.span`
-  font-family: 'Cinzel Decorative', serif;
-  font-size: clamp(2.5rem, 7vw, 4rem);
-  font-weight: 700;
-  background: linear-gradient(180deg, #FFF8DC 0%, #D4AF37 50%, #B8860B 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-`;
-
-const GoldLabel = styled.span`
-  font-family: 'Cinzel', serif;
-  font-size: clamp(0.6rem, 1.5vw, 0.75rem);
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: rgba(212, 175, 55, 0.7);
-  margin-top: 0.5rem;
-`;
-
-const GoldBanner = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 1rem 2.5rem;
-  border: 1px solid rgba(212, 175, 55, 0.3);
   
-  span {
-    font-family: 'Cinzel', serif;
-    color: #D4AF37;
-    font-size: 1.25rem;
-    
-    &:nth-child(2) {
-      font-size: clamp(0.9rem, 2vw, 1.1rem);
-      color: #FFF8DC;
-      letter-spacing: 0.15em;
-    }
+  &:hover {
+    border-color: rgba(0,255,255,0.6);
+    box-shadow: 0 0 30px rgba(0,255,255,0.15);
   }
 `;
 
-// Export map for dynamic rendering
+const NeonNumber = styled.div`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(3rem, 8vw, 4.5rem);
+  font-weight: 700;
+  color: #00ffff;
+  line-height: 1;
+  animation: ${holographicShift} 3s ease-in-out infinite;
+  animation-delay: ${p => p.$delay}s;
+`;
+
+const NeonLabel = styled.div`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-top: 15px;
+`;
+
+const NeonDate = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 25px;
+  border: 1px solid rgba(255,0,255,0.3);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #ff00ff;
+  
+  span { color: rgba(255,255,255,0.6); }
+`;
+
+export const NeonCountdown = () => {
+  const time = useCountdown();
+  const units = [
+    { value: time.days, label: 'DAYS' },
+    { value: time.hours, label: 'HRS' },
+    { value: time.minutes, label: 'MIN' },
+    { value: time.seconds, label: 'SEC' },
+  ];
+  
+  return (
+    <NeonSection>
+      <NeonGridBg />
+      <NeonGlow />
+      <NeonGlow />
+      <NeonContainer>
+        <NeonEyebrow>SYSTEM LAUNCH</NeonEyebrow>
+        <NeonTitle>THE <span>COUNTDOWN</span></NeonTitle>
+        <NeonGrid>
+          {units.map((unit, i) => (
+            <NeonUnit key={i} $delay={i * 0.1}>
+              <NeonBox>
+                <NeonNumber $delay={i * 0.5}>{formatNumber(unit.value)}</NeonNumber>
+              </NeonBox>
+              <NeonLabel>{unit.label}</NeonLabel>
+            </NeonUnit>
+          ))}
+        </NeonGrid>
+        <NeonDate>
+          <span>&gt;</span> 01.10.2026 <span>&lt;</span>
+        </NeonDate>
+      </NeonContainer>
+    </NeonSection>
+  );
+};
+
+// ============================================
+// EXPORT MAP
+// ============================================
 export const countdownComponents = {
-  neon: NeonCountdown,
-  luxe: LuxeCountdown,
-  botanical: BotanicalCountdown,
   editorial: EditorialCountdown,
-  contemporary: ContemporaryCountdown,
   gold: GoldCountdown,
+  botanical: BotanicalCountdown,
+  contemporary: ContemporaryCountdown,
+  luxe: LuxeCountdown,
+  neon: NeonCountdown,
 };

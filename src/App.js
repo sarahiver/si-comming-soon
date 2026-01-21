@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { themes } from './themes/themeDefinitions';
+import styled, { createGlobalStyle } from 'styled-components';
+import { themes, isDarkTheme } from './themes/themeDefinitions';
 import ThemeSwitcher from './components/ThemeSwitcher';
 import HeroSection from './components/HeroSection';
 import { countdownComponents } from './components/Countdowns';
-import ServicesSection from './components/ServicesSection';
-import AboutSection from './components/AboutSection';
-import WaitlistForm from './components/WaitlistForm';
+import { ServicesSection, AboutSection, WaitlistSection, Footer } from './components/ContentSections';
 
 const GlobalStyles = createGlobalStyle`
   *, *::before, *::after {
@@ -20,44 +18,29 @@ const GlobalStyles = createGlobalStyle`
   }
   
   body {
-    font-family: ${props => props.theme.fonts.body};
-    background: ${props => props.theme.colors.backgroundGradient};
-    color: ${props => props.theme.colors.text};
-    min-height: 100vh;
-    transition: background 0.5s ease, color 0.3s ease;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
-  }
-  
-  ::selection {
-    background: ${props => props.theme.colors.primary};
-    color: ${props => 
-      ['botanical', 'editorial', 'contemporary'].includes(props.theme.style) 
-        ? '#ffffff' 
-        : props.theme.colors.background
-    };
   }
 `;
 
 function App() {
-  const [currentTheme, setCurrentTheme] = useState('luxe');
-  const theme = themes[currentTheme];
-  
+  const [currentTheme, setCurrentTheme] = useState('gold');
   const CountdownComponent = countdownComponents[currentTheme];
+  const isDark = isDarkTheme(currentTheme);
 
   // Load Google Fonts
   useEffect(() => {
     const link = document.createElement('link');
-    link.href = 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Bodoni+Moda:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600;700&family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&display=swap';
+    link.href = 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Lato:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap';
     link.rel = 'stylesheet';
     document.head.appendChild(link);
-    
-    return () => {
-      document.head.removeChild(link);
-    };
+    return () => document.head.removeChild(link);
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <GlobalStyles />
       <AppWrapper>
         <ThemeSwitcher 
@@ -65,65 +48,38 @@ function App() {
           onThemeChange={setCurrentTheme} 
         />
         
-        <HeroSection />
+        <HeroSection currentTheme={currentTheme} />
         
         <CountdownComponent />
         
-        <Divider />
+        <Divider $isDark={isDark} />
         
-        <ServicesSection />
+        <ServicesSection currentTheme={currentTheme} />
         
-        <Divider />
+        <Divider $isDark={isDark} />
         
-        <AboutSection />
+        <AboutSection currentTheme={currentTheme} />
         
-        <Divider />
+        <WaitlistSection currentTheme={currentTheme} />
         
-        <WaitlistForm currentTheme={currentTheme} />
-        
-        <Footer>
-          <FooterLogo>S&I.</FooterLogo>
-          <FooterText>
-            © 2026 S&I. Weddings — Digitale Hochzeitserlebnisse
-          </FooterText>
-        </Footer>
+        <Footer currentTheme={currentTheme} />
       </AppWrapper>
-    </ThemeProvider>
+    </>
   );
 }
 
 export default App;
 
-// Styles
 const AppWrapper = styled.div`
   min-height: 100vh;
-  position: relative;
 `;
 
 const Divider = styled.div`
-  width: 100%;
-  max-width: 200px;
   height: 1px;
+  max-width: 200px;
   margin: 0 auto;
-  background: ${props => `linear-gradient(90deg, transparent, ${props.theme.colors.primary}40, transparent)`};
-`;
-
-const Footer = styled.footer`
-  padding: 3rem 2rem;
-  text-align: center;
-  border-top: 1px solid ${props => props.theme.colors.primary}15;
-`;
-
-const FooterLogo = styled.span`
-  font-family: ${props => props.theme.fonts.heading};
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: ${props => props.theme.colors.primary};
-`;
-
-const FooterText = styled.p`
-  font-family: ${props => props.theme.fonts.body};
-  font-size: 0.85rem;
-  color: ${props => props.theme.colors.textMuted};
-  margin-top: 0.75rem;
+  background: ${p => p.$isDark 
+    ? 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)'
+    : 'linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent)'
+  };
 `;

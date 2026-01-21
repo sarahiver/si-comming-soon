@@ -1,141 +1,119 @@
-// Theme Definitions for S&I Weddings Coming Soon Page
+// Theme Definitions - EXAKT wie in den Wedding Website Themes
 
 export const themes = {
-  neon: {
-    name: 'Neon',
-    colors: {
-      primary: '#FF00FF',
-      secondary: '#00FFFF',
-      accent: '#FFFF00',
-      background: '#0a0a0f',
-      backgroundGradient: 'linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%)',
-      text: '#ffffff',
-      textMuted: 'rgba(255,255,255,0.6)',
-      glow: '0 0 30px rgba(255, 0, 255, 0.5), 0 0 60px rgba(0, 255, 255, 0.3)',
-      cardBg: 'rgba(255,255,255,0.03)',
-    },
-    fonts: {
-      heading: "'Orbitron', sans-serif",
-      body: "'Rajdhani', sans-serif",
-    },
-    borderRadius: '0px',
-    style: 'cyberpunk',
-  },
-  
-  luxe: {
-    name: 'Luxe',
-    colors: {
-      primary: '#C9A962',
-      secondary: '#8B7355',
-      accent: '#F5E6C8',
-      background: '#0D0D0D',
-      backgroundGradient: 'linear-gradient(180deg, #0D0D0D 0%, #1A1A1A 50%, #0D0D0D 100%)',
-      text: '#F5F5F5',
-      textMuted: 'rgba(245,245,245,0.5)',
-      glow: '0 0 40px rgba(201, 169, 98, 0.2)',
-      cardBg: 'rgba(255,255,255,0.03)',
-    },
-    fonts: {
-      heading: "'Playfair Display', serif",
-      body: "'Cormorant Garamond', serif",
-    },
-    borderRadius: '0px',
-    style: 'luxury',
-  },
-  
-  botanical: {
-    name: 'Botanical',
-    colors: {
-      primary: '#2D5A3D',
-      secondary: '#8FBC8F',
-      accent: '#F4E9D8',
-      background: '#FFFBF5',
-      backgroundGradient: 'linear-gradient(180deg, #FFFBF5 0%, #F4E9D8 100%)',
-      text: '#2D3B2D',
-      textMuted: 'rgba(45,59,45,0.6)',
-      glow: 'none',
-      cardBg: 'rgba(0,0,0,0.02)',
-    },
-    fonts: {
-      heading: "'Cormorant Garamond', serif",
-      body: "'Lora', serif",
-    },
-    borderRadius: '8px',
-    style: 'organic',
-  },
-  
   editorial: {
+    id: 'editorial',
     name: 'Editorial',
-    colors: {
-      primary: '#1a1a1a',
-      secondary: '#e63946',
-      accent: '#f1faee',
-      background: '#fefefe',
-      backgroundGradient: 'linear-gradient(180deg, #fefefe 0%, #f8f8f8 100%)',
-      text: '#1a1a1a',
-      textMuted: 'rgba(26,26,26,0.5)',
-      glow: 'none',
-      cardBg: 'rgba(0,0,0,0.02)',
-    },
+    description: 'Minimalistisch & Modern',
     fonts: {
-      heading: "'Bodoni Moda', serif",
-      body: "'Source Serif 4', serif",
+      heading: "'Instrument Serif', Georgia, serif",
+      body: "'Inter', sans-serif",
     },
-    borderRadius: '0px',
-    style: 'magazine',
-  },
-  
-  contemporary: {
-    name: 'Contemporary',
     colors: {
-      primary: '#2d2d2d',
-      secondary: '#E8E0D5',
-      accent: '#A3B18A',
-      background: '#F5F2EE',
-      backgroundGradient: 'linear-gradient(135deg, #F5F2EE 0%, #E8E0D5 100%)',
-      text: '#2d2d2d',
-      textMuted: 'rgba(45,45,45,0.6)',
-      glow: 'none',
-      cardBg: 'rgba(0,0,0,0.02)',
+      bg: '#FFFFFF',
+      bgGradient: 'linear-gradient(180deg, #FFFFFF 0%, #F5F5F5 100%)',
+      text: '#1A1A1A',
+      textMuted: '#666666',
+      accent: '#1A1A1A',
+      border: '#E0E0E0',
     },
-    fonts: {
-      heading: "'DM Sans', sans-serif",
-      body: "'DM Sans', sans-serif",
-    },
-    borderRadius: '16px',
-    style: 'modern',
   },
-  
+
   gold: {
+    id: 'gold',
     name: 'Gold',
-    colors: {
-      primary: '#D4AF37',
-      secondary: '#B8860B',
-      accent: '#FFF8DC',
-      background: '#1C1C1C',
-      backgroundGradient: 'radial-gradient(ellipse at center, #2a2a2a 0%, #1C1C1C 70%)',
-      text: '#FFF8DC',
-      textMuted: 'rgba(255,248,220,0.6)',
-      glow: '0 0 50px rgba(212, 175, 55, 0.3)',
-      cardBg: 'rgba(255,255,255,0.03)',
-    },
+    description: 'Luxuriös & Opulent',
     fonts: {
-      heading: "'Cinzel Decorative', serif",
-      body: "'Cinzel', serif",
+      heading: "'Cormorant Garamond', Georgia, serif",
+      body: "'Montserrat', sans-serif",
     },
-    borderRadius: '0px',
-    style: 'opulent',
+    colors: {
+      bg: '#0A0A0A',
+      bgGradient: 'linear-gradient(180deg, #0A0A0A 0%, #151510 100%)',
+      text: '#FFFFFF',
+      textMuted: 'rgba(255,255,255,0.5)',
+      accent: '#D4AF37',
+      border: 'rgba(212, 175, 55, 0.3)',
+    },
+  },
+
+  botanical: {
+    id: 'botanical',
+    name: 'Botanical',
+    description: 'Natürlich & Organisch',
+    fonts: {
+      heading: "'Playfair Display', Georgia, serif",
+      body: "'Lato', sans-serif",
+    },
+    colors: {
+      bg: '#F5F1EB',
+      bgGradient: 'linear-gradient(180deg, #F5F1EB 0%, #EDE8E0 100%)',
+      text: '#2D3B2D',
+      textMuted: '#8B9D83',
+      accent: '#8B9D83',
+      border: 'rgba(139, 157, 131, 0.3)',
+    },
+  },
+
+  contemporary: {
+    id: 'contemporary',
+    name: 'Contemporary',
+    description: 'Bold & Playful',
+    fonts: {
+      heading: "'Space Grotesk', sans-serif",
+      body: "'Space Grotesk', sans-serif",
+    },
+    colors: {
+      bg: '#FFFFFF',
+      bgGradient: 'linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%)',
+      text: '#0D0D0D',
+      textMuted: 'rgba(13,13,13,0.6)',
+      accent: '#FF6B6B',
+      accent2: '#4ECDC4',
+      accent3: '#FFE66D',
+      border: '#0D0D0D',
+    },
+  },
+
+  luxe: {
+    id: 'luxe',
+    name: 'Luxe',
+    description: 'Raffiniert & Zeitlos',
+    fonts: {
+      heading: "'Cormorant Garamond', Georgia, serif",
+      body: "'Montserrat', sans-serif",
+    },
+    colors: {
+      bg: '#0A0A0A',
+      bgGradient: 'linear-gradient(180deg, #0A0A0A 0%, #111111 100%)',
+      text: '#FFFFFF',
+      textMuted: 'rgba(255,255,255,0.6)',
+      accent: '#D4AF37',
+      accent2: '#C9A96E',
+      border: 'rgba(212, 175, 55, 0.2)',
+    },
+  },
+
+  neon: {
+    id: 'neon',
+    name: 'Neon',
+    description: 'Futuristisch & Elektrisierend',
+    fonts: {
+      heading: "'Space Grotesk', sans-serif",
+      body: "'Space Grotesk', sans-serif",
+    },
+    colors: {
+      bg: '#0a0a0f',
+      bgGradient: 'linear-gradient(135deg, #0a0a0f 0%, #0f0a15 50%, #0a0a0f 100%)',
+      text: '#FFFFFF',
+      textMuted: 'rgba(255,255,255,0.6)',
+      accent: '#00ffff',
+      accent2: '#ff00ff',
+      accent3: '#00ff88',
+      border: 'rgba(0, 255, 255, 0.3)',
+    },
   },
 };
 
-export const themeOrder = ['neon', 'luxe', 'botanical', 'editorial', 'contemporary', 'gold'];
-
-// Helper function to check if theme is dark
-export const isDarkTheme = (themeKey) => {
-  return ['neon', 'luxe', 'gold'].includes(themeKey);
-};
-
-// Helper function to get contrasting text color
-export const getContrastColor = (themeKey) => {
-  return isDarkTheme(themeKey) ? themes[themeKey].colors.background : '#ffffff';
-};
+export const themeOrder = ['editorial', 'gold', 'botanical', 'contemporary', 'luxe', 'neon'];
+export const isDarkTheme = (id) => ['gold', 'luxe', 'neon'].includes(id);
