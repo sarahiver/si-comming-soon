@@ -98,34 +98,79 @@ export const deleteWaitlistEntry = async (id) => {
   }
 };
 
+// Double Opt-In: E-Mail bestätigen
+export const confirmWaitlistEntry = async (token, email) => {
+  if (!supabase) {
+    return { success: false, error: 'Supabase nicht konfiguriert' };
+  }
+
+  try {
+    // Zuerst prüfen ob Eintrag existiert und Status
+    let query = supabase.from('waitlist').select('*');
+    
+    if (token) {
+      query = query.eq('id', token);
+    } else if (email) {
+      query = query.eq('email', email.toLowerCase());
+    }
+    
+    const { data: existing, error: findError } = await query.single();
+    
+    if (findError || !existing) {
+      return { success: false, error: 'Eintrag nicht gefunden.' };
+    }
+    
+    // Bereits bestätigt?
+    if (existing.confirmed) {
+      return { success: true, alreadyConfirmed: true };
+    }
+    
+    // Bestätigen
+    const { error: updateError } = await supabase
+      .from('waitlist')
+      .update({ confirmed: true })
+      .eq('id', existing.id);
+    
+    if (updateError) throw updateError;
+    
+    return { success: true, alreadyConfirmed: false };
+  } catch (error) {
+    console.error('Confirm error:', error);
+    return { success: false, error: error.message };
+  }
+};
+
 /*
-  SUPABASE SQL:
+  SUPABASE SQL - ERWEITERT FÜR DOUBLE OPT-IN:
   
-  CREATE TABLE waitlist (
+  -- Basis-Tabelle erstellen (falls noch nicht vorhanden)
+  CREATE TABLE IF NOT EXISTS waitlist (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
-    theme_preference VARCHAR(50) DEFAULT 'contemporary',
+    theme_preference VARCHAR(50) DEFAULT 'video',
     source VARCHAR(100) DEFAULT 'coming-soon-page',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     contacted BOOLEAN DEFAULT FALSE,
-    notes TEXT
+    notes TEXT,
+    confirmed BOOLEAN DEFAULT FALSE
   );
 
+  -- Falls Tabelle schon existiert, Spalte hinzufügen:
+  ALTER TABLE waitlist ADD COLUMN IF NOT EXISTS confirmed BOOLEAN DEFAULT FALSE;
+
+  -- Row Level Security
   ALTER TABLE waitlist ENABLE ROW LEVEL SECURITY;
   
-  -- Allow anonymous inserts
+  -- Policies (falls noch nicht vorhanden)
   CREATE POLICY "Allow anonymous inserts" ON waitlist
     FOR INSERT WITH CHECK (true);
     
-  -- Allow reading for authenticated users (admin)
-  CREATE POLICY "Allow read for service role" ON waitlist
+  CREATE POLICY "Allow read all" ON waitlist
     FOR SELECT USING (true);
     
-  -- Allow update for service role
-  CREATE POLICY "Allow update for service role" ON waitlist
+  CREATE POLICY "Allow update all" ON waitlist
     FOR UPDATE USING (true);
     
-  -- Allow delete for service role  
-  CREATE POLICY "Allow delete for service role" ON waitlist
+  CREATE POLICY "Allow delete all" ON waitlist
     FOR DELETE USING (true);
 */

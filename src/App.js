@@ -10,6 +10,9 @@ import AboutSection from './components/AboutSection';
 import WaitlistSection from './components/WaitlistSection';
 import Footer from './components/Footer';
 import AdminDashboard from './components/AdminDashboard';
+import ConfirmPage from './components/ConfirmPage';
+import ImpressumPage from './components/ImpressumPage';
+import DatenschutzPage from './components/DatenschutzPage';
 
 const GlobalStyles = createGlobalStyle`
   *, *::before, *::after {
@@ -107,6 +110,9 @@ function App() {
           </ThemeProvider>
         } />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/confirm" element={<ConfirmPage />} />
+        <Route path="/impressum" element={<ImpressumPage />} />
+        <Route path="/datenschutz" element={<DatenschutzPage />} />
       </Routes>
     </Router>
   );

@@ -1,5 +1,5 @@
-// Footer mit Social Links und Impressum Modal - Multi-Theme
-import React, { useState } from 'react';
+// Footer mit Social Links - Multi-Theme
+import React from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { useTheme } from '../context/ThemeContext';
 
@@ -15,116 +15,49 @@ const slideUp = keyframes`
 
 const Footer = () => {
   const { currentTheme } = useTheme();
-  const [showImpressum, setShowImpressum] = useState(false);
 
   return (
-    <>
-      <FooterSection $theme={currentTheme}>
-        <Container>
-          <Logo $theme={currentTheme}>S&I.</Logo>
-          
-          <SocialLinks>
-            <SocialLink 
-              href="https://instagram.com/sarah.iver.wedding" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              $theme={currentTheme}
-            >
-              <InstagramIcon />
-              <span>Instagram</span>
-            </SocialLink>
-            <SocialDivider $theme={currentTheme}>•</SocialDivider>
-            <SocialLink 
-              href="https://pinterest.com/sarahiverwedding" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              $theme={currentTheme}
-            >
-              <PinterestIcon />
-              <span>Pinterest</span>
-            </SocialLink>
-          </SocialLinks>
-          
-          <Copyright $theme={currentTheme}>
-            © 2026 S&I. wedding — Digitale Hochzeitserlebnisse
-          </Copyright>
-          
-          <LegalLinks>
-            <LegalLink onClick={() => setShowImpressum(true)} $theme={currentTheme}>
-              Impressum
-            </LegalLink>
-            <LegalDivider $theme={currentTheme}>|</LegalDivider>
-            <LegalLink onClick={() => setShowImpressum(true)} $theme={currentTheme}>
-              Datenschutz
-            </LegalLink>
-          </LegalLinks>
-        </Container>
-      </FooterSection>
-
-      {/* Impressum Modal */}
-      {showImpressum && (
-        <ModalOverlay onClick={() => setShowImpressum(false)}>
-          <ModalContent onClick={(e) => e.stopPropagation()} $theme={currentTheme}>
-            <ModalHeader $theme={currentTheme}>
-              <ModalTitle $theme={currentTheme}>
-                {currentTheme === 'editorial' ? 'Impressum' : 'IMPRESSUM'}
-              </ModalTitle>
-              <CloseButton onClick={() => setShowImpressum(false)} $theme={currentTheme}>✕</CloseButton>
-            </ModalHeader>
-            
-            <ModalBody>
-              <ModalSection>
-                <SectionTitle $theme={currentTheme}>Angaben gemäß § 5 TMG</SectionTitle>
-                <SectionText $theme={currentTheme}>
-                  <strong>S&I. wedding</strong><br />
-                  [Vorname Nachname]<br />
-                  [Straße Hausnummer]<br />
-                  [PLZ Ort]<br />
-                  Deutschland
-                </SectionText>
-              </ModalSection>
-              
-              <ModalSection>
-                <SectionTitle $theme={currentTheme}>Kontakt</SectionTitle>
-                <SectionText $theme={currentTheme}>
-                  E-Mail: hello@siwedding.de<br />
-                  Website: www.siwedding.de
-                </SectionText>
-              </ModalSection>
-              
-              <ModalSection>
-                <SectionTitle $theme={currentTheme}>Umsatzsteuer-ID</SectionTitle>
-                <SectionText $theme={currentTheme}>
-                  Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:<br />
-                  [DE XXX XXX XXX]
-                </SectionText>
-              </ModalSection>
-              
-              <ModalSection>
-                <SectionTitle $theme={currentTheme}>Verantwortlich für den Inhalt</SectionTitle>
-                <SectionText $theme={currentTheme}>
-                  [Vorname Nachname]<br />
-                  [Straße Hausnummer]<br />
-                  [PLZ Ort]
-                </SectionText>
-              </ModalSection>
-              
-              <Divider $theme={currentTheme} />
-              
-              <ModalSection>
-                <SectionTitle $theme={currentTheme}>Streitschlichtung</SectionTitle>
-                <SectionText $theme={currentTheme}>
-                  Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: 
-                  https://ec.europa.eu/consumers/odr/<br /><br />
-                  Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer 
-                  Verbraucherschlichtungsstelle teilzunehmen.
-                </SectionText>
-              </ModalSection>
-            </ModalBody>
-          </ModalContent>
-        </ModalOverlay>
-      )}
-    </>
+    <FooterSection $theme={currentTheme}>
+      <Container>
+        <Logo $theme={currentTheme}>S&I.</Logo>
+        
+        <SocialLinks>
+          <SocialLink 
+            href="https://instagram.com/sarah.iver.wedding" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            $theme={currentTheme}
+          >
+            <InstagramIcon />
+            <span>Instagram</span>
+          </SocialLink>
+          <SocialDivider $theme={currentTheme}>•</SocialDivider>
+          <SocialLink 
+            href="https://pinterest.com/sarahiverwedding" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            $theme={currentTheme}
+          >
+            <PinterestIcon />
+            <span>Pinterest</span>
+          </SocialLink>
+        </SocialLinks>
+        
+        <Copyright $theme={currentTheme}>
+          © 2025 S&I. wedding — Digitale Hochzeitserlebnisse
+        </Copyright>
+        
+        <LegalLinks>
+          <LegalLinkAnchor href="/impressum" $theme={currentTheme}>
+            Impressum
+          </LegalLinkAnchor>
+          <LegalDivider $theme={currentTheme}>|</LegalDivider>
+          <LegalLinkAnchor href="/datenschutz" $theme={currentTheme}>
+            Datenschutz
+          </LegalLinkAnchor>
+        </LegalLinks>
+      </Container>
+    </FooterSection>
   );
 };
 
@@ -294,6 +227,48 @@ const LegalLink = styled.button`
   background: none;
   border: none;
   cursor: pointer;
+  transition: color 0.3s ease;
+  
+  ${p => p.$theme === 'contemporary' && css`
+    font-family: 'Space Grotesk', sans-serif;
+    color: rgba(255, 255, 255, 0.4);
+    
+    &:hover { color: #FF6B6B; }
+  `}
+  
+  ${p => p.$theme === 'editorial' && css`
+    font-family: 'Inter', sans-serif;
+    color: rgba(255, 255, 255, 0.3);
+    
+    &:hover { color: #FFFFFF; }
+  `}
+  
+  ${p => p.$theme === 'video' && css`
+    font-family: 'Montserrat', sans-serif;
+    color: rgba(255, 255, 255, 0.3);
+    
+    &:hover { color: #C4A87C; }
+  `}
+  
+  ${p => p.$theme === 'botanical' && css`
+    font-family: 'Lato', sans-serif;
+    color: rgba(250, 249, 246, 0.4);
+    
+    &:hover { color: #7BA889; }
+  `}
+  
+  ${p => p.$theme === 'luxe' && css`
+    font-family: 'Montserrat', sans-serif;
+    color: rgba(255, 255, 255, 0.3);
+    
+    &:hover { color: #B8960B; }
+  `}
+`;
+
+const LegalLinkAnchor = styled.a`
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-decoration: none;
   transition: color 0.3s ease;
   
   ${p => p.$theme === 'contemporary' && css`
