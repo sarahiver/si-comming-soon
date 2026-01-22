@@ -278,10 +278,11 @@ const BackgroundText = styled.div`
   top: 50%;
   right: -5%;
   transform: translateY(-50%);
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: clamp(15rem, 40vw, 35rem);
   font-weight: 700;
-  color: #0D0D0D;
+  letter-spacing: -0.03em;
+  color: #000000;
   opacity: 0.03;
   pointer-events: none;
   user-select: none;
@@ -470,10 +471,14 @@ const ImagePlaceholder = styled.div`
 `;
 
 const PlaceholderLogo = styled.div`
-  font-family: 'Instrument Serif', Georgia, serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 4rem;
-  font-style: italic;
-  color: #E0E0E0;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  background: #000000;
+  padding: 15px 25px;
+  display: inline-block;
 `;
 
 const EditorialQuote = styled.blockquote`
@@ -680,11 +685,14 @@ const VideoSignature = styled.div`
 `;
 
 const SignatureLogo = styled.div`
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 2rem;
   font-weight: 700;
-  color: #1A1814;
-  letter-spacing: 0.1em;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  background: #000000;
+  padding: 8px 16px;
+  display: inline-block;
   margin-bottom: 10px;
 `;
 
@@ -778,11 +786,13 @@ const BotanicalImagePlaceholder = styled.div`
 `;
 
 const PlaceholderContent = styled.div`
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 3rem;
-  font-weight: 400;
-  color: #4A7C59;
-  opacity: 0.3;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  background: #000000;
+  padding: 12px 20px;
 `;
 
 const BotanicalQuoteSmall = styled.p`

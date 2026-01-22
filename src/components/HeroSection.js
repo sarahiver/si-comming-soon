@@ -214,8 +214,6 @@ const BotanicalHero = ({ scrollToWaitlist, scrollToCountdown }) => (
       
       <BotanicalLogo>S&I.</BotanicalLogo>
       
-      <BotanicalAmpersand>&</BotanicalAmpersand>
-      
       <BotanicalTagline>
         Individuelle Hochzeitswebsites,<br />
         die so einzigartig sind wie eure Liebe
@@ -362,13 +360,13 @@ const ContemporaryBadge = styled.div`
 `;
 
 const ContemporaryLogo = styled.h1`
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: clamp(5rem, 15vw, 9rem);
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   line-height: 0.9;
   display: inline-block;
-  background: #0D0D0D;
+  background: #000000;
   color: #FFFFFF;
   padding: 10px 25px;
   margin-bottom: 25px;
@@ -482,13 +480,13 @@ const EditorialLocation = styled.div`
 `;
 
 const EditorialLogo = styled.h1`
-  font-family: 'Inter', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: clamp(4rem, 12vw, 8rem);
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   line-height: 0.9;
   display: inline-block;
-  background: #1A1A1A;
+  background: #000000;
   color: #FFFFFF;
   padding: 15px 35px;
   margin-bottom: 40px;
@@ -650,18 +648,16 @@ const VideoEyebrow = styled.div`
 `;
 
 const VideoLogo = styled.h1`
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: clamp(5rem, 18vw, 12rem);
   font-weight: 700;
   color: #FFFFFF;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   line-height: 0.85;
   margin-bottom: 30px;
-  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
   display: inline-block;
-  background: rgba(0, 0, 0, 0.4);
+  background: #000000;
   padding: 15px 40px;
-  backdrop-filter: blur(10px);
   
   @media (max-width: 600px) {
     font-size: 4rem;
@@ -814,12 +810,20 @@ const BotanicalEyebrow = styled.div`
 `;
 
 const BotanicalLogo = styled.h1`
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Roboto', sans-serif;
   font-size: clamp(4rem, 15vw, 10rem);
-  font-weight: 400;
-  color: #2C3E2D;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  background: #000000;
+  padding: 15px 35px;
   line-height: 0.9;
-  margin-bottom: 0;
+  margin-bottom: 20px;
+  
+  @media (max-width: 600px) {
+    font-size: 3.5rem;
+    padding: 10px 25px;
+  }
 `;
 
 const BotanicalAmpersand = styled.div`

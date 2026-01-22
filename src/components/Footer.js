@@ -175,32 +175,15 @@ const Container = styled.div`
 `;
 
 const Logo = styled.div`
+  font-family: 'Roboto', sans-serif;
   font-size: 2rem;
   font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  background: #000000;
+  display: inline-block;
+  padding: 8px 16px;
   margin-bottom: 25px;
-  
-  ${p => p.$theme === 'contemporary' && css`
-    font-family: 'Space Grotesk', sans-serif;
-    color: #FFFFFF;
-    letter-spacing: -0.02em;
-  `}
-  
-  ${p => p.$theme === 'editorial' && css`
-    font-family: 'Inter', sans-serif;
-    color: #FFFFFF;
-  `}
-  
-  ${p => p.$theme === 'video' && css`
-    font-family: 'Montserrat', sans-serif;
-    color: #FFFFFF;
-    letter-spacing: 0.1em;
-  `}
-  
-  ${p => p.$theme === 'botanical' && css`
-    font-family: 'Playfair Display', Georgia, serif;
-    color: #FAF9F6;
-    letter-spacing: 0.05em;
-  `}
 `;
 
 const SocialLinks = styled.div`

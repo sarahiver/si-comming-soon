@@ -102,32 +102,13 @@ const LogoLink = styled.button`
 `;
 
 const Logo = styled.span`
+  font-family: 'Roboto', sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
-  background: #0D0D0D;
+  letter-spacing: -0.03em;
+  background: #000000;
   color: #FFFFFF;
   padding: 6px 12px;
-  
-  ${p => p.$theme === 'editorial' && css`
-    font-family: 'Inter', sans-serif;
-  `}
-  
-  ${p => p.$theme === 'contemporary' && css`
-    font-family: 'Space Grotesk', sans-serif;
-  `}
-  
-  ${p => p.$theme === 'video' && css`
-    font-family: 'Montserrat', sans-serif;
-    background: rgba(26, 24, 20, 0.9);
-    letter-spacing: 0.05em;
-  `}
-  
-  ${p => p.$theme === 'botanical' && css`
-    font-family: 'Playfair Display', Georgia, serif;
-    background: #2C3E2D;
-    letter-spacing: 0.02em;
-  `}
 `;
 
 const ThemeSwitcher = styled.div`
