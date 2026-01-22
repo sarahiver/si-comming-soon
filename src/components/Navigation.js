@@ -53,7 +53,7 @@ const Navigation = () => {
               onClick={() => setShowThemeMenu(!showThemeMenu)} 
               $theme={currentTheme}
             >
-              <ThemeDot $color={theme.colors.accent} />
+              <ThemeDot $color={theme.colors.accent} $inButton $theme={currentTheme} />
               <span>{themes[currentTheme].name}</span>
               <Arrow $open={showThemeMenu}>▾</Arrow>
             </ThemeButton>
@@ -133,9 +133,9 @@ const MobileHint = styled.button`
   color: ${p => {
     if (p.$theme === 'contemporary') return '#FF6B6B';
     if (p.$theme === 'editorial') return '#1A1A1A';
-    if (p.$theme === 'video') return p.$scrolled ? '#1A1A1A' : '#C9A962';
+    if (p.$theme === 'video') return p.$scrolled ? '#1A1A1A' : '#FFFFFF';
     if (p.$theme === 'botanical') return '#4A7C59';
-    if (p.$theme === 'luxe') return p.$scrolled ? '#B8960B' : '#B8960B';
+    if (p.$theme === 'luxe') return p.$scrolled ? '#1A1A1A' : '#FFFFFF';
     return '#FF6B6B';
   }};
   
@@ -310,6 +310,11 @@ const ThemeDot = styled.div`
   height: 10px;
   border-radius: 50%;
   background: ${p => p.$color};
+  
+  /* Bei Editorial im Button: weißer Dot statt schwarzer */
+  ${p => p.$inButton && p.$theme === 'editorial' && css`
+    background: #FFFFFF;
+  `}
 `;
 
 const Arrow = styled.span`

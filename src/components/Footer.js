@@ -225,9 +225,11 @@ const Footer = () => {
                   Anbieter: Supabase Inc., Singapore.<br />
                   Datenschutz: https://supabase.com/privacy<br /><br />
                   
-                  <strong>EmailJS (E-Mail-Versand)</strong><br />
-                  Anbieter: EmailJS, Dover, DE, USA.<br />
-                  Datenschutz: https://www.emailjs.com/legal/privacy-policy/<br /><br />
+                  <strong>Resend (E-Mail-Versand)</strong><br />
+                  Anbieter: Resend Inc., San Francisco, CA, USA.<br />
+                  Für den Versand der Double-Opt-In Bestätigungsmail nutzen wir Resend. 
+                  Dabei wird deine E-Mail-Adresse an Resend übermittelt.<br />
+                  Datenschutz: https://resend.com/legal/privacy-policy<br /><br />
                   
                   <strong>Cloudinary (Bildhosting)</strong><br />
                   Anbieter: Cloudinary Ltd., Sunnyvale, CA, USA.<br />
