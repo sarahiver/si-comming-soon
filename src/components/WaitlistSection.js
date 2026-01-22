@@ -37,7 +37,7 @@ const WaitlistSection = () => {
       
       if (result.success) {
         // 2. Bestätigungsmail senden via API Route
-        const confirmLink = `https://si-comming-soon.vercel.app/confirm?email=${encodeURIComponent(email)}&token=${result.data?.[0]?.id || 'pending'}`;
+        const confirmLink = `https://siwedding.de/confirm?email=${encodeURIComponent(email)}&token=${result.data?.[0]?.id || 'pending'}`;
         
         try {
           const response = await fetch('/api/send-email', {
