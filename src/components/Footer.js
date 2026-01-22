@@ -1,5 +1,5 @@
-// Footer mit Social Links - Multi-Theme
-import React from 'react';
+// Footer mit Social Links und Legal Modals - Multi-Theme
+import React, { useState } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { useTheme } from '../context/ThemeContext';
 
@@ -15,49 +15,273 @@ const slideUp = keyframes`
 
 const Footer = () => {
   const { currentTheme } = useTheme();
+  const [activeModal, setActiveModal] = useState(null); // 'impressum' | 'datenschutz' | null
+
+  const closeModal = () => setActiveModal(null);
 
   return (
-    <FooterSection $theme={currentTheme}>
-      <Container>
-        <Logo $theme={currentTheme}>S&I.</Logo>
-        
-        <SocialLinks>
-          <SocialLink 
-            href="https://instagram.com/sarah.iver.wedding" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            $theme={currentTheme}
-          >
-            <InstagramIcon />
-            <span>Instagram</span>
-          </SocialLink>
-          <SocialDivider $theme={currentTheme}>•</SocialDivider>
-          <SocialLink 
-            href="https://pinterest.com/sarahiverwedding" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            $theme={currentTheme}
-          >
-            <PinterestIcon />
-            <span>Pinterest</span>
-          </SocialLink>
-        </SocialLinks>
-        
-        <Copyright $theme={currentTheme}>
-          © 2025 S&I. wedding — Digitale Hochzeitserlebnisse
-        </Copyright>
-        
-        <LegalLinks>
-          <LegalLinkAnchor href="/impressum" $theme={currentTheme}>
-            Impressum
-          </LegalLinkAnchor>
-          <LegalDivider $theme={currentTheme}>|</LegalDivider>
-          <LegalLinkAnchor href="/datenschutz" $theme={currentTheme}>
-            Datenschutz
-          </LegalLinkAnchor>
-        </LegalLinks>
-      </Container>
-    </FooterSection>
+    <>
+      <FooterSection $theme={currentTheme}>
+        <Container>
+          <Logo $theme={currentTheme}>S&I.</Logo>
+          
+          <SocialLinks>
+            <SocialLink 
+              href="https://instagram.com/sarah.iver.wedding" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              $theme={currentTheme}
+            >
+              <InstagramIcon />
+              <span>Instagram</span>
+            </SocialLink>
+            <SocialDivider $theme={currentTheme}>•</SocialDivider>
+            <SocialLink 
+              href="https://pinterest.com/sarahiverwedding" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              $theme={currentTheme}
+            >
+              <PinterestIcon />
+              <span>Pinterest</span>
+            </SocialLink>
+          </SocialLinks>
+          
+          <Copyright $theme={currentTheme}>
+            © 2025 S&I. wedding — Digitale Hochzeitserlebnisse
+          </Copyright>
+          
+          <LegalLinks>
+            <LegalLink onClick={() => setActiveModal('impressum')} $theme={currentTheme}>
+              Impressum
+            </LegalLink>
+            <LegalDivider $theme={currentTheme}>|</LegalDivider>
+            <LegalLink onClick={() => setActiveModal('datenschutz')} $theme={currentTheme}>
+              Datenschutz
+            </LegalLink>
+          </LegalLinks>
+        </Container>
+      </FooterSection>
+
+      {/* Impressum Modal */}
+      {activeModal === 'impressum' && (
+        <ModalOverlay onClick={closeModal}>
+          <ModalContent onClick={(e) => e.stopPropagation()} $theme={currentTheme}>
+            <ModalHeader $theme={currentTheme}>
+              <ModalTitle $theme={currentTheme}>Impressum</ModalTitle>
+              <CloseButton onClick={closeModal} $theme={currentTheme}>✕</CloseButton>
+            </ModalHeader>
+            
+            <ModalBody>
+              <ModalSection>
+                <SectionTitle $theme={currentTheme}>Angaben gemäß § 5 TMG</SectionTitle>
+                <SectionText $theme={currentTheme}>
+                  <strong>S&I. wedding</strong><br />
+                  Sarah & Iver Bohnes<br />
+                  Große Freiheit 82<br />
+                  22767 Hamburg<br />
+                  Deutschland
+                </SectionText>
+              </ModalSection>
+              
+              <ModalSection>
+                <SectionTitle $theme={currentTheme}>Kontakt</SectionTitle>
+                <SectionText $theme={currentTheme}>
+                  E-Mail: wedding@sarahiver.de
+                </SectionText>
+              </ModalSection>
+              
+              <ModalSection>
+                <SectionTitle $theme={currentTheme}>Umsatzsteuer-ID</SectionTitle>
+                <SectionText $theme={currentTheme}>
+                  Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:<br />
+                  [wird nach Gewerbeanmeldung ergänzt]
+                </SectionText>
+              </ModalSection>
+              
+              <ModalSection>
+                <SectionTitle $theme={currentTheme}>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</SectionTitle>
+                <SectionText $theme={currentTheme}>
+                  Sarah & Iver Bohnes<br />
+                  Große Freiheit 82<br />
+                  22767 Hamburg
+                </SectionText>
+              </ModalSection>
+              
+              <Divider $theme={currentTheme} />
+              
+              <ModalSection>
+                <SectionTitle $theme={currentTheme}>EU-Streitschlichtung</SectionTitle>
+                <SectionText $theme={currentTheme}>
+                  Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: 
+                  https://ec.europa.eu/consumers/odr/<br /><br />
+                  Unsere E-Mail-Adresse finden Sie oben im Impressum.
+                </SectionText>
+              </ModalSection>
+              
+              <ModalSection>
+                <SectionTitle $theme={currentTheme}>Verbraucherstreitbeilegung</SectionTitle>
+                <SectionText $theme={currentTheme}>
+                  Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer 
+                  Verbraucherschlichtungsstelle teilzunehmen.
+                </SectionText>
+              </ModalSection>
+              
+              <Divider $theme={currentTheme} />
+              
+              <ModalSection>
+                <SectionTitle $theme={currentTheme}>Haftung für Inhalte</SectionTitle>
+                <SectionText $theme={currentTheme}>
+                  Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten 
+                  nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als 
+                  Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde 
+                  Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige 
+                  Tätigkeit hinweisen.
+                </SectionText>
+              </ModalSection>
+              
+              <ModalSection>
+                <SectionTitle $theme={currentTheme}>Haftung für Links</SectionTitle>
+                <SectionText $theme={currentTheme}>
+                  Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen 
+                  Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen.
+                </SectionText>
+              </ModalSection>
+              
+              <ModalSection>
+                <SectionTitle $theme={currentTheme}>Urheberrecht</SectionTitle>
+                <SectionText $theme={currentTheme}>
+                  Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem 
+                  deutschen Urheberrecht. Downloads und Kopien dieser Seite sind nur für den privaten, nicht 
+                  kommerziellen Gebrauch gestattet.
+                </SectionText>
+              </ModalSection>
+            </ModalBody>
+          </ModalContent>
+        </ModalOverlay>
+      )}
+
+      {/* Datenschutz Modal */}
+      {activeModal === 'datenschutz' && (
+        <ModalOverlay onClick={closeModal}>
+          <ModalContent onClick={(e) => e.stopPropagation()} $theme={currentTheme}>
+            <ModalHeader $theme={currentTheme}>
+              <ModalTitle $theme={currentTheme}>Datenschutzerklärung</ModalTitle>
+              <CloseButton onClick={closeModal} $theme={currentTheme}>✕</CloseButton>
+            </ModalHeader>
+            
+            <ModalBody>
+              <ModalSection>
+                <SectionTitle $theme={currentTheme}>1. Datenschutz auf einen Blick</SectionTitle>
+                <SectionText $theme={currentTheme}>
+                  Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit deinen 
+                  personenbezogenen Daten passiert, wenn du diese Website besuchst.
+                </SectionText>
+              </ModalSection>
+              
+              <ModalSection>
+                <SectionTitle $theme={currentTheme}>2. Verantwortliche Stelle</SectionTitle>
+                <SectionText $theme={currentTheme}>
+                  <strong>S&I. wedding</strong><br />
+                  Sarah & Iver Bohnes<br />
+                  Große Freiheit 82<br />
+                  22767 Hamburg<br /><br />
+                  E-Mail: wedding@sarahiver.de
+                </SectionText>
+              </ModalSection>
+              
+              <Divider $theme={currentTheme} />
+              
+              <ModalSection>
+                <SectionTitle $theme={currentTheme}>3. Hosting</SectionTitle>
+                <SectionText $theme={currentTheme}>
+                  Wir hosten die Inhalte unserer Website bei Vercel Inc., 340 S Lemon Ave #4133, 
+                  Walnut, CA 91789, USA. Wenn du unsere Website besuchst, erfasst Vercel verschiedene 
+                  Logfiles inklusive deiner IP-Adresse.<br /><br />
+                  Datenschutzerklärung: https://vercel.com/legal/privacy-policy
+                </SectionText>
+              </ModalSection>
+              
+              <ModalSection>
+                <SectionTitle $theme={currentTheme}>4. Warteliste / Newsletter</SectionTitle>
+                <SectionText $theme={currentTheme}>
+                  Auf unserer Website kannst du dich für unsere Warteliste anmelden. 
+                  Hierfür benötigen wir deine E-Mail-Adresse. Zusätzlich speichern wir das von dir 
+                  gewählte Design-Theme und den Zeitpunkt der Anmeldung.<br /><br />
+                  Wir verwenden das Double-Opt-In-Verfahren. Das bedeutet, dass wir dir 
+                  nach deiner Anmeldung eine E-Mail senden, in der wir dich um Bestätigung bitten.<br /><br />
+                  <strong>Zweck:</strong> Information über den Launch sowie Zusendung deines exklusiven Launch-Rabatts.<br /><br />
+                  <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung).<br /><br />
+                  <strong>Speicherdauer:</strong> Bis zur Abmeldung oder Zweckentfall.
+                </SectionText>
+              </ModalSection>
+              
+              <Divider $theme={currentTheme} />
+              
+              <ModalSection>
+                <SectionTitle $theme={currentTheme}>5. Externe Dienste</SectionTitle>
+                <SectionText $theme={currentTheme}>
+                  <strong>Supabase (Datenbank)</strong><br />
+                  Anbieter: Supabase Inc., Singapore.<br />
+                  Datenschutz: https://supabase.com/privacy<br /><br />
+                  
+                  <strong>EmailJS (E-Mail-Versand)</strong><br />
+                  Anbieter: EmailJS, Dover, DE, USA.<br />
+                  Datenschutz: https://www.emailjs.com/legal/privacy-policy/<br /><br />
+                  
+                  <strong>Cloudinary (Bildhosting)</strong><br />
+                  Anbieter: Cloudinary Ltd., Sunnyvale, CA, USA.<br />
+                  Datenschutz: https://cloudinary.com/privacy
+                </SectionText>
+              </ModalSection>
+              
+              <ModalSection>
+                <SectionTitle $theme={currentTheme}>6. Cookies</SectionTitle>
+                <SectionText $theme={currentTheme}>
+                  Diese Website verwendet keine Cookies zu Tracking- oder Analysezwecken.
+                  Es werden ausschließlich technisch notwendige Funktionen verwendet.
+                </SectionText>
+              </ModalSection>
+              
+              <Divider $theme={currentTheme} />
+              
+              <ModalSection>
+                <SectionTitle $theme={currentTheme}>7. Deine Rechte</SectionTitle>
+                <SectionText $theme={currentTheme}>
+                  Du hast jederzeit das Recht auf:<br /><br />
+                  • Auskunft über deine gespeicherten Daten (Art. 15 DSGVO)<br />
+                  • Berichtigung unrichtiger Daten (Art. 16 DSGVO)<br />
+                  • Löschung deiner Daten (Art. 17 DSGVO)<br />
+                  • Einschränkung der Verarbeitung (Art. 18 DSGVO)<br />
+                  • Datenübertragbarkeit (Art. 20 DSGVO)<br />
+                  • Widerspruch (Art. 21 DSGVO)<br />
+                  • Widerruf deiner Einwilligung (Art. 7 Abs. 3 DSGVO)<br /><br />
+                  Kontakt: wedding@sarahiver.de
+                </SectionText>
+              </ModalSection>
+              
+              <ModalSection>
+                <SectionTitle $theme={currentTheme}>8. Beschwerderecht</SectionTitle>
+                <SectionText $theme={currentTheme}>
+                  Du hast das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren.<br /><br />
+                  <strong>Zuständige Behörde:</strong><br />
+                  Der Hamburgische Beauftragte für Datenschutz und Informationsfreiheit<br />
+                  Ludwig-Erhard-Str. 22, 7. OG<br />
+                  20459 Hamburg<br />
+                  https://datenschutz-hamburg.de
+                </SectionText>
+              </ModalSection>
+              
+              <ModalSection>
+                <SectionText $theme={currentTheme}>
+                  <em>Stand: Januar 2025</em>
+                </SectionText>
+              </ModalSection>
+            </ModalBody>
+          </ModalContent>
+        </ModalOverlay>
+      )}
+    </>
   );
 };
 
@@ -143,35 +367,30 @@ const SocialLink = styled.a`
   ${p => p.$theme === 'contemporary' && css`
     font-family: 'Space Grotesk', sans-serif;
     color: rgba(255, 255, 255, 0.7);
-    
     &:hover { color: #FF6B6B; }
   `}
   
   ${p => p.$theme === 'editorial' && css`
     font-family: 'Inter', sans-serif;
     color: rgba(255, 255, 255, 0.6);
-    
     &:hover { color: #FFFFFF; }
   `}
   
   ${p => p.$theme === 'video' && css`
     font-family: 'Montserrat', sans-serif;
     color: rgba(255, 255, 255, 0.5);
-    
     &:hover { color: #C4A87C; }
   `}
   
   ${p => p.$theme === 'botanical' && css`
     font-family: 'Lato', sans-serif;
     color: rgba(250, 249, 246, 0.6);
-    
     &:hover { color: #7BA889; }
   `}
   
   ${p => p.$theme === 'luxe' && css`
     font-family: 'Montserrat', sans-serif;
     color: rgba(255, 255, 255, 0.5);
-    
     &:hover { color: #B8960B; }
   `}
   
@@ -232,77 +451,30 @@ const LegalLink = styled.button`
   ${p => p.$theme === 'contemporary' && css`
     font-family: 'Space Grotesk', sans-serif;
     color: rgba(255, 255, 255, 0.4);
-    
     &:hover { color: #FF6B6B; }
   `}
   
   ${p => p.$theme === 'editorial' && css`
     font-family: 'Inter', sans-serif;
     color: rgba(255, 255, 255, 0.3);
-    
     &:hover { color: #FFFFFF; }
   `}
   
   ${p => p.$theme === 'video' && css`
     font-family: 'Montserrat', sans-serif;
     color: rgba(255, 255, 255, 0.3);
-    
     &:hover { color: #C4A87C; }
   `}
   
   ${p => p.$theme === 'botanical' && css`
     font-family: 'Lato', sans-serif;
     color: rgba(250, 249, 246, 0.4);
-    
     &:hover { color: #7BA889; }
   `}
   
   ${p => p.$theme === 'luxe' && css`
     font-family: 'Montserrat', sans-serif;
     color: rgba(255, 255, 255, 0.3);
-    
-    &:hover { color: #B8960B; }
-  `}
-`;
-
-const LegalLinkAnchor = styled.a`
-  font-size: 0.75rem;
-  font-weight: 500;
-  text-decoration: none;
-  transition: color 0.3s ease;
-  
-  ${p => p.$theme === 'contemporary' && css`
-    font-family: 'Space Grotesk', sans-serif;
-    color: rgba(255, 255, 255, 0.4);
-    
-    &:hover { color: #FF6B6B; }
-  `}
-  
-  ${p => p.$theme === 'editorial' && css`
-    font-family: 'Inter', sans-serif;
-    color: rgba(255, 255, 255, 0.3);
-    
-    &:hover { color: #FFFFFF; }
-  `}
-  
-  ${p => p.$theme === 'video' && css`
-    font-family: 'Montserrat', sans-serif;
-    color: rgba(255, 255, 255, 0.3);
-    
-    &:hover { color: #C4A87C; }
-  `}
-  
-  ${p => p.$theme === 'botanical' && css`
-    font-family: 'Lato', sans-serif;
-    color: rgba(250, 249, 246, 0.4);
-    
-    &:hover { color: #7BA889; }
-  `}
-  
-  ${p => p.$theme === 'luxe' && css`
-    font-family: 'Montserrat', sans-serif;
-    color: rgba(255, 255, 255, 0.3);
-    
     &:hover { color: #B8960B; }
   `}
 `;
@@ -332,6 +504,7 @@ const ModalContent = styled.div`
   width: 100%;
   overflow-y: auto;
   animation: ${slideUp} 0.3s ease;
+  border-radius: 4px;
 `;
 
 const ModalHeader = styled.div`
@@ -366,6 +539,8 @@ const ModalHeader = styled.div`
 `;
 
 const ModalTitle = styled.h2`
+  margin: 0;
+  
   ${p => p.$theme === 'contemporary' && css`
     font-family: 'Space Grotesk', sans-serif;
     font-size: 1.5rem;
@@ -375,9 +550,10 @@ const ModalTitle = styled.h2`
   `}
   
   ${p => p.$theme === 'editorial' && css`
-    font-family: 'Inter', sans-serif;
-    font-size: 1.3rem;
-    font-weight: 500;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    font-style: italic;
     color: #1A1A1A;
   `}
   
@@ -444,17 +620,17 @@ const ModalBody = styled.div`
 `;
 
 const ModalSection = styled.div`
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   
   &:last-child { margin-bottom: 0; }
 `;
 
 const SectionTitle = styled.h3`
-  margin-bottom: 12px;
+  margin: 0 0 12px 0;
   
   ${p => p.$theme === 'contemporary' && css`
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: #FF6B6B;
     letter-spacing: 0.1em;
@@ -463,7 +639,7 @@ const SectionTitle = styled.h3`
   
   ${p => p.$theme === 'editorial' && css`
     font-family: 'Inter', sans-serif;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 600;
     color: #999;
     letter-spacing: 0.1em;
@@ -472,7 +648,7 @@ const SectionTitle = styled.h3`
   
   ${p => p.$theme === 'video' && css`
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 600;
     color: #8B7355;
     letter-spacing: 0.15em;
@@ -481,7 +657,7 @@ const SectionTitle = styled.h3`
   
   ${p => p.$theme === 'botanical' && css`
     font-family: 'Lato', sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 700;
     color: #4A7C59;
     letter-spacing: 0.15em;
@@ -490,7 +666,7 @@ const SectionTitle = styled.h3`
   
   ${p => p.$theme === 'luxe' && css`
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 500;
     color: #B8960B;
     letter-spacing: 0.15em;
@@ -499,45 +675,47 @@ const SectionTitle = styled.h3`
 `;
 
 const SectionText = styled.p`
+  margin: 0;
   line-height: 1.7;
   
   ${p => p.$theme === 'contemporary' && css`
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: #0D0D0D;
   `}
   
   ${p => p.$theme === 'editorial' && css`
     font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
-    color: #1A1A1A;
+    font-size: 0.85rem;
+    color: #444;
   `}
   
   ${p => p.$theme === 'video' && css`
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #1A1814;
   `}
   
   ${p => p.$theme === 'botanical' && css`
     font-family: 'Lato', sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #2C3E2D;
   `}
   
   ${p => p.$theme === 'luxe' && css`
     font-family: 'Montserrat', sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 300;
     color: #1A1A1A;
   `}
   
   strong { font-weight: 700; }
+  em { font-style: italic; color: #888; }
 `;
 
 const Divider = styled.hr`
   border: none;
-  margin: 30px 0;
+  margin: 25px 0;
   
   ${p => p.$theme === 'contemporary' && css`
     height: 2px;
@@ -546,12 +724,12 @@ const Divider = styled.hr`
   
   ${p => p.$theme === 'editorial' && css`
     height: 1px;
-    background: #E0E0E0;
+    background: #E5E5E5;
   `}
   
   ${p => p.$theme === 'video' && css`
     height: 1px;
-    background: rgba(139, 115, 85, 0.3);
+    background: rgba(139, 115, 85, 0.2);
   `}
   
   ${p => p.$theme === 'botanical' && css`

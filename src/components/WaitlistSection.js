@@ -44,12 +44,14 @@ const WaitlistSection = () => {
       if (result.success) {
         // 2. Bestätigungsmail senden via EmailJS
         try {
+          // Dynamische URL basierend auf aktueller Domain
+          const baseUrl = window.location.origin;
           await emailjs.send(
             EMAILJS_SERVICE_ID,
             EMAILJS_TEMPLATE_ID,
             {
               to_email: email,
-              confirm_link: `https://siwedding.de/confirm?email=${encodeURIComponent(email)}&token=${result.data?.[0]?.id || 'pending'}`,
+              confirm_link: `${baseUrl}/confirm?email=${encodeURIComponent(email)}&token=${result.data?.[0]?.id || 'pending'}`,
             },
             EMAILJS_PUBLIC_KEY
           );
