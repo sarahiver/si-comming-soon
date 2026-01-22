@@ -29,6 +29,10 @@ const usps = [
 const USPsSection = () => {
   const { currentTheme } = useTheme();
 
+  if (currentTheme === 'botanical') {
+    return <BotanicalUSPs />;
+  }
+
   if (currentTheme === 'video') {
     return <VideoUSPs />;
   }
@@ -83,7 +87,7 @@ const EditorialUSPs = () => (
   <Section id="usps" $theme="editorial">
     <Container>
       <Header>
-        <Badge $theme="editorial">WARUM S&I</Badge>
+        <Badge $theme="editorial">WARUM S&I.</Badge>
         <EditorialMainTitle>Was uns <em>auszeichnet</em></EditorialMainTitle>
         <Subtitle $theme="editorial">
           Premium-Features für Paare, die keine Kompromisse eingehen. Jede Website ist ein Unikat.
@@ -174,6 +178,43 @@ const VideoUSPs = () => {
     </VideoSection>
   );
 };
+
+// ============================================
+// BOTANICAL USPs - Grid with Plant Elements
+// ============================================
+const BotanicalUSPs = () => (
+  <BotanicalUSPSection id="usps">
+    <BotanicalUSPContainer>
+      <BotanicalUSPHeader>
+        <BotanicalUSPBadge>✦ WARUM S&I. ✦</BotanicalUSPBadge>
+        <BotanicalUSPTitle>Was uns <em>auszeichnet</em></BotanicalUSPTitle>
+        <BotanicalUSPSubtitle>
+          Premium-Features für Paare, die keine Kompromisse eingehen. Jede Website ist ein Unikat.
+        </BotanicalUSPSubtitle>
+      </BotanicalUSPHeader>
+      
+      <BotanicalUSPGrid>
+        {usps.map((usp, index) => (
+          <BotanicalUSPCard key={usp.num} $delay={index * 0.05}>
+            <BotanicalUSPIcon>{usp.icon}</BotanicalUSPIcon>
+            <BotanicalUSPCardTitle>{usp.title}</BotanicalUSPCardTitle>
+            <BotanicalUSPCardText>{usp.text}</BotanicalUSPCardText>
+            <BotanicalUSPTag>{usp.subtitle}</BotanicalUSPTag>
+          </BotanicalUSPCard>
+        ))}
+      </BotanicalUSPGrid>
+      
+      <BotanicalDomainBox>
+        <DomainIcon>🌐</DomainIcon>
+        <BotanicalDomainTitle>Eure eigene Domain – <em>inklusive</em></BotanicalDomainTitle>
+        <BotanicalDomainExample>www.sarah-und-thomas.de</BotanicalDomainExample>
+        <BotanicalDomainSubtext>
+          Keine kryptischen URLs. Eure Hochzeitswebsite, eure Domain. Setup und erstes Jahr inklusive.
+        </BotanicalDomainSubtext>
+      </BotanicalDomainBox>
+    </BotanicalUSPContainer>
+  </BotanicalUSPSection>
+);
 
 export default USPsSection;
 
@@ -669,4 +710,156 @@ const VideoDomainSubtext = styled.p`
   font-family: 'Montserrat', sans-serif;
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.5);
+`;
+
+// ============================================
+// BOTANICAL THEME STYLES
+// ============================================
+const BotanicalUSPSection = styled.section`
+  padding: 120px 5%;
+  background: #FAF9F6;
+`;
+
+const BotanicalUSPContainer = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+const BotanicalUSPHeader = styled.div`
+  text-align: center;
+  margin-bottom: 60px;
+`;
+
+const BotanicalUSPBadge = styled.div`
+  font-family: 'Lato', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  color: #4A7C59;
+  margin-bottom: 20px;
+`;
+
+const BotanicalUSPTitle = styled.h2`
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 400;
+  color: #2C3E2D;
+  margin-bottom: 15px;
+  
+  em {
+    font-style: italic;
+  }
+`;
+
+const BotanicalUSPSubtitle = styled.p`
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  font-style: italic;
+  color: #6B7B6C;
+  max-width: 600px;
+  margin: 0 auto;
+`;
+
+const BotanicalUSPGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  margin-bottom: 60px;
+  
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const BotanicalUSPCard = styled.div`
+  background: #FFFFFF;
+  border: 1px solid #E5E0D8;
+  padding: 30px 25px;
+  text-align: center;
+  transition: all 0.3s ease;
+  opacity: 0;
+  animation: ${fadeInUp} 0.6s ease forwards;
+  animation-delay: ${p => p.$delay}s;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(74, 124, 89, 0.1);
+    border-color: #4A7C59;
+  }
+`;
+
+const BotanicalUSPIcon = styled.div`
+  font-size: 2rem;
+  margin-bottom: 15px;
+`;
+
+const BotanicalUSPCardTitle = styled.h3`
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #2C3E2D;
+  margin-bottom: 12px;
+`;
+
+const BotanicalUSPCardText = styled.p`
+  font-family: 'Lato', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: #6B7B6C;
+  line-height: 1.7;
+  margin-bottom: 15px;
+`;
+
+const BotanicalUSPTag = styled.span`
+  display: inline-block;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: #FFFFFF;
+  background: #4A7C59;
+  padding: 6px 12px;
+  border-radius: 20px;
+`;
+
+const BotanicalDomainBox = styled.div`
+  text-align: center;
+  padding: 50px 30px;
+  background: #2C3E2D;
+  border-radius: 0;
+`;
+
+const BotanicalDomainTitle = styled.h3`
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #FAF9F6;
+  margin-bottom: 20px;
+  
+  em {
+    font-style: italic;
+    color: #7BA889;
+  }
+`;
+
+const BotanicalDomainExample = styled.div`
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  color: #7BA889;
+  padding: 12px 25px;
+  border: 1px dashed rgba(123, 168, 137, 0.5);
+  display: inline-block;
+  margin-bottom: 15px;
+`;
+
+const BotanicalDomainSubtext = styled.p`
+  font-family: 'Lato', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: rgba(250, 249, 246, 0.6);
 `;

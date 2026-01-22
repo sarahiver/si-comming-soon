@@ -61,9 +61,30 @@ export const themes = {
       border: '#E5E0D8',
     },
   },
+  botanical: {
+    id: 'botanical',
+    name: 'Botanical',
+    fonts: {
+      heading: "'Playfair Display', Georgia, serif",
+      body: "'Lato', sans-serif",
+      script: "'Playfair Display', Georgia, serif",
+    },
+    colors: {
+      bg: '#FAF9F6',
+      bgAlt: '#F5F1EB',
+      bgDark: '#2C3E2D',
+      text: '#2C3E2D',
+      textLight: '#6B7B6C',
+      textOnDark: '#FAF9F6',
+      accent: '#4A7C59',
+      accentLight: '#7BA889',
+      cream: '#EDE8DF',
+      border: '#D4CFC4',
+    },
+  },
 };
 
-export const themeOrder = ['contemporary', 'editorial', 'video'];
+export const themeOrder = ['contemporary', 'editorial', 'video', 'botanical'];
 
 export const ThemeProvider = ({ children }) => {
   const [currentTheme, setCurrentTheme] = useState('contemporary');

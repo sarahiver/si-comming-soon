@@ -22,6 +22,10 @@ const CountdownSection = () => {
     document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  if (currentTheme === 'botanical') {
+    return <BotanicalCountdown timeLeft={timeLeft} scrollToWaitlist={scrollToWaitlist} />;
+  }
+
   if (currentTheme === 'video') {
     return <VideoCountdown timeLeft={timeLeft} scrollToWaitlist={scrollToWaitlist} />;
   }
@@ -158,6 +162,51 @@ const VideoCountdown = ({ timeLeft, scrollToWaitlist }) => {
         </VideoCTA>
       </VideoContainer>
     </VideoSection>
+  );
+};
+
+// ============================================
+// BOTANICAL COUNTDOWN - Organic Nature Style
+// ============================================
+const BotanicalCountdown = ({ timeLeft, scrollToWaitlist }) => {
+  const units = [
+    { value: timeLeft.days, label: 'Tage' },
+    { value: timeLeft.hours, label: 'Stunden' },
+    { value: timeLeft.minutes, label: 'Minuten' },
+    { value: timeLeft.seconds, label: 'Sekunden' },
+  ];
+
+  return (
+    <BotanicalSection id="countdown">
+      <BotanicalContainer>
+        <BotanicalBadge>✦ COUNTDOWN ✦</BotanicalBadge>
+        
+        <BotanicalTitle>
+          Es wird <em>Zeit</em>
+        </BotanicalTitle>
+        
+        <BotanicalSubtitle>
+          Jeder Moment bringt uns unserem großen Tag näher
+        </BotanicalSubtitle>
+        
+        <BotanicalGrid>
+          {units.map((unit, index) => (
+            <BotanicalUnit key={unit.label} $delay={index * 0.1}>
+              <BotanicalNumber>{formatNumber(unit.value)}</BotanicalNumber>
+              <BotanicalLabel>{unit.label}</BotanicalLabel>
+            </BotanicalUnit>
+          ))}
+        </BotanicalGrid>
+        
+        <BotanicalMessage>
+          🌸 Bald beginnt unser gemeinsames Abenteuer – und wir können es kaum erwarten, es mit euch zu teilen. 🌿
+        </BotanicalMessage>
+        
+        <BotanicalCTA onClick={scrollToWaitlist}>
+          Jetzt eintragen →
+        </BotanicalCTA>
+      </BotanicalContainer>
+    </BotanicalSection>
   );
 };
 
@@ -579,5 +628,142 @@ const VideoCTA = styled.button`
     background: #6B5A45;
     transform: translateY(-2px);
     box-shadow: 0 10px 30px rgba(139, 115, 85, 0.3);
+  }
+`;
+
+// ============================================
+// BOTANICAL THEME STYLES
+// ============================================
+const BotanicalSection = styled.section`
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 100px 5%;
+  overflow: hidden;
+  background: linear-gradient(180deg, #F5F1EB 0%, #EDE8DF 100%);
+`;
+
+const BotanicalContainer = styled.div`
+  max-width: 900px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+`;
+
+const BotanicalBadge = styled.div`
+  font-family: 'Lato', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  color: #4A7C59;
+  margin-bottom: 25px;
+`;
+
+const BotanicalTitle = styled.h2`
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 400;
+  color: #2C3E2D;
+  margin-bottom: 15px;
+  
+  em {
+    font-style: italic;
+  }
+`;
+
+const BotanicalSubtitle = styled.p`
+  font-family: 'Lato', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 300;
+  font-style: italic;
+  color: #6B7B6C;
+  margin-bottom: 50px;
+`;
+
+const BotanicalGrid = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 40px;
+  
+  @media (max-width: 600px) {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+`;
+
+const BotanicalUnit = styled.div`
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid #D4CFC4;
+  padding: 30px 25px;
+  min-width: 100px;
+  text-align: center;
+  opacity: 0;
+  animation: ${fadeInUp} 0.6s ease forwards;
+  animation-delay: ${p => p.$delay}s;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: #FFFFFF;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(74, 124, 89, 0.1);
+  }
+  
+  @media (max-width: 600px) {
+    padding: 20px 15px;
+    min-width: 70px;
+  }
+`;
+
+const BotanicalNumber = styled.div`
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 400;
+  color: #2C3E2D;
+  line-height: 1;
+  margin-bottom: 8px;
+`;
+
+const BotanicalLabel = styled.div`
+  font-family: 'Lato', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  color: #6B7B6C;
+  text-transform: uppercase;
+`;
+
+const BotanicalMessage = styled.p`
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1rem;
+  font-style: italic;
+  color: #4A7C59;
+  background: rgba(74, 124, 89, 0.1);
+  padding: 20px 30px;
+  border-radius: 30px;
+  display: inline-block;
+  margin-bottom: 40px;
+  max-width: 500px;
+`;
+
+const BotanicalCTA = styled.button`
+  font-family: 'Lato', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  padding: 16px 35px;
+  background: #4A7C59;
+  color: #FFFFFF;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+  
+  &:hover {
+    background: #3A6249;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(74, 124, 89, 0.3);
   }
 `;

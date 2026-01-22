@@ -21,7 +21,7 @@ const Footer = () => {
     <>
       <FooterSection $theme={currentTheme}>
         <Container>
-          <Logo $theme={currentTheme}>S&I</Logo>
+          <Logo $theme={currentTheme}>S&I.</Logo>
           
           <SocialLinks>
             <SocialLink 
@@ -46,7 +46,7 @@ const Footer = () => {
           </SocialLinks>
           
           <Copyright $theme={currentTheme}>
-            © 2026 S&I. Weddings — Digitale Hochzeitserlebnisse
+            © 2026 S&I. wedding — Digitale Hochzeitserlebnisse
           </Copyright>
           
           <LegalLinks>
@@ -76,7 +76,7 @@ const Footer = () => {
               <ModalSection>
                 <SectionTitle $theme={currentTheme}>Angaben gemäß § 5 TMG</SectionTitle>
                 <SectionText $theme={currentTheme}>
-                  <strong>S&I. Weddings</strong><br />
+                  <strong>S&I. wedding</strong><br />
                   [Vorname Nachname]<br />
                   [Straße Hausnummer]<br />
                   [PLZ Ort]<br />
@@ -162,6 +162,10 @@ const FooterSection = styled.footer`
   ${p => p.$theme === 'video' && css`
     background: #0A0A08;
   `}
+  
+  ${p => p.$theme === 'botanical' && css`
+    background: #1E2E1F;
+  `}
 `;
 
 const Container = styled.div`
@@ -190,6 +194,12 @@ const Logo = styled.div`
     font-family: 'Montserrat', sans-serif;
     color: #FFFFFF;
     letter-spacing: 0.1em;
+  `}
+  
+  ${p => p.$theme === 'botanical' && css`
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #FAF9F6;
+    letter-spacing: 0.05em;
   `}
 `;
 
@@ -231,6 +241,13 @@ const SocialLink = styled.a`
     &:hover { color: #C4A87C; }
   `}
   
+  ${p => p.$theme === 'botanical' && css`
+    font-family: 'Lato', sans-serif;
+    color: rgba(250, 249, 246, 0.6);
+    
+    &:hover { color: #7BA889; }
+  `}
+  
   span {
     @media (max-width: 400px) { display: none; }
   }
@@ -257,6 +274,11 @@ const Copyright = styled.p`
   ${p => p.$theme === 'video' && css`
     font-family: 'Montserrat', sans-serif;
     color: rgba(255, 255, 255, 0.4);
+  `}
+  
+  ${p => p.$theme === 'botanical' && css`
+    font-family: 'Lato', sans-serif;
+    color: rgba(250, 249, 246, 0.5);
   `}
 `;
 
@@ -294,6 +316,13 @@ const LegalLink = styled.button`
     color: rgba(255, 255, 255, 0.3);
     
     &:hover { color: #C4A87C; }
+  `}
+  
+  ${p => p.$theme === 'botanical' && css`
+    font-family: 'Lato', sans-serif;
+    color: rgba(250, 249, 246, 0.4);
+    
+    &:hover { color: #7BA889; }
   `}
 `;
 
@@ -345,6 +374,10 @@ const ModalHeader = styled.div`
   ${p => p.$theme === 'video' && css`
     border-bottom: 1px solid rgba(139, 115, 85, 0.3);
   `}
+  
+  ${p => p.$theme === 'botanical' && css`
+    border-bottom: 1px solid #D4CFC4;
+  `}
 `;
 
 const ModalTitle = styled.h2`
@@ -368,6 +401,13 @@ const ModalTitle = styled.h2`
     font-size: 1.5rem;
     font-weight: 500;
     color: #1A1814;
+  `}
+  
+  ${p => p.$theme === 'botanical' && css`
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #2C3E2D;
   `}
 `;
 
@@ -393,6 +433,11 @@ const CloseButton = styled.button`
   ${p => p.$theme === 'video' && css`
     color: #1A1814;
     &:hover { color: #8B7355; }
+  `}
+  
+  ${p => p.$theme === 'botanical' && css`
+    color: #2C3E2D;
+    &:hover { color: #4A7C59; }
   `}
 `;
 
@@ -435,6 +480,15 @@ const SectionTitle = styled.h3`
     letter-spacing: 0.15em;
     text-transform: uppercase;
   `}
+  
+  ${p => p.$theme === 'botanical' && css`
+    font-family: 'Lato', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #4A7C59;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  `}
 `;
 
 const SectionText = styled.p`
@@ -458,6 +512,12 @@ const SectionText = styled.p`
     color: #1A1814;
   `}
   
+  ${p => p.$theme === 'botanical' && css`
+    font-family: 'Lato', sans-serif;
+    font-size: 0.9rem;
+    color: #2C3E2D;
+  `}
+  
   strong { font-weight: 700; }
 `;
 
@@ -478,5 +538,10 @@ const Divider = styled.hr`
   ${p => p.$theme === 'video' && css`
     height: 1px;
     background: rgba(139, 115, 85, 0.3);
+  `}
+  
+  ${p => p.$theme === 'botanical' && css`
+    height: 1px;
+    background: #D4CFC4;
   `}
 `;

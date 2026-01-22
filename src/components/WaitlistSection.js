@@ -38,6 +38,18 @@ const WaitlistSection = () => {
     setLoading(false);
   };
 
+  if (currentTheme === 'botanical') {
+    return (
+      <BotanicalWaitlist 
+        email={email}
+        setEmail={setEmail}
+        status={status}
+        loading={loading}
+        handleSubmit={handleSubmit}
+      />
+    );
+  }
+
   if (currentTheme === 'video') {
     return (
       <VideoWaitlist 
@@ -236,6 +248,56 @@ const VideoWaitlist = ({ email, setEmail, status, loading, handleSubmit }) => (
       </VideoBenefits>
     </VideoContainer>
   </VideoSection>
+);
+
+// ============================================
+// BOTANICAL WAITLIST - Nature-inspired Form
+// ============================================
+const BotanicalWaitlist = ({ email, setEmail, status, loading, handleSubmit }) => (
+  <BotanicalWaitlistSection id="waitlist">
+    <BotanicalWaitlistContainer>
+      <BotanicalWaitlistBadge>✦ SEI DABEI ✦</BotanicalWaitlistBadge>
+      
+      <BotanicalWaitlistTitle>
+        Trag dich ein für <em>exklusiven Zugang</em>
+      </BotanicalWaitlistTitle>
+      
+      <BotanicalWaitlistSubtitle>
+        Werde Teil unserer Geschichte und erhalte als Erste/r Zugang zum Launch.
+      </BotanicalWaitlistSubtitle>
+      
+      <BotanicalFormBox>
+        <BotanicalForm onSubmit={handleSubmit}>
+          <BotanicalInput
+            type="email"
+            placeholder="deine@email.de"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={loading}
+          />
+          <BotanicalSubmitButton type="submit" disabled={loading}>
+            {loading ? 'Wird eingetragen...' : 'Eintragen →'}
+          </BotanicalSubmitButton>
+        </BotanicalForm>
+        
+        {status.message && (
+          <BotanicalFormMessage $success={status.type === 'success'}>
+            {status.message}
+          </BotanicalFormMessage>
+        )}
+        
+        <BotanicalPrivacy>
+          🌿 Deine Daten sind bei uns sicher. Kein Spam, versprochen.
+        </BotanicalPrivacy>
+      </BotanicalFormBox>
+      
+      <BotanicalBenefitsList>
+        <BotanicalBenefitItem>🌱 Early Access zum Launch</BotanicalBenefitItem>
+        <BotanicalBenefitItem>💚 Exklusive Rabatte</BotanicalBenefitItem>
+        <BotanicalBenefitItem>✨ Sneak Peeks & Updates</BotanicalBenefitItem>
+      </BotanicalBenefitsList>
+    </BotanicalWaitlistContainer>
+  </BotanicalWaitlistSection>
 );
 
 export default WaitlistSection;
@@ -694,4 +756,160 @@ const VideoBenefitDivider = styled.span`
   @media (max-width: 500px) {
     display: none;
   }
+`;
+
+// ============================================
+// BOTANICAL THEME STYLES
+// ============================================
+const BotanicalWaitlistSection = styled.section`
+  padding: 120px 5%;
+  background: #2C3E2D;
+  text-align: center;
+`;
+
+const BotanicalWaitlistContainer = styled.div`
+  max-width: 600px;
+  margin: 0 auto;
+`;
+
+const BotanicalWaitlistBadge = styled.div`
+  font-family: 'Lato', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  color: #7BA889;
+  margin-bottom: 25px;
+`;
+
+const BotanicalWaitlistTitle = styled.h2`
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  font-weight: 400;
+  color: #FAF9F6;
+  margin-bottom: 15px;
+  
+  em {
+    font-style: italic;
+    color: #7BA889;
+  }
+`;
+
+const BotanicalWaitlistSubtitle = styled.p`
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  color: rgba(250, 249, 246, 0.7);
+  line-height: 1.7;
+  margin-bottom: 40px;
+`;
+
+const BotanicalFormBox = styled.div`
+  background: rgba(255, 255, 255, 0.05);
+  padding: 40px;
+  border: 1px solid rgba(123, 168, 137, 0.3);
+  border-radius: 20px;
+  margin-bottom: 40px;
+`;
+
+const BotanicalForm = styled.form`
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+  
+  @media (max-width: 500px) {
+    flex-direction: column;
+    gap: 15px;
+  }
+`;
+
+const BotanicalInput = styled.input`
+  flex: 1;
+  padding: 18px 20px;
+  font-family: 'Lato', sans-serif;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(123, 168, 137, 0.3);
+  border-right: none;
+  border-radius: 30px 0 0 30px;
+  color: #FAF9F6;
+  transition: all 0.3s ease;
+  
+  &:focus {
+    outline: none;
+    border-color: #7BA889;
+    background: rgba(255, 255, 255, 0.15);
+  }
+  
+  &::placeholder {
+    color: rgba(250, 249, 246, 0.5);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+  }
+  
+  @media (max-width: 500px) {
+    border-radius: 30px;
+    border-right: 1px solid rgba(123, 168, 137, 0.3);
+  }
+`;
+
+const BotanicalSubmitButton = styled.button`
+  font-family: 'Lato', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  padding: 18px 30px;
+  background: #4A7C59;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 0 30px 30px 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  
+  &:hover:not(:disabled) {
+    background: #3A6249;
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  @media (max-width: 500px) {
+    border-radius: 30px;
+    width: 100%;
+  }
+`;
+
+const BotanicalFormMessage = styled.div`
+  font-family: 'Lato', sans-serif;
+  font-size: 0.9rem;
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  background: ${p => p.$success ? 'rgba(123, 168, 137, 0.2)' : 'rgba(255, 100, 100, 0.1)'};
+  color: ${p => p.$success ? '#7BA889' : '#FF6B6B'};
+  border: 1px solid ${p => p.$success ? 'rgba(123, 168, 137, 0.4)' : 'rgba(255, 100, 100, 0.3)'};
+`;
+
+const BotanicalPrivacy = styled.p`
+  font-family: 'Lato', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: rgba(250, 249, 246, 0.5);
+`;
+
+const BotanicalBenefitsList = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+`;
+
+const BotanicalBenefitItem = styled.span`
+  font-family: 'Lato', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: rgba(250, 249, 246, 0.8);
 `;

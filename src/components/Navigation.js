@@ -22,70 +22,48 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToSection = (id) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const isEditorial = currentTheme === 'editorial';
-
   return (
     <Nav $scrolled={scrolled} $theme={currentTheme}>
       <NavContainer>
         <LogoLink onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-          <Logo $theme={currentTheme}>S&I</Logo>
+          <Logo $theme={currentTheme}>S&I.</Logo>
         </LogoLink>
         
-        <NavLinks>
-          <NavLink onClick={() => scrollToSection('countdown')} $theme={currentTheme}>
-            {isEditorial ? 'Countdown' : 'Countdown'}
-          </NavLink>
-          <NavLink onClick={() => scrollToSection('usps')} $theme={currentTheme}>
-            {isEditorial ? 'Features' : 'Features'}
-          </NavLink>
-          <NavLink onClick={() => scrollToSection('about')} $theme={currentTheme}>
-            {isEditorial ? 'Über uns' : 'About'}
-          </NavLink>
+        {/* Theme Switcher */}
+        <ThemeSwitcher>
+          <ThemeButton 
+            onClick={() => setShowThemeMenu(!showThemeMenu)} 
+            $theme={currentTheme}
+          >
+            <ThemeDot $color={theme.colors.accent} />
+            <span>{themes[currentTheme].name}</span>
+            <Arrow $open={showThemeMenu}>▾</Arrow>
+          </ThemeButton>
           
-          {/* Theme Switcher */}
-          <ThemeSwitcher>
-            <ThemeButton 
-              onClick={() => setShowThemeMenu(!showThemeMenu)} 
-              $theme={currentTheme}
-            >
-              <ThemeDot $color={theme.colors.accent} />
-              <span>{themes[currentTheme].name}</span>
-              <Arrow $open={showThemeMenu}>▾</Arrow>
-            </ThemeButton>
-            
-            {showThemeMenu && (
-              <>
-                <ThemeDropdown $theme={currentTheme}>
-                  <DropdownLabel $theme={currentTheme}>Design wählen</DropdownLabel>
-                  {themeOrder.map((themeId) => (
-                    <ThemeOption
-                      key={themeId}
-                      onClick={() => {
-                        setCurrentTheme(themeId);
-                        setShowThemeMenu(false);
-                      }}
-                      $active={currentTheme === themeId}
-                      $theme={currentTheme}
-                    >
-                      <ThemeDot $color={themes[themeId].colors.accent} />
-                      <span>{themes[themeId].name}</span>
-                      {currentTheme === themeId && <Check>✓</Check>}
-                    </ThemeOption>
-                  ))}
-                </ThemeDropdown>
-                <Backdrop onClick={() => setShowThemeMenu(false)} />
-              </>
-            )}
-          </ThemeSwitcher>
-          
-          <NavLinkCTA onClick={() => scrollToSection('waitlist')} $theme={currentTheme}>
-            {isEditorial ? 'EINTRAGEN' : 'WAITLIST'}
-          </NavLinkCTA>
-        </NavLinks>
+          {showThemeMenu && (
+            <>
+              <ThemeDropdown $theme={currentTheme}>
+                <DropdownLabel $theme={currentTheme}>Design wählen</DropdownLabel>
+                {themeOrder.map((themeId) => (
+                  <ThemeOption
+                    key={themeId}
+                    onClick={() => {
+                      setCurrentTheme(themeId);
+                      setShowThemeMenu(false);
+                    }}
+                    $active={currentTheme === themeId}
+                    $theme={currentTheme}
+                  >
+                    <ThemeDot $color={themes[themeId].colors.accent} />
+                    <span>{themes[themeId].name}</span>
+                    {currentTheme === themeId && <Check>✓</Check>}
+                  </ThemeOption>
+                ))}
+              </ThemeDropdown>
+              <Backdrop onClick={() => setShowThemeMenu(false)} />
+            </>
+          )}
+        </ThemeSwitcher>
       </NavContainer>
     </Nav>
   );
@@ -144,51 +122,12 @@ const Logo = styled.span`
     background: rgba(26, 24, 20, 0.9);
     letter-spacing: 0.05em;
   `}
-`;
-
-const NavLinks = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 25px;
   
-  @media (max-width: 800px) {
-    gap: 15px;
-  }
-  
-  @media (max-width: 600px) {
-    gap: 10px;
-  }
-`;
-
-const NavLink = styled.button`
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: #0D0D0D;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: color 0.3s ease;
-  
-  ${p => p.$theme === 'editorial' && css`
-    font-family: 'Inter', sans-serif;
+  ${p => p.$theme === 'botanical' && css`
+    font-family: 'Playfair Display', Georgia, serif;
+    background: #2C3E2D;
+    letter-spacing: 0.02em;
   `}
-  
-  ${p => p.$theme === 'contemporary' && css`
-    font-family: 'Space Grotesk', sans-serif;
-  `}
-  
-  ${p => p.$theme === 'video' && css`
-    font-family: 'Montserrat', sans-serif;
-    color: #1A1814;
-  `}
-  
-  &:hover {
-    color: ${p => p.$theme === 'editorial' ? '#666' : p.$theme === 'video' ? '#8B7355' : '#FF6B6B'};
-  }
-  
-  @media (max-width: 700px) {
-    display: none;
-  }
 `;
 
 const ThemeSwitcher = styled.div`
@@ -220,6 +159,11 @@ const ThemeButton = styled.button`
   ${p => p.$theme === 'video' && css`
     font-family: 'Montserrat', sans-serif;
     color: #1A1814;
+  `}
+  
+  ${p => p.$theme === 'botanical' && css`
+    font-family: 'Lato', sans-serif;
+    color: #2C3E2D;
   `}
   
   &:hover {
@@ -316,36 +260,4 @@ const Backdrop = styled.div`
   position: fixed;
   inset: 0;
   z-index: 99;
-`;
-
-const NavLinkCTA = styled.button`
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  
-  ${p => p.$theme === 'editorial' && css`
-    font-family: 'Inter', sans-serif;
-    background: #1A1A1A;
-    color: #FFFFFF;
-    border: none;
-    
-    &:hover {
-      background: #333;
-    }
-  `}
-  
-  ${p => p.$theme === 'contemporary' && css`
-    font-family: 'Space Grotesk', sans-serif;
-    background: #FF6B6B;
-    color: #FFFFFF;
-    border: none;
-    
-    &:hover {
-      background: #0D0D0D;
-      transform: translateY(-2px);
-    }
-  `}
 `;

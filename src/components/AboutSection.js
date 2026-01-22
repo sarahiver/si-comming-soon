@@ -37,6 +37,10 @@ const values = [
 const AboutSection = () => {
   const { currentTheme } = useTheme();
 
+  if (currentTheme === 'botanical') {
+    return <BotanicalAbout />;
+  }
+
   if (currentTheme === 'video') {
     return <VideoAbout />;
   }
@@ -53,7 +57,7 @@ const AboutSection = () => {
 // ============================================
 const ContemporaryAbout = () => (
   <Section id="about" $theme="contemporary">
-    <BackgroundText>S&I</BackgroundText>
+    <BackgroundText>S&I.</BackgroundText>
     
     <Container>
       <Badge $theme="contemporary">★ ABOUT US</Badge>
@@ -96,7 +100,7 @@ const EditorialAbout = () => (
       {/* Left Side - Image Placeholder */}
       <EditorialImageSection>
         <ImagePlaceholder>
-          <PlaceholderLogo>S&I</PlaceholderLogo>
+          <PlaceholderLogo>S&I.</PlaceholderLogo>
         </ImagePlaceholder>
         <EditorialQuote>
           „Wir glauben, dass eure Hochzeitswebsite genauso einzigartig sein sollte wie eure Liebe."
@@ -114,7 +118,7 @@ const EditorialAbout = () => (
         </EditorialText>
         
         <EditorialText>
-          Das wollten wir ändern. Deshalb haben wir S&I gegründet – mit einer klaren Mission: <strong>Jedes Paar verdient eine Website, die so einzigartig ist wie ihre Geschichte.</strong>
+          Das wollten wir ändern. Deshalb haben wir S&I. gegründet – mit einer klaren Mission: <strong>Jedes Paar verdient eine Website, die so einzigartig ist wie ihre Geschichte.</strong>
         </EditorialText>
         
         <EditorialText>
@@ -122,7 +126,7 @@ const EditorialAbout = () => (
         </EditorialText>
         
         <EditorialSignature>Sarah & Iver</EditorialSignature>
-        <SignatureSubtext>GRÜNDER VON S&I</SignatureSubtext>
+        <SignatureSubtext>GRÜNDER VON S&I.</SignatureSubtext>
       </EditorialContentSection>
     </EditorialContainer>
   </Section>
@@ -181,11 +185,65 @@ const VideoAbout = () => (
       </VideoQuoteBox>
       
       <VideoSignature>
-        <SignatureLogo>S&I</SignatureLogo>
+        <SignatureLogo>S&I.</SignatureLogo>
         <SignatureTagline>REAL PEOPLE. REAL CONNECTION.</SignatureTagline>
       </VideoSignature>
     </VideoContainer>
   </VideoSection>
+);
+
+// ============================================
+// BOTANICAL ABOUT - Split Layout with Image
+// ============================================
+const BotanicalAbout = () => (
+  <BotanicalAboutSection id="about">
+    <BotanicalAboutContainer>
+      {/* Header */}
+      <BotanicalAboutHeader>
+        <BotanicalAboutBadge>✦ ÜBER UNS ✦</BotanicalAboutBadge>
+        <BotanicalAboutTitle>
+          Hallo, wir sind <em>Sarah & Iver</em>
+        </BotanicalAboutTitle>
+      </BotanicalAboutHeader>
+      
+      {/* Content Grid */}
+      <BotanicalAboutGrid>
+        {/* Left - Text */}
+        <BotanicalAboutText>
+          <p>
+            Wir glauben an echte Verbindungen – nicht nur zwischen euch als Paar, sondern auch zwischen uns und euch. Deshalb haben wir S&I. gegründet.
+          </p>
+          <p>
+            Als wir selbst geheiratet haben, war uns eines besonders wichtig: Authentizität. Keine 08/15-Lösung, sondern etwas, das wirklich unsere Geschichte erzählt.
+          </p>
+        </BotanicalAboutText>
+        
+        {/* Right - Image + Quote */}
+        <BotanicalAboutVisual>
+          <BotanicalImagePlaceholder>
+            <PlaceholderContent>S&I.</PlaceholderContent>
+          </BotanicalImagePlaceholder>
+          
+          <BotanicalQuoteSmall>
+            „Persönlich bedeutet für uns: Wir kennen eure Namen, eure Geschichte, eure Wünsche."
+          </BotanicalQuoteSmall>
+        </BotanicalAboutVisual>
+      </BotanicalAboutGrid>
+      
+      {/* Promise Box */}
+      <BotanicalPromiseBox>
+        <BotanicalPromiseIcon>💚</BotanicalPromiseIcon>
+        <BotanicalPromiseTitle>Unser Versprechen</BotanicalPromiseTitle>
+        <BotanicalPromiseText>
+          Bei uns seid ihr keine Nummer. Wir begleiten euch persönlich durch den gesamten Prozess – mit Herz, Zeit und voller Aufmerksamkeit.
+        </BotanicalPromiseText>
+        <BotanicalSignatureBox>
+          <BotanicalSignatureName>Sarah & Iver</BotanicalSignatureName>
+          <BotanicalSignatureRole>Gründer von S&I.</BotanicalSignatureRole>
+        </BotanicalSignatureBox>
+      </BotanicalPromiseBox>
+    </BotanicalAboutContainer>
+  </BotanicalAboutSection>
 );
 
 export default AboutSection;
@@ -636,4 +694,156 @@ const SignatureTagline = styled.div`
   font-weight: 500;
   letter-spacing: 0.25em;
   color: #8B7355;
+`;
+
+// ============================================
+// BOTANICAL THEME STYLES
+// ============================================
+const BotanicalAboutSection = styled.section`
+  padding: 120px 5%;
+  background: linear-gradient(180deg, #FAF9F6 0%, #F5F1EB 100%);
+`;
+
+const BotanicalAboutContainer = styled.div`
+  max-width: 1000px;
+  margin: 0 auto;
+`;
+
+const BotanicalAboutHeader = styled.div`
+  margin-bottom: 50px;
+`;
+
+const BotanicalAboutBadge = styled.div`
+  font-family: 'Lato', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  color: #4A7C59;
+  margin-bottom: 20px;
+`;
+
+const BotanicalAboutTitle = styled.h2`
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 400;
+  color: #2C3E2D;
+  
+  em {
+    font-style: italic;
+  }
+`;
+
+const BotanicalAboutGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  margin-bottom: 50px;
+  
+  @media (max-width: 800px) {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+`;
+
+const BotanicalAboutText = styled.div`
+  p {
+    font-family: 'Lato', sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    color: #6B7B6C;
+    line-height: 1.9;
+    margin-bottom: 20px;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+`;
+
+const BotanicalAboutVisual = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+const BotanicalImagePlaceholder = styled.div`
+  aspect-ratio: 4/3;
+  background: #EDE8DF;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+`;
+
+const PlaceholderContent = styled.div`
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 3rem;
+  font-weight: 400;
+  color: #4A7C59;
+  opacity: 0.3;
+`;
+
+const BotanicalQuoteSmall = styled.p`
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: #4A7C59;
+  line-height: 1.7;
+  padding-left: 20px;
+  border-left: 2px solid #4A7C59;
+`;
+
+const BotanicalPromiseBox = styled.div`
+  background: #EDE8DF;
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+`;
+
+const BotanicalPromiseIcon = styled.div`
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+`;
+
+const BotanicalPromiseTitle = styled.h3`
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #2C3E2D;
+  margin-bottom: 15px;
+`;
+
+const BotanicalPromiseText = styled.p`
+  font-family: 'Lato', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: #6B7B6C;
+  line-height: 1.8;
+  max-width: 500px;
+  margin: 0 auto 25px;
+`;
+
+const BotanicalSignatureBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+`;
+
+const BotanicalSignatureName = styled.span`
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #2C3E2D;
+`;
+
+const BotanicalSignatureRole = styled.span`
+  font-family: 'Lato', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: #6B7B6C;
+  text-transform: uppercase;
 `;

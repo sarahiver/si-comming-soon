@@ -59,6 +59,10 @@ const HeroSection = () => {
     document.getElementById('countdown')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  if (currentTheme === 'botanical') {
+    return <BotanicalHero scrollToWaitlist={scrollToWaitlist} scrollToCountdown={scrollToCountdown} />;
+  }
+
   if (currentTheme === 'video') {
     return <VideoHero scrollToWaitlist={scrollToWaitlist} scrollToCountdown={scrollToCountdown} />;
   }
@@ -86,7 +90,7 @@ const ContemporaryHero = ({ scrollToWaitlist, scrollToCountdown }) => (
     <Container>
       <LeftContent>
         <ContemporaryBadge>COMING SOON</ContemporaryBadge>
-        <ContemporaryLogo>S&I</ContemporaryLogo>
+        <ContemporaryLogo>S&I.</ContemporaryLogo>
         <ContemporaryTagline>
           Individuelle Hochzeitswebsites,
           <br />
@@ -127,7 +131,7 @@ const EditorialHero = ({ scrollToWaitlist, scrollToCountdown }) => (
       <EditorialDate>1. Oktober 2026</EditorialDate>
       <EditorialLocation>SIWEDDING.DE</EditorialLocation>
       
-      <EditorialLogo>S&I</EditorialLogo>
+      <EditorialLogo>S&I.</EditorialLogo>
       
       <EditorialTagline>
         Individuelle Hochzeitswebsites,<br />
@@ -172,7 +176,7 @@ const VideoHero = ({ scrollToWaitlist, scrollToCountdown }) => (
     <VideoContent>
       <VideoEyebrow>COMING SOON</VideoEyebrow>
       
-      <VideoLogo>S&I</VideoLogo>
+      <VideoLogo>S&I.</VideoLogo>
       
       <VideoTagline>
         Individuelle Hochzeitswebsites,<br />
@@ -192,6 +196,42 @@ const VideoHero = ({ scrollToWaitlist, scrollToCountdown }) => (
       <VideoScrollArrow>∨</VideoScrollArrow>
     </VideoScrollIndicator>
   </VideoSection>
+);
+
+// ============================================
+// BOTANICAL HERO - Nature-inspired Design
+// ============================================
+const BotanicalHero = ({ scrollToWaitlist, scrollToCountdown }) => (
+  <BotanicalSection>
+    {/* Decorative Leaves */}
+    <LeafDecoration $position="top-left">🌿</LeafDecoration>
+    <LeafDecoration $position="top-right">🍃</LeafDecoration>
+    <LeafDecoration $position="bottom-left">🌱</LeafDecoration>
+    <LeafDecoration $position="bottom-right">🌿</LeafDecoration>
+    
+    <BotanicalContent>
+      <BotanicalEyebrow>COMING SOON</BotanicalEyebrow>
+      
+      <BotanicalLogo>S&I.</BotanicalLogo>
+      
+      <BotanicalAmpersand>&</BotanicalAmpersand>
+      
+      <BotanicalTagline>
+        Individuelle Hochzeitswebsites,<br />
+        die so einzigartig sind wie eure Liebe
+      </BotanicalTagline>
+      
+      <BotanicalDivider>✦ ✦ ✦</BotanicalDivider>
+      
+      <BotanicalDate>1. Oktober 2026</BotanicalDate>
+      <BotanicalLocation>SIWEDDING.DE</BotanicalLocation>
+    </BotanicalContent>
+
+    <BotanicalScrollIndicator onClick={scrollToCountdown}>
+      <span>ENTDECKEN</span>
+      <BotanicalScrollArrow>↓</BotanicalScrollArrow>
+    </BotanicalScrollIndicator>
+  </BotanicalSection>
 );
 
 export default HeroSection;
@@ -699,5 +739,154 @@ const VideoScrollIndicator = styled.button`
 const VideoScrollArrow = styled.span`
   font-size: 1.2rem;
   color: rgba(255, 255, 255, 0.6);
+  animation: ${scrollBounce} 1.5s ease-in-out infinite;
+`;
+
+// ============================================
+// BOTANICAL THEME STYLES
+// ============================================
+const leafFloat = keyframes`
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(5deg); }
+`;
+
+const BotanicalSection = styled.section`
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 100px 5% 60px;
+  background: linear-gradient(180deg, #FAF9F6 0%, #F5F1EB 100%);
+`;
+
+const LeafDecoration = styled.div`
+  position: absolute;
+  font-size: 3rem;
+  opacity: 0.3;
+  animation: ${leafFloat} 4s ease-in-out infinite;
+  
+  ${p => p.$position === 'top-left' && css`
+    top: 10%;
+    left: 5%;
+    animation-delay: 0s;
+  `}
+  
+  ${p => p.$position === 'top-right' && css`
+    top: 15%;
+    right: 8%;
+    animation-delay: 1s;
+  `}
+  
+  ${p => p.$position === 'bottom-left' && css`
+    bottom: 20%;
+    left: 8%;
+    animation-delay: 0.5s;
+  `}
+  
+  ${p => p.$position === 'bottom-right' && css`
+    bottom: 15%;
+    right: 5%;
+    animation-delay: 1.5s;
+  `}
+  
+  @media (max-width: 600px) {
+    font-size: 2rem;
+    opacity: 0.2;
+  }
+`;
+
+const BotanicalContent = styled.div`
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  animation: ${fadeInUp} 1s ease;
+`;
+
+const BotanicalEyebrow = styled.div`
+  font-family: 'Lato', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.4em;
+  color: #4A7C59;
+  margin-bottom: 30px;
+`;
+
+const BotanicalLogo = styled.h1`
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(4rem, 15vw, 10rem);
+  font-weight: 400;
+  color: #2C3E2D;
+  line-height: 0.9;
+  margin-bottom: 0;
+`;
+
+const BotanicalAmpersand = styled.div`
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-style: italic;
+  color: #4A7C59;
+  margin: 10px 0;
+`;
+
+const BotanicalTagline = styled.p`
+  font-family: 'Lato', sans-serif;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  font-weight: 300;
+  color: #6B7B6C;
+  line-height: 1.8;
+  margin-bottom: 30px;
+`;
+
+const BotanicalDivider = styled.div`
+  font-size: 0.8rem;
+  color: #4A7C59;
+  letter-spacing: 0.5em;
+  margin-bottom: 25px;
+`;
+
+const BotanicalDate = styled.div`
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  font-style: italic;
+  color: #2C3E2D;
+  margin-bottom: 8px;
+`;
+
+const BotanicalLocation = styled.div`
+  font-family: 'Lato', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  color: #4A7C59;
+`;
+
+const BotanicalScrollIndicator = styled.button`
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  
+  span {
+    font-family: 'Lato', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    color: #6B7B6C;
+  }
+`;
+
+const BotanicalScrollArrow = styled.span`
+  font-size: 1rem;
+  color: #4A7C59;
   animation: ${scrollBounce} 1.5s ease-in-out infinite;
 `;
