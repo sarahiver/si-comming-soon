@@ -6,9 +6,9 @@ import { addToWaitlist } from '../config/supabase';
 import emailjs from '@emailjs/browser';
 
 // EmailJS Konfiguration
-const EMAILJS_SERVICE_ID = 'service_si_wedding';
-const EMAILJS_TEMPLATE_ID = 'template_waitlist_confirm';
-const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY'; // Muss noch konfiguriert werden
+const EMAILJS_SERVICE_ID = 'service_jeauwnt';
+const EMAILJS_TEMPLATE_ID = 'template_83dx4ey';
+const EMAILJS_PUBLIC_KEY = 'ME2poBnMRMUKod-o7'; 
 
 const fadeInUp = keyframes`
   from { opacity: 0; transform: translateY(30px); }
