@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import Navigation from './components/Navigation';
@@ -8,6 +9,7 @@ import USPsSection from './components/USPsSection';
 import AboutSection from './components/AboutSection';
 import WaitlistSection from './components/WaitlistSection';
 import Footer from './components/Footer';
+import AdminDashboard from './components/AdminDashboard';
 
 const GlobalStyles = createGlobalStyle`
   *, *::before, *::after {
@@ -35,7 +37,7 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
-function AppContent() {
+function MainPage() {
   const { currentTheme } = useTheme();
   
   // Load Google Fonts
@@ -46,7 +48,7 @@ function AppContent() {
     document.head.appendChild(link);
     
     // Update page title
-    document.title = 'S&I. Weddings — Coming Soon';
+    document.title = 'S&I. wedding — Coming Soon';
     
     return () => {
       if (link.parentNode) {
@@ -56,26 +58,51 @@ function AppContent() {
   }, []);
 
   return (
-    <>
-      <GlobalStyles />
-      <AppWrapper $theme={currentTheme}>
-        <Navigation />
-        <HeroSection />
-        <CountdownSection />
-        <USPsSection />
-        <AboutSection />
-        <WaitlistSection />
-        <Footer />
-      </AppWrapper>
-    </>
+    <AppWrapper $theme={currentTheme}>
+      <Navigation />
+      <HeroSection />
+      <CountdownSection />
+      <USPsSection />
+      <AboutSection />
+      <WaitlistSection />
+      <Footer />
+    </AppWrapper>
   );
+}
+
+function AdminPage() {
+  useEffect(() => {
+    // Load fonts for admin
+    const link = document.createElement('link');
+    link.href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@700&family=Space+Grotesk:wght@400;500;600;700&display=swap';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+    
+    document.title = 'S&I. wedding — Admin Dashboard';
+    
+    return () => {
+      if (link.parentNode) {
+        document.head.removeChild(link);
+      }
+    };
+  }, []);
+
+  return <AdminDashboard />;
 }
 
 function App() {
   return (
-    <ThemeProvider>
-      <AppContent />
-    </ThemeProvider>
+    <Router>
+      <GlobalStyles />
+      <Routes>
+        <Route path="/" element={
+          <ThemeProvider>
+            <MainPage />
+          </ThemeProvider>
+        } />
+        <Route path="/admin" element={<AdminPage />} />
+      </Routes>
+    </Router>
   );
 }
 
