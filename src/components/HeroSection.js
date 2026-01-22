@@ -239,7 +239,7 @@ const BotanicalHero = ({ scrollToWaitlist, scrollToCountdown }) => (
 // ============================================
 // LUXE HERO - Classic Elegance with B/W Image
 // ============================================
-const LUXE_BG_URL = ''; // Cloudinary URL für S/W Hintergrundbild
+const LUXE_BG_URL = 'https://res.cloudinary.com/si-weddings/image/upload/v1769072318/si_cooming_soon_luxe_hero_wowu9v.jpg'; // Cloudinary URL für S/W Hintergrundbild
 
 const LuxeHero = ({ scrollToWaitlist, scrollToCountdown }) => (
   <LuxeSection $hasBg={!!LUXE_BG_URL}>
