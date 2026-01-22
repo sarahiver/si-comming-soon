@@ -3,6 +3,9 @@ import React from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { useTheme } from '../context/ThemeContext';
 
+// Cloudinary About Image - für alle Themes
+const ABOUT_IMAGE_URL = 'https://res.cloudinary.com/si-weddings/image/upload/v1769078167/si_comming_soon_about_pbqwny.jpg';
+
 const fadeInUp = keyframes`
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
@@ -66,6 +69,8 @@ const ContemporaryAbout = () => (
     <Container>
       <Badge $theme="contemporary">★ ABOUT US</Badge>
       
+      <ContemporaryAboutImage style={{ backgroundImage: `url(${ABOUT_IMAGE_URL})` }} />
+      
       <TitleGroup>
         <TitleLine $theme="contemporary">WE ARE</TitleLine>
         <TitleAccent $theme="contemporary">SARAH & IVER</TitleAccent>
@@ -101,11 +106,9 @@ const ContemporaryAbout = () => (
 const EditorialAbout = () => (
   <Section id="about" $theme="editorial">
     <EditorialContainer>
-      {/* Left Side - Image Placeholder */}
+      {/* Left Side - Image */}
       <EditorialImageSection>
-        <ImagePlaceholder>
-          <PlaceholderLogo>S&I.</PlaceholderLogo>
-        </ImagePlaceholder>
+        <AboutImageContainer style={{ backgroundImage: `url(${ABOUT_IMAGE_URL})` }} />
         <EditorialQuote>
           „Wir glauben, dass eure Hochzeitswebsite genauso einzigartig sein sollte wie eure Liebe."
         </EditorialQuote>
@@ -149,37 +152,43 @@ const VideoAbout = () => (
         </VideoTitle>
       </VideoHeader>
       
-      <VideoTimeline>
-        <TimelineItem>
-          <TimelineYear>01</TimelineYear>
-          <TimelineContent>
-            <TimelineTitle>Die Idee</TimelineTitle>
-            <TimelineText>
-              Als wir unsere eigene Hochzeit geplant haben, standen wir vor dem gleichen Problem wie ihr: Unzählige Template-Websites, die alle gleich aussahen.
-            </TimelineText>
-          </TimelineContent>
-        </TimelineItem>
+      <VideoAboutGrid>
+        <VideoAboutImageWrapper>
+          <VideoAboutImage style={{ backgroundImage: `url(${ABOUT_IMAGE_URL})` }} />
+        </VideoAboutImageWrapper>
         
-        <TimelineItem>
-          <TimelineYear>02</TimelineYear>
-          <TimelineContent>
-            <TimelineTitle>Die Mission</TimelineTitle>
-            <TimelineText>
-              Jedes Paar verdient eine Website, die so einzigartig ist wie ihre Geschichte. Das ist unsere Mission mit S&I.
-            </TimelineText>
-          </TimelineContent>
-        </TimelineItem>
-        
-        <TimelineItem>
-          <TimelineYear>03</TimelineYear>
-          <TimelineContent>
-            <TimelineTitle>Das Versprechen</TimelineTitle>
-            <TimelineText>
-              Bei uns bekommt ihr keine anonyme Massenware. Ihr bekommt uns – als eure persönlichen Ansprechpartner, von der ersten Idee bis zum großen Tag.
-            </TimelineText>
-          </TimelineContent>
-        </TimelineItem>
-      </VideoTimeline>
+        <VideoTimeline>
+          <TimelineItem>
+            <TimelineYear>01</TimelineYear>
+            <TimelineContent>
+              <TimelineTitle>Die Idee</TimelineTitle>
+              <TimelineText>
+                Als wir unsere eigene Hochzeit geplant haben, standen wir vor dem gleichen Problem wie ihr: Unzählige Template-Websites, die alle gleich aussahen.
+              </TimelineText>
+            </TimelineContent>
+          </TimelineItem>
+          
+          <TimelineItem>
+            <TimelineYear>02</TimelineYear>
+            <TimelineContent>
+              <TimelineTitle>Die Mission</TimelineTitle>
+              <TimelineText>
+                Jedes Paar verdient eine Website, die so einzigartig ist wie ihre Geschichte. Das ist unsere Mission mit S&I.
+              </TimelineText>
+            </TimelineContent>
+          </TimelineItem>
+          
+          <TimelineItem>
+            <TimelineYear>03</TimelineYear>
+            <TimelineContent>
+              <TimelineTitle>Das Versprechen</TimelineTitle>
+              <TimelineText>
+                Bei uns bekommt ihr keine anonyme Massenware. Ihr bekommt uns – als eure persönlichen Ansprechpartner, von der ersten Idee bis zum großen Tag.
+              </TimelineText>
+            </TimelineContent>
+          </TimelineItem>
+        </VideoTimeline>
+      </VideoAboutGrid>
       
       <VideoQuoteBox>
         <VideoQuote>
@@ -224,9 +233,7 @@ const BotanicalAbout = () => (
         
         {/* Right - Image + Quote */}
         <BotanicalAboutVisual>
-          <BotanicalImagePlaceholder>
-            <PlaceholderContent>S&I.</PlaceholderContent>
-          </BotanicalImagePlaceholder>
+          <BotanicalAboutImage style={{ backgroundImage: `url(${ABOUT_IMAGE_URL})` }} />
           
           <BotanicalQuoteSmall>
             „Persönlich bedeutet für uns: Wir kennen eure Namen, eure Geschichte, eure Wünsche."
@@ -253,7 +260,6 @@ const BotanicalAbout = () => (
 // ============================================
 // LUXE ABOUT - Classic White Space Design
 // ============================================
-const LUXE_ABOUT_IMAGE = ''; // Cloudinary URL für S/W Bild
 
 const LuxeAbout = () => (
   <LuxeAboutSection id="about">
@@ -261,13 +267,7 @@ const LuxeAbout = () => (
       <LuxeAboutGrid>
         {/* Image Side */}
         <LuxeAboutImageWrapper>
-          {LUXE_ABOUT_IMAGE ? (
-            <LuxeAboutImage style={{ backgroundImage: `url(${LUXE_ABOUT_IMAGE})` }} />
-          ) : (
-            <LuxeAboutImagePlaceholder>
-              <span>S/W BILD</span>
-            </LuxeAboutImagePlaceholder>
-          )}
+          <LuxeAboutImage style={{ backgroundImage: `url(${ABOUT_IMAGE_URL})` }} />
         </LuxeAboutImageWrapper>
         
         {/* Content Side */}
@@ -365,6 +365,25 @@ const Badge = styled.div`
     letter-spacing: 0.3em;
     color: #999;
   `}
+`;
+
+// Shared About Image für alle Themes
+const AboutImageContainer = styled.div`
+  width: 100%;
+  aspect-ratio: 4/3;
+  background-size: cover;
+  background-position: center;
+  margin-bottom: 30px;
+`;
+
+const ContemporaryAboutImage = styled.div`
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 4/3;
+  background-size: cover;
+  background-position: center;
+  margin: 0 auto 40px;
+  border: 4px solid #0D0D0D;
 `;
 
 const TitleGroup = styled.div`
@@ -650,6 +669,30 @@ const VideoTitle = styled.h2`
   }
 `;
 
+const VideoAboutGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 60px;
+  margin-bottom: 60px;
+  
+  @media (max-width: 800px) {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+`;
+
+const VideoAboutImageWrapper = styled.div`
+  position: relative;
+`;
+
+const VideoAboutImage = styled.div`
+  width: 100%;
+  aspect-ratio: 3/4;
+  background-size: cover;
+  background-position: center;
+  filter: sepia(20%) contrast(1.1);
+`;
+
 const VideoTimeline = styled.div`
   display: flex;
   flex-direction: column;
@@ -826,6 +869,13 @@ const BotanicalAboutVisual = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+`;
+
+const BotanicalAboutImage = styled.div`
+  aspect-ratio: 4/3;
+  background-size: cover;
+  background-position: center;
+  border-radius: 20px;
 `;
 
 const BotanicalImagePlaceholder = styled.div`

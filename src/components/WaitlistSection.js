@@ -3,6 +3,12 @@ import React, { useState } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { useTheme } from '../context/ThemeContext';
 import { addToWaitlist } from '../config/supabase';
+import emailjs from '@emailjs/browser';
+
+// EmailJS Konfiguration
+const EMAILJS_SERVICE_ID = 'service_si_wedding';
+const EMAILJS_TEMPLATE_ID = 'template_waitlist_confirm';
+const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY'; // Muss noch konfiguriert werden
 
 const fadeInUp = keyframes`
   from { opacity: 0; transform: translateY(30px); }
@@ -14,6 +20,8 @@ const WaitlistSection = () => {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState({ type: '', message: '' });
   const [loading, setLoading] = useState(false);
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,12 +31,43 @@ const WaitlistSection = () => {
       return;
     }
     
+    if (!privacyAccepted) {
+      setStatus({ type: 'error', message: 'Bitte akzeptiere die Datenschutzerklärung.' });
+      return;
+    }
+    
     setLoading(true);
     try {
+      // 1. In Supabase speichern (noch nicht bestätigt)
       const result = await addToWaitlist(email, currentTheme);
+      
       if (result.success) {
-        setStatus({ type: 'success', message: '🎉 Perfekt! Du bist auf der Warteliste. Wir melden uns!' });
+        // 2. Bestätigungsmail senden via EmailJS
+        try {
+          await emailjs.send(
+            EMAILJS_SERVICE_ID,
+            EMAILJS_TEMPLATE_ID,
+            {
+              to_email: email,
+              confirm_link: `https://siwedding.de/confirm?email=${encodeURIComponent(email)}&token=${result.data?.[0]?.id || 'pending'}`,
+            },
+            EMAILJS_PUBLIC_KEY
+          );
+          
+          setStatus({ 
+            type: 'success', 
+            message: '📧 Fast geschafft! Bitte bestätige deine E-Mail-Adresse über den Link in deinem Postfach.' 
+          });
+        } catch (emailError) {
+          console.warn('EmailJS error:', emailError);
+          // Fallback wenn EmailJS noch nicht konfiguriert
+          setStatus({ 
+            type: 'success', 
+            message: '🎉 Perfekt! Du bist auf der Warteliste. Wir melden uns bei dir!' 
+          });
+        }
         setEmail('');
+        setPrivacyAccepted(false);
       } else {
         setStatus({ type: 'error', message: result.error || 'Etwas ist schiefgelaufen.' });
       }
@@ -38,69 +77,91 @@ const WaitlistSection = () => {
     setLoading(false);
   };
 
+  const commonProps = {
+    email,
+    setEmail,
+    status,
+    loading,
+    handleSubmit,
+    privacyAccepted,
+    setPrivacyAccepted,
+    showPrivacyModal,
+    setShowPrivacyModal,
+  };
+
   if (currentTheme === 'luxe') {
-    return (
-      <LuxeWaitlist 
-        email={email}
-        setEmail={setEmail}
-        status={status}
-        loading={loading}
-        handleSubmit={handleSubmit}
-      />
-    );
+    return <LuxeWaitlist {...commonProps} />;
   }
 
   if (currentTheme === 'botanical') {
-    return (
-      <BotanicalWaitlist 
-        email={email}
-        setEmail={setEmail}
-        status={status}
-        loading={loading}
-        handleSubmit={handleSubmit}
-      />
-    );
+    return <BotanicalWaitlist {...commonProps} />;
   }
 
   if (currentTheme === 'video') {
-    return (
-      <VideoWaitlist 
-        email={email}
-        setEmail={setEmail}
-        status={status}
-        loading={loading}
-        handleSubmit={handleSubmit}
-      />
-    );
+    return <VideoWaitlist {...commonProps} />;
   }
 
   if (currentTheme === 'editorial') {
-    return (
-      <EditorialWaitlist 
-        email={email}
-        setEmail={setEmail}
-        status={status}
-        loading={loading}
-        handleSubmit={handleSubmit}
-      />
-    );
+    return <EditorialWaitlist {...commonProps} />;
   }
 
+  return <ContemporaryWaitlist {...commonProps} />;
+};
+
+// ============================================
+// PRIVACY MODAL COMPONENT
+// ============================================
+const PrivacyModal = ({ show, onClose, $theme }) => {
+  if (!show) return null;
+  
   return (
-    <ContemporaryWaitlist 
-      email={email}
-      setEmail={setEmail}
-      status={status}
-      loading={loading}
-      handleSubmit={handleSubmit}
-    />
+    <ModalOverlay onClick={onClose}>
+      <ModalContent onClick={e => e.stopPropagation()} $theme={$theme}>
+        <ModalHeader $theme={$theme}>
+          <ModalTitle $theme={$theme}>Datenschutzerklärung</ModalTitle>
+          <CloseButton onClick={onClose} $theme={$theme}>×</CloseButton>
+        </ModalHeader>
+        <ModalBody $theme={$theme}>
+          <h3>1. Verantwortlicher</h3>
+          <p>Sarah & Iver GbR<br />
+          E-Mail: wedding@sarahiv.de</p>
+          
+          <h3>2. Erhobene Daten</h3>
+          <p>Bei der Anmeldung zur Warteliste erheben wir:</p>
+          <ul>
+            <li>E-Mail-Adresse</li>
+            <li>Bevorzugtes Design-Theme</li>
+            <li>Zeitpunkt der Anmeldung</li>
+          </ul>
+          
+          <h3>3. Zweck der Datenverarbeitung</h3>
+          <p>Wir verwenden deine Daten ausschließlich, um:</p>
+          <ul>
+            <li>Dich über den Launch unserer Plattform zu informieren</li>
+            <li>Dir deinen exklusiven Launch-Rabatt zuzusenden</li>
+          </ul>
+          
+          <h3>4. Rechtsgrundlage</h3>
+          <p>Die Verarbeitung erfolgt auf Grundlage deiner Einwilligung (Art. 6 Abs. 1 lit. a DSGVO).</p>
+          
+          <h3>5. Speicherdauer</h3>
+          <p>Deine Daten werden gelöscht, sobald du dich von der Warteliste abmeldest oder der Zweck der Speicherung entfällt.</p>
+          
+          <h3>6. Deine Rechte</h3>
+          <p>Du hast das Recht auf Auskunft, Berichtigung, Löschung und Widerspruch. Kontaktiere uns jederzeit unter wedding@sarahiv.de.</p>
+          
+          <h3>7. Widerruf</h3>
+          <p>Du kannst deine Einwilligung jederzeit widerrufen, indem du uns eine E-Mail sendest.</p>
+        </ModalBody>
+      </ModalContent>
+    </ModalOverlay>
   );
 };
 
 // ============================================
 // CONTEMPORARY WAITLIST
 // ============================================
-const ContemporaryWaitlist = ({ email, setEmail, status, loading, handleSubmit }) => (
+const ContemporaryWaitlist = ({ email, setEmail, status, loading, handleSubmit, privacyAccepted, setPrivacyAccepted, showPrivacyModal, setShowPrivacyModal }) => (
   <Section id="waitlist" $theme="contemporary">
     <Container>
       <Badge $theme="contemporary">★ BE PART OF IT</Badge>
@@ -111,8 +172,7 @@ const ContemporaryWaitlist = ({ email, setEmail, status, loading, handleSubmit }
       </TitleGroup>
       
       <Subtitle $theme="contemporary">
-        Sei einer der Ersten. Trag dich ein und erhalte exklusiven 
-        Zugang zum Launch – plus Early-Bird Vorteile.
+        Trag dich ein und sichere dir deinen exklusiven Launch-Rabatt.
       </Subtitle>
       
       <FormWrapper $theme="contemporary">
@@ -130,46 +190,47 @@ const ContemporaryWaitlist = ({ email, setEmail, status, loading, handleSubmit }
           </SubmitButton>
         </Form>
         
+        <CheckboxWrapper $theme="contemporary">
+          <Checkbox
+            type="checkbox"
+            checked={privacyAccepted}
+            onChange={(e) => setPrivacyAccepted(e.target.checked)}
+            id="privacy-contemporary"
+          />
+          <CheckboxLabel htmlFor="privacy-contemporary" $theme="contemporary">
+            Ich akzeptiere die{' '}
+            <PrivacyLink onClick={(e) => { e.preventDefault(); setShowPrivacyModal(true); }} $theme="contemporary">
+              Datenschutzerklärung
+            </PrivacyLink>
+          </CheckboxLabel>
+        </CheckboxWrapper>
+        
         {status.message && (
           <Message $success={status.type === 'success'} $theme="contemporary">
             {status.message}
           </Message>
         )}
-        
-        <Privacy $theme="contemporary">
-          🔒 Deine Daten sind bei uns sicher. Kein Spam, versprochen.
-        </Privacy>
       </FormWrapper>
       
-      <BenefitsGrid>
-        <Benefit $theme="contemporary">
-          <BenefitIcon>🚀</BenefitIcon>
-          <BenefitText $theme="contemporary">Early Access zum Launch</BenefitText>
-        </Benefit>
-        <Benefit $theme="contemporary">
-          <BenefitIcon>💰</BenefitIcon>
-          <BenefitText $theme="contemporary">Exklusive Launch-Rabatte</BenefitText>
-        </Benefit>
-        <Benefit $theme="contemporary">
-          <BenefitIcon>✨</BenefitIcon>
-          <BenefitText $theme="contemporary">Sneak Peeks & Updates</BenefitText>
-        </Benefit>
-      </BenefitsGrid>
+      <RabattHinweis $theme="contemporary">
+        💰 Wartelisten-Mitglieder erhalten einen exklusiven Rabatt zum Launch!
+      </RabattHinweis>
     </Container>
+    
+    <PrivacyModal show={showPrivacyModal} onClose={() => setShowPrivacyModal(false)} $theme="contemporary" />
   </Section>
 );
 
 // ============================================
 // EDITORIAL WAITLIST
 // ============================================
-const EditorialWaitlist = ({ email, setEmail, status, loading, handleSubmit }) => (
+const EditorialWaitlist = ({ email, setEmail, status, loading, handleSubmit, privacyAccepted, setPrivacyAccepted, showPrivacyModal, setShowPrivacyModal }) => (
   <Section id="waitlist" $theme="editorial">
     <Container>
-      <EditorialTitle>Sei dabei von <em>Anfang an</em></EditorialTitle>
+      <EditorialTitle>Sichere dir deinen <em>Launch-Rabatt</em></EditorialTitle>
       
       <Subtitle $theme="editorial">
-        Trag dich auf unsere Warteliste ein und erhalte exklusiven 
-        Zugang zum Launch.
+        Trag dich auf unsere Warteliste ein und erhalte einen exklusiven Rabatt zum Launch.
       </Subtitle>
       
       <FormWrapper $theme="editorial">
@@ -187,34 +248,47 @@ const EditorialWaitlist = ({ email, setEmail, status, loading, handleSubmit }) =
           </SubmitButton>
         </Form>
         
+        <CheckboxWrapper $theme="editorial">
+          <Checkbox
+            type="checkbox"
+            checked={privacyAccepted}
+            onChange={(e) => setPrivacyAccepted(e.target.checked)}
+            id="privacy-editorial"
+          />
+          <CheckboxLabel htmlFor="privacy-editorial" $theme="editorial">
+            Ich akzeptiere die{' '}
+            <PrivacyLink onClick={(e) => { e.preventDefault(); setShowPrivacyModal(true); }} $theme="editorial">
+              Datenschutzerklärung
+            </PrivacyLink>
+          </CheckboxLabel>
+        </CheckboxWrapper>
+        
         {status.message && (
           <Message $success={status.type === 'success'} $theme="editorial">
             {status.message}
           </Message>
         )}
-        
-        <Privacy $theme="editorial">
-          Deine Daten sind bei uns sicher. Kein Spam.
-        </Privacy>
       </FormWrapper>
     </Container>
+    
+    <PrivacyModal show={showPrivacyModal} onClose={() => setShowPrivacyModal(false)} $theme="editorial" />
   </Section>
 );
 
 // ============================================
 // VIDEO WAITLIST - Cinematic Dark Style
 // ============================================
-const VideoWaitlist = ({ email, setEmail, status, loading, handleSubmit }) => (
+const VideoWaitlist = ({ email, setEmail, status, loading, handleSubmit, privacyAccepted, setPrivacyAccepted, showPrivacyModal, setShowPrivacyModal }) => (
   <VideoSection id="waitlist">
     <VideoContainer>
       <VideoBadge>— SEI DABEI —</VideoBadge>
       
       <VideoTitle>
-        Werde Teil unserer <em>Geschichte</em>
+        Sichere dir deinen <em>Launch-Rabatt</em>
       </VideoTitle>
       
       <VideoSubtitle>
-        Trag dich auf unsere Warteliste ein und erhalte exklusiven Zugang zum Launch.
+        Trag dich auf unsere Warteliste ein und erhalte einen exklusiven Rabatt zum Launch.
       </VideoSubtitle>
       
       <VideoFormWrapper>
@@ -231,51 +305,51 @@ const VideoWaitlist = ({ email, setEmail, status, loading, handleSubmit }) => (
           </VideoSubmitButton>
         </VideoForm>
         
+        <VideoCheckboxWrapper>
+          <Checkbox
+            type="checkbox"
+            checked={privacyAccepted}
+            onChange={(e) => setPrivacyAccepted(e.target.checked)}
+            id="privacy-video"
+          />
+          <VideoCheckboxLabel htmlFor="privacy-video">
+            Ich akzeptiere die{' '}
+            <VideoPrivacyLink onClick={(e) => { e.preventDefault(); setShowPrivacyModal(true); }}>
+              Datenschutzerklärung
+            </VideoPrivacyLink>
+          </VideoCheckboxLabel>
+        </VideoCheckboxWrapper>
+        
         {status.message && (
           <VideoMessage $success={status.type === 'success'}>
             {status.message}
           </VideoMessage>
         )}
-        
-        <VideoPrivacy>
-          Deine Daten sind bei uns sicher. Kein Spam, versprochen.
-        </VideoPrivacy>
       </VideoFormWrapper>
       
-      <VideoBenefits>
-        <VideoBenefit>
-          <VideoBenefitIcon>✦</VideoBenefitIcon>
-          <VideoBenefitText>Early Access</VideoBenefitText>
-        </VideoBenefit>
-        <VideoBenefitDivider>·</VideoBenefitDivider>
-        <VideoBenefit>
-          <VideoBenefitIcon>✦</VideoBenefitIcon>
-          <VideoBenefitText>Launch-Rabatte</VideoBenefitText>
-        </VideoBenefit>
-        <VideoBenefitDivider>·</VideoBenefitDivider>
-        <VideoBenefit>
-          <VideoBenefitIcon>✦</VideoBenefitIcon>
-          <VideoBenefitText>Sneak Peeks</VideoBenefitText>
-        </VideoBenefit>
-      </VideoBenefits>
+      <VideoRabattHinweis>
+        ✦ Wartelisten-Mitglieder erhalten einen exklusiven Rabatt zum Launch
+      </VideoRabattHinweis>
     </VideoContainer>
+    
+    <PrivacyModal show={showPrivacyModal} onClose={() => setShowPrivacyModal(false)} $theme="video" />
   </VideoSection>
 );
 
 // ============================================
 // BOTANICAL WAITLIST - Nature-inspired Form
 // ============================================
-const BotanicalWaitlist = ({ email, setEmail, status, loading, handleSubmit }) => (
+const BotanicalWaitlist = ({ email, setEmail, status, loading, handleSubmit, privacyAccepted, setPrivacyAccepted, showPrivacyModal, setShowPrivacyModal }) => (
   <BotanicalWaitlistSection id="waitlist">
     <BotanicalWaitlistContainer>
       <BotanicalWaitlistBadge>✦ SEI DABEI ✦</BotanicalWaitlistBadge>
       
       <BotanicalWaitlistTitle>
-        Trag dich ein für <em>exklusiven Zugang</em>
+        Sichere dir deinen <em>Launch-Rabatt</em>
       </BotanicalWaitlistTitle>
       
       <BotanicalWaitlistSubtitle>
-        Werde Teil unserer Geschichte und erhalte als Erste/r Zugang zum Launch.
+        Trag dich auf unsere Warteliste ein und erhalte einen exklusiven Rabatt zum Launch.
       </BotanicalWaitlistSubtitle>
       
       <BotanicalFormBox>
@@ -292,40 +366,51 @@ const BotanicalWaitlist = ({ email, setEmail, status, loading, handleSubmit }) =
           </BotanicalSubmitButton>
         </BotanicalForm>
         
+        <BotanicalCheckboxWrapper>
+          <Checkbox
+            type="checkbox"
+            checked={privacyAccepted}
+            onChange={(e) => setPrivacyAccepted(e.target.checked)}
+            id="privacy-botanical"
+          />
+          <BotanicalCheckboxLabel htmlFor="privacy-botanical">
+            Ich akzeptiere die{' '}
+            <BotanicalPrivacyLink onClick={(e) => { e.preventDefault(); setShowPrivacyModal(true); }}>
+              Datenschutzerklärung
+            </BotanicalPrivacyLink>
+          </BotanicalCheckboxLabel>
+        </BotanicalCheckboxWrapper>
+        
         {status.message && (
           <BotanicalFormMessage $success={status.type === 'success'}>
             {status.message}
           </BotanicalFormMessage>
         )}
-        
-        <BotanicalPrivacy>
-          🌿 Deine Daten sind bei uns sicher. Kein Spam, versprochen.
-        </BotanicalPrivacy>
       </BotanicalFormBox>
       
-      <BotanicalBenefitsList>
-        <BotanicalBenefitItem>🌱 Early Access zum Launch</BotanicalBenefitItem>
-        <BotanicalBenefitItem>💚 Exklusive Rabatte</BotanicalBenefitItem>
-        <BotanicalBenefitItem>✨ Sneak Peeks & Updates</BotanicalBenefitItem>
-      </BotanicalBenefitsList>
+      <BotanicalRabattHinweis>
+        🌿 Wartelisten-Mitglieder erhalten einen exklusiven Rabatt zum Launch
+      </BotanicalRabattHinweis>
     </BotanicalWaitlistContainer>
+    
+    <PrivacyModal show={showPrivacyModal} onClose={() => setShowPrivacyModal(false)} $theme="botanical" />
   </BotanicalWaitlistSection>
 );
 
 // ============================================
 // LUXE WAITLIST - Elegant Minimal Style
 // ============================================
-const LuxeWaitlist = ({ email, setEmail, status, loading, handleSubmit }) => (
+const LuxeWaitlist = ({ email, setEmail, status, loading, handleSubmit, privacyAccepted, setPrivacyAccepted, showPrivacyModal, setShowPrivacyModal }) => (
   <LuxeWaitlistSection id="waitlist">
     <LuxeWaitlistContainer>
       <LuxeWaitlistBadge>SEI DABEI</LuxeWaitlistBadge>
       
       <LuxeWaitlistTitle>
-        <em>Trag dich ein</em>
+        <em>Sichere dir deinen Launch-Rabatt</em>
       </LuxeWaitlistTitle>
       
       <LuxeWaitlistSubtitle>
-        Erhalte exklusiven Zugang zum Launch und sichere dir besondere Vorteile.
+        Trag dich auf unsere Warteliste ein und erhalte einen exklusiven Rabatt zum Launch.
       </LuxeWaitlistSubtitle>
       
       <LuxeFormWrapper>
@@ -342,21 +427,30 @@ const LuxeWaitlist = ({ email, setEmail, status, loading, handleSubmit }) => (
           </LuxeSubmitButton>
         </LuxeForm>
         
+        <LuxeCheckboxWrapper>
+          <Checkbox
+            type="checkbox"
+            checked={privacyAccepted}
+            onChange={(e) => setPrivacyAccepted(e.target.checked)}
+            id="privacy-luxe"
+          />
+          <LuxeCheckboxLabel htmlFor="privacy-luxe">
+            Ich akzeptiere die{' '}
+            <LuxePrivacyLink onClick={(e) => { e.preventDefault(); setShowPrivacyModal(true); }}>
+              Datenschutzerklärung
+            </LuxePrivacyLink>
+          </LuxeCheckboxLabel>
+        </LuxeCheckboxWrapper>
+        
         {status.message && (
           <LuxeFormMessage $success={status.type === 'success'}>
             {status.message}
           </LuxeFormMessage>
         )}
       </LuxeFormWrapper>
-      
-      <LuxeBenefitsList>
-        <LuxeBenefitItem>Early Access</LuxeBenefitItem>
-        <LuxeBenefitDivider>·</LuxeBenefitDivider>
-        <LuxeBenefitItem>Exklusive Rabatte</LuxeBenefitItem>
-        <LuxeBenefitDivider>·</LuxeBenefitDivider>
-        <LuxeBenefitItem>Sneak Peeks</LuxeBenefitItem>
-      </LuxeBenefitsList>
     </LuxeWaitlistContainer>
+    
+    <PrivacyModal show={showPrivacyModal} onClose={() => setShowPrivacyModal(false)} $theme="luxe" />
   </LuxeWaitlistSection>
 );
 
@@ -1101,5 +1195,281 @@ const LuxeBenefitDivider = styled.span`
   
   @media (max-width: 400px) {
     display: none;
+  }
+`;
+
+// ============================================
+// MODAL STYLES
+// ============================================
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+`;
+
+const ModalContent = styled.div`
+  background: ${p => (p.$theme === 'video' || p.$theme === 'luxe') ? '#1A1A1A' : '#FFFFFF'};
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  border-radius: ${p => p.$theme === 'botanical' ? '20px' : '0'};
+`;
+
+const ModalHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 30px;
+  border-bottom: 1px solid ${p => (p.$theme === 'video' || p.$theme === 'luxe') ? 'rgba(255,255,255,0.1)' : '#E5E5E5'};
+`;
+
+const ModalTitle = styled.h3`
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: ${p => (p.$theme === 'video' || p.$theme === 'luxe') ? '#FFFFFF' : '#1A1A1A'};
+  
+  ${p => p.$theme === 'contemporary' && `font-family: 'Space Grotesk', sans-serif;`}
+  ${p => p.$theme === 'editorial' && `font-family: 'Inter', sans-serif;`}
+  ${p => p.$theme === 'video' && `font-family: 'Montserrat', sans-serif;`}
+  ${p => p.$theme === 'botanical' && `font-family: 'Lato', sans-serif;`}
+  ${p => p.$theme === 'luxe' && `font-family: 'Montserrat', sans-serif;`}
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: ${p => (p.$theme === 'video' || p.$theme === 'luxe') ? '#FFFFFF' : '#1A1A1A'};
+  line-height: 1;
+  
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
+const ModalBody = styled.div`
+  padding: 30px;
+  color: ${p => (p.$theme === 'video' || p.$theme === 'luxe') ? 'rgba(255,255,255,0.8)' : '#333'};
+  font-size: 0.9rem;
+  line-height: 1.7;
+  
+  ${p => p.$theme === 'contemporary' && `font-family: 'Space Grotesk', sans-serif;`}
+  ${p => p.$theme === 'editorial' && `font-family: 'Inter', sans-serif;`}
+  ${p => p.$theme === 'video' && `font-family: 'Montserrat', sans-serif;`}
+  ${p => p.$theme === 'botanical' && `font-family: 'Lato', sans-serif;`}
+  ${p => p.$theme === 'luxe' && `font-family: 'Montserrat', sans-serif;`}
+  
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 25px 0 10px;
+    color: ${p => (p.$theme === 'video' || p.$theme === 'luxe') ? '#FFFFFF' : '#1A1A1A'};
+    
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+  
+  ul {
+    margin: 10px 0;
+    padding-left: 20px;
+  }
+  
+  li {
+    margin: 5px 0;
+  }
+`;
+
+// ============================================
+// CHECKBOX STYLES
+// ============================================
+const Checkbox = styled.input`
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #FF6B6B;
+`;
+
+const CheckboxWrapper = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 15px;
+  text-align: left;
+  
+  ${p => p.$theme === 'contemporary' && `
+    justify-content: center;
+  `}
+  
+  ${p => p.$theme === 'editorial' && `
+    justify-content: center;
+  `}
+`;
+
+const CheckboxLabel = styled.label`
+  font-size: 0.85rem;
+  cursor: pointer;
+  
+  ${p => p.$theme === 'contemporary' && `
+    font-family: 'Space Grotesk', sans-serif;
+    color: #0D0D0D;
+  `}
+  
+  ${p => p.$theme === 'editorial' && `
+    font-family: 'Inter', sans-serif;
+    color: #666;
+  `}
+`;
+
+const PrivacyLink = styled.button`
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  
+  ${p => p.$theme === 'contemporary' && `
+    font-family: 'Space Grotesk', sans-serif;
+    color: #0D0D0D;
+    font-weight: 600;
+  `}
+  
+  ${p => p.$theme === 'editorial' && `
+    font-family: 'Inter', sans-serif;
+    color: #1A1A1A;
+  `}
+  
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
+const RabattHinweis = styled.p`
+  margin-top: 40px;
+  
+  ${p => p.$theme === 'contemporary' && `
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0D0D0D;
+  `}
+`;
+
+// Video Checkbox Styles
+const VideoCheckboxWrapper = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+`;
+
+const VideoCheckboxLabel = styled.label`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+`;
+
+const VideoPrivacyLink = styled.button`
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  color: #C9A962;
+  text-decoration: underline;
+  cursor: pointer;
+  
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+const VideoRabattHinweis = styled.p`
+  margin-top: 40px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  color: #C9A962;
+  letter-spacing: 0.05em;
+`;
+
+// Botanical Checkbox Styles
+const BotanicalCheckboxWrapper = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+`;
+
+const BotanicalCheckboxLabel = styled.label`
+  font-family: 'Lato', sans-serif;
+  font-size: 0.85rem;
+  color: #5A6B5D;
+  cursor: pointer;
+`;
+
+const BotanicalPrivacyLink = styled.button`
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.85rem;
+  color: #4A7C59;
+  text-decoration: underline;
+  cursor: pointer;
+  
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
+const BotanicalRabattHinweis = styled.p`
+  margin-top: 40px;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.95rem;
+  color: #4A7C59;
+  font-weight: 500;
+`;
+
+// Luxe Checkbox Styles
+const LuxeCheckboxWrapper = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+`;
+
+const LuxeCheckboxLabel = styled.label`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  color: #888;
+  cursor: pointer;
+`;
+
+const LuxePrivacyLink = styled.button`
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  color: #B8960B;
+  text-decoration: underline;
+  cursor: pointer;
+  
+  &:hover {
+    opacity: 0.8;
   }
 `;
