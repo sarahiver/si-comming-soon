@@ -1,207 +1,639 @@
+// About Section - Multi-Theme (Contemporary, Editorial & Video)
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
+import { useTheme } from '../context/ThemeContext';
 
-const AboutSection = () => {
-  return (
-    <Container>
-      <Header>
-        <Eyebrow>Die Menschen hinter S&I.</Eyebrow>
-        <Title>Lernt uns kennen</Title>
-      </Header>
-      
-      <Content>
-        <PersonCard $delay={0.1}>
-          <Avatar>👩‍💼</Avatar>
-          <PersonName>Sarah</PersonName>
-          <Role>Kreative Leitung</Role>
-          <Bio>
-            Mit einem Auge fürs Detail und einer Leidenschaft für ästhetische Perfektion 
-            bringt Sarah eure Vision zum Leben. Jedes Design erzählt eure Geschichte.
-          </Bio>
-        </PersonCard>
-        
-        <PersonCard $delay={0.2}>
-          <Avatar>👨‍💻</Avatar>
-          <PersonName>Iver</PersonName>
-          <Role>Technische Magie</Role>
-          <Bio>
-            Als Tech-Enthusiast sorgt Iver dafür, dass eure Website nicht nur 
-            wunderschön aussieht, sondern auch technisch brillant funktioniert.
-          </Bio>
-        </PersonCard>
-      </Content>
-      
-      <StorySection>
-        <StoryTitle>Unsere Geschichte</StoryTitle>
-        <StoryText>
-          Wir haben selbst erlebt, wie schwer es ist, eine Hochzeitswebsite zu finden, 
-          die wirklich zu einem passt. Die Standardlösungen? Austauschbar. Die Agenturen? 
-          Unpersönlich und teuer. Also haben wir <strong>S&I.</strong> gegründet – 
-          um Paaren das zu geben, was wir uns selbst gewünscht hätten: 
-          Handgefertigte, liebevoll gestaltete Websites, die so einzigartig sind wie die Liebe selbst. 
-          Mit persönlicher Betreuung von Anfang bis Ende.
-        </StoryText>
-        <Values>
-          <Value>💕 Mit Liebe gemacht</Value>
-          <Value>🎨 Einzigartig</Value>
-          <Value>🤝 Persönlich</Value>
-        </Values>
-      </StorySection>
-    </Container>
-  );
-};
-
-export default AboutSection;
-
-// Animations
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(20px); }
+const fadeInUp = keyframes`
+  from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
 `;
 
-// Styles
-const Container = styled.section`
-  padding: 6rem 2rem;
+const float = keyframes`
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+`;
+
+const values = [
+  { 
+    title: 'PERSÖNLICH', 
+    icon: '💬', 
+    text: 'Ihr seid nicht eine Nummer. Sarah & Iver beraten euch persönlich von der ersten Idee bis zum Go-Live.',
+    color: '#FF6B6B'
+  },
+  { 
+    title: 'INDIVIDUELL', 
+    icon: '✨', 
+    text: 'Jede Website ist ein Unikat. Wir designen nicht für die Masse, sondern für eure einzigartige Geschichte.',
+    color: '#FFE66D'
+  },
+  { 
+    title: 'LEIDENSCHAFT', 
+    icon: '❤️', 
+    text: 'Wir lieben was wir tun. Diese Begeisterung steckt in jedem Pixel eurer Hochzeitswebsite.',
+    color: '#4ECDC4'
+  },
+];
+
+const AboutSection = () => {
+  const { currentTheme } = useTheme();
+
+  if (currentTheme === 'video') {
+    return <VideoAbout />;
+  }
+
+  if (currentTheme === 'editorial') {
+    return <EditorialAbout />;
+  }
+
+  return <ContemporaryAbout />;
+};
+
+// ============================================
+// CONTEMPORARY ABOUT
+// ============================================
+const ContemporaryAbout = () => (
+  <Section id="about" $theme="contemporary">
+    <BackgroundText>S&I</BackgroundText>
+    
+    <Container>
+      <Badge $theme="contemporary">★ ABOUT US</Badge>
+      
+      <TitleGroup>
+        <TitleLine $theme="contemporary">WE ARE</TitleLine>
+        <TitleAccent $theme="contemporary">SARAH & IVER</TitleAccent>
+      </TitleGroup>
+      
+      <Subtitle $theme="contemporary">
+        Keine Agentur. Keine Templates. Nur wir – und unsere 
+        <br />
+        Mission, eure Liebe digital unvergesslich zu machen.
+      </Subtitle>
+      
+      <ValuesGrid $theme="contemporary">
+        {values.map((value, index) => (
+          <ContemporaryCard key={value.title} $color={value.color} $delay={index * 0.15}>
+            <CardIcon>{value.icon}</CardIcon>
+            <CardTitle $theme="contemporary">{value.title}</CardTitle>
+            <CardText $theme="contemporary">{value.text}</CardText>
+          </ContemporaryCard>
+        ))}
+      </ValuesGrid>
+      
+      <LogoSection $theme="contemporary">
+        <LogoText $theme="contemporary">S & I</LogoText>
+        <LogoTagline $theme="contemporary">REAL PEOPLE. REAL CONNECTION.</LogoTagline>
+      </LogoSection>
+    </Container>
+  </Section>
+);
+
+// ============================================
+// EDITORIAL ABOUT
+// ============================================
+const EditorialAbout = () => (
+  <Section id="about" $theme="editorial">
+    <EditorialContainer>
+      {/* Left Side - Image Placeholder */}
+      <EditorialImageSection>
+        <ImagePlaceholder>
+          <PlaceholderLogo>S&I</PlaceholderLogo>
+        </ImagePlaceholder>
+        <EditorialQuote>
+          „Wir glauben, dass eure Hochzeitswebsite genauso einzigartig sein sollte wie eure Liebe."
+        </EditorialQuote>
+        <QuoteAuthor>— SARAH & IVER</QuoteAuthor>
+      </EditorialImageSection>
+      
+      {/* Right Side - Content */}
+      <EditorialContentSection>
+        <Badge $theme="editorial">ÜBER UNS</Badge>
+        <EditorialTitle>Wir sind <em>Sarah & Iver</em></EditorialTitle>
+        
+        <EditorialText>
+          Als wir unsere eigene Hochzeit geplant haben, standen wir vor dem gleichen Problem wie ihr: Unzählige Template-Websites, die alle gleich aussahen. Unpersönlich. Austauschbar.
+        </EditorialText>
+        
+        <EditorialText>
+          Das wollten wir ändern. Deshalb haben wir S&I gegründet – mit einer klaren Mission: <strong>Jedes Paar verdient eine Website, die so einzigartig ist wie ihre Geschichte.</strong>
+        </EditorialText>
+        
+        <EditorialText>
+          Bei uns bekommt ihr keine anonyme Massenware. Ihr bekommt uns – als eure persönlichen Ansprechpartner, von der ersten Idee bis zum großen Tag.
+        </EditorialText>
+        
+        <EditorialSignature>Sarah & Iver</EditorialSignature>
+        <SignatureSubtext>GRÜNDER VON S&I</SignatureSubtext>
+      </EditorialContentSection>
+    </EditorialContainer>
+  </Section>
+);
+
+// ============================================
+// VIDEO ABOUT - Timeline Style
+// ============================================
+const VideoAbout = () => (
+  <VideoSection id="about">
+    <VideoContainer>
+      <VideoHeader>
+        <VideoBadge>— ÜBER UNS —</VideoBadge>
+        <VideoTitle>
+          Wir sind <em>Sarah & Iver</em>
+        </VideoTitle>
+      </VideoHeader>
+      
+      <VideoTimeline>
+        <TimelineItem>
+          <TimelineYear>01</TimelineYear>
+          <TimelineContent>
+            <TimelineTitle>Die Idee</TimelineTitle>
+            <TimelineText>
+              Als wir unsere eigene Hochzeit geplant haben, standen wir vor dem gleichen Problem wie ihr: Unzählige Template-Websites, die alle gleich aussahen.
+            </TimelineText>
+          </TimelineContent>
+        </TimelineItem>
+        
+        <TimelineItem>
+          <TimelineYear>02</TimelineYear>
+          <TimelineContent>
+            <TimelineTitle>Die Mission</TimelineTitle>
+            <TimelineText>
+              Jedes Paar verdient eine Website, die so einzigartig ist wie ihre Geschichte. Das ist unsere Mission mit S&I.
+            </TimelineText>
+          </TimelineContent>
+        </TimelineItem>
+        
+        <TimelineItem>
+          <TimelineYear>03</TimelineYear>
+          <TimelineContent>
+            <TimelineTitle>Das Versprechen</TimelineTitle>
+            <TimelineText>
+              Bei uns bekommt ihr keine anonyme Massenware. Ihr bekommt uns – als eure persönlichen Ansprechpartner, von der ersten Idee bis zum großen Tag.
+            </TimelineText>
+          </TimelineContent>
+        </TimelineItem>
+      </VideoTimeline>
+      
+      <VideoQuoteBox>
+        <VideoQuote>
+          „Wir glauben, dass eure Hochzeitswebsite genauso einzigartig sein sollte wie eure Liebe."
+        </VideoQuote>
+        <VideoQuoteAuthor>— Sarah & Iver</VideoQuoteAuthor>
+      </VideoQuoteBox>
+      
+      <VideoSignature>
+        <SignatureLogo>S&I</SignatureLogo>
+        <SignatureTagline>REAL PEOPLE. REAL CONNECTION.</SignatureTagline>
+      </VideoSignature>
+    </VideoContainer>
+  </VideoSection>
+);
+
+export default AboutSection;
+
+// ============================================
+// STYLES
+// ============================================
+const Section = styled.section`
+  padding: 120px 5%;
+  position: relative;
+  overflow: hidden;
+  
+  ${p => p.$theme === 'contemporary' && css`
+    background: #FFFFFF;
+  `}
+  
+  ${p => p.$theme === 'editorial' && css`
+    background: #FFFFFF;
+  `}
+`;
+
+const Container = styled.div`
   max-width: 1000px;
   margin: 0 auto;
-`;
-
-const Header = styled.div`
   text-align: center;
-  margin-bottom: 4rem;
-  animation: ${fadeIn} 0.6s ease-out;
+  position: relative;
+  z-index: 2;
 `;
 
-const Eyebrow = styled.span`
-  font-family: ${props => props.theme.fonts.body};
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.3em;
-  color: ${props => props.theme.colors.primary};
-  display: block;
-  margin-bottom: 1rem;
+const BackgroundText = styled.div`
+  position: absolute;
+  top: 50%;
+  right: -5%;
+  transform: translateY(-50%);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(15rem, 40vw, 35rem);
+  font-weight: 700;
+  color: #0D0D0D;
+  opacity: 0.03;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+  line-height: 0.8;
 `;
 
-const Title = styled.h2`
-  font-family: ${props => props.theme.fonts.heading};
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: ${props => ['luxury', 'magazine', 'opulent'].includes(props.theme.style) ? '400' : '600'};
-  font-style: ${props => ['luxury', 'magazine'].includes(props.theme.style) ? 'italic' : 'normal'};
-  color: ${props => props.theme.colors.text};
-`;
-
-const Content = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
+const Badge = styled.div`
+  display: inline-block;
+  margin-bottom: 30px;
   
-  @media (min-width: 768px) {
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-  }
+  ${p => p.$theme === 'contemporary' && css`
+    background: #FF6B6B;
+    color: #FFFFFF;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    padding: 8px 18px;
+  `}
+  
+  ${p => p.$theme === 'editorial' && css`
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    color: #999;
+  `}
 `;
 
-const PersonCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  animation: ${fadeIn} 0.6s ease-out forwards;
-  animation-delay: ${props => props.$delay}s;
+const TitleGroup = styled.div`
+  margin-bottom: 25px;
+`;
+
+const TitleLine = styled.h2`
+  line-height: 1.1;
+  
+  ${p => p.$theme === 'contemporary' && css`
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: #0D0D0D;
+    letter-spacing: -0.02em;
+  `}
+`;
+
+const TitleAccent = styled.span`
+  display: block;
+  line-height: 1;
+  
+  ${p => p.$theme === 'contemporary' && css`
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 700;
+    color: #FF6B6B;
+    letter-spacing: -0.02em;
+  `}
+`;
+
+const Subtitle = styled.p`
+  margin-bottom: 60px;
+  line-height: 1.7;
+  
+  ${p => p.$theme === 'contemporary' && css`
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    color: rgba(13, 13, 13, 0.6);
+  `}
+`;
+
+const ValuesGrid = styled.div`
+  display: grid;
+  gap: 25px;
+  margin-bottom: 80px;
+  
+  ${p => p.$theme === 'contemporary' && css`
+    grid-template-columns: repeat(3, 1fr);
+    
+    @media (max-width: 800px) {
+      grid-template-columns: 1fr;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  `}
+`;
+
+const ContemporaryCard = styled.div`
+  background: ${p => p.$color};
+  padding: 40px 30px;
+  text-align: left;
   opacity: 0;
-`;
-
-const Avatar = styled.div`
-  width: 140px;
-  height: 140px;
-  border-radius: ${props => props.theme.style === 'modern' ? '24px' : '50%'};
-  background: ${props => props.theme.colors.primary}20;
-  border: 3px solid ${props => props.theme.colors.primary};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
-  margin-bottom: 1.5rem;
-  transition: all 0.3s ease;
+  animation: ${fadeInUp} 0.6s ease forwards, ${float} 5s ease-in-out infinite;
+  animation-delay: ${p => p.$delay}s, ${p => p.$delay + 1}s;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   
   &:hover {
-    transform: scale(1.05);
-    box-shadow: ${props => props.theme.colors.glow !== 'none' ? props.theme.colors.glow : '0 8px 30px rgba(0,0,0,0.15)'};
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
   }
 `;
 
-const PersonName = styled.h3`
-  font-family: ${props => props.theme.fonts.heading};
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: ${props => props.theme.colors.text};
-  margin-bottom: 0.5rem;
+const CardIcon = styled.div`
+  font-size: 2rem;
+  margin-bottom: 20px;
 `;
 
-const Role = styled.span`
-  font-family: ${props => props.theme.fonts.body};
-  font-size: 0.9rem;
-  color: ${props => props.theme.colors.primary};
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 1rem;
-  display: block;
+const CardTitle = styled.h3`
+  margin-bottom: 12px;
+  
+  ${p => p.$theme === 'contemporary' && css`
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0D0D0D;
+    letter-spacing: 0.05em;
+  `}
 `;
 
-const Bio = styled.p`
-  font-family: ${props => props.theme.fonts.body};
-  font-size: 1rem;
-  color: ${props => props.theme.colors.textMuted};
-  line-height: 1.7;
-  max-width: 350px;
+const CardText = styled.p`
+  line-height: 1.6;
+  
+  ${p => p.$theme === 'contemporary' && css`
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.9rem;
+    color: rgba(13, 13, 13, 0.7);
+  `}
 `;
 
-const StorySection = styled.div`
-  margin-top: 4rem;
-  padding: 3rem 2rem;
-  background: ${props => props.theme.colors.cardBg};
-  border-radius: ${props => props.theme.borderRadius};
-  border: 1px solid ${props => props.theme.colors.primary}15;
-  animation: ${fadeIn} 0.6s ease-out;
+const LogoSection = styled.div`
+  padding-top: 40px;
+  border-top: 1px solid rgba(13, 13, 13, 0.1);
 `;
 
-const StoryTitle = styled.h3`
-  font-family: ${props => props.theme.fonts.heading};
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: ${props => props.theme.colors.primary};
-  margin-bottom: 1.5rem;
-  text-align: center;
+const LogoText = styled.div`
+  margin-bottom: 10px;
+  
+  ${p => p.$theme === 'contemporary' && css`
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0D0D0D;
+    letter-spacing: 0.1em;
+  `}
 `;
 
-const StoryText = styled.p`
-  font-family: ${props => props.theme.fonts.body};
-  font-size: 1.05rem;
-  color: ${props => props.theme.colors.text};
-  line-height: 1.8;
-  text-align: center;
-  max-width: 800px;
+const LogoTagline = styled.p`
+  ${p => p.$theme === 'contemporary' && css`
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #FF6B6B;
+    letter-spacing: 0.2em;
+  `}
+`;
+
+// Editorial Styles
+const EditorialContainer = styled.div`
+  max-width: 1200px;
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+`;
+
+const EditorialImageSection = styled.div`
+  @media (max-width: 900px) {
+    order: 2;
+  }
+`;
+
+const ImagePlaceholder = styled.div`
+  aspect-ratio: 4/5;
+  background: #F5F5F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+  border: 1px solid #E0E0E0;
+`;
+
+const PlaceholderLogo = styled.div`
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 4rem;
+  font-style: italic;
+  color: #E0E0E0;
+`;
+
+const EditorialQuote = styled.blockquote`
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #1A1A1A;
+  line-height: 1.7;
+  padding: 25px;
+  background: #FAFAFA;
+  border-left: 2px solid #1A1A1A;
+  margin: 0;
+`;
+
+const QuoteAuthor = styled.div`
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: #999;
+  margin-top: 15px;
+  padding-left: 25px;
+`;
+
+const EditorialContentSection = styled.div`
+  @media (max-width: 900px) {
+    order: 1;
+    text-align: center;
+  }
+`;
+
+const EditorialTitle = styled.h2`
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 400;
+  color: #1A1A1A;
+  margin-bottom: 30px;
+  
+  em {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+  }
+`;
+
+const EditorialText = styled.p`
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.8;
+  margin-bottom: 20px;
   
   strong {
-    font-weight: 700;
-    color: ${props => props.theme.colors.primary};
+    color: #1A1A1A;
+    font-weight: 500;
+  }
+  
+  @media (max-width: 900px) {
+    text-align: left;
   }
 `;
 
-const Values = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 2rem;
-  flex-wrap: wrap;
+const EditorialSignature = styled.div`
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 1.8rem;
+  font-style: italic;
+  color: #1A1A1A;
+  margin-top: 40px;
+  margin-bottom: 5px;
 `;
 
-const Value = styled.span`
-  font-family: ${props => props.theme.fonts.body};
-  font-size: 0.85rem;
-  color: ${props => props.theme.colors.textMuted};
-  padding: 0.5rem 1rem;
-  border: 1px solid ${props => props.theme.colors.primary}30;
-  border-radius: ${props => props.theme.style === 'modern' ? '100px' : props.theme.borderRadius};
+const SignatureSubtext = styled.div`
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: #999;
+`;
+
+// ============================================
+// VIDEO THEME STYLES
+// ============================================
+const VideoSection = styled.section`
+  padding: 120px 5%;
+  background: #F8F6F0;
+  position: relative;
+`;
+
+const VideoContainer = styled.div`
+  max-width: 900px;
+  margin: 0 auto;
+`;
+
+const VideoHeader = styled.div`
+  text-align: center;
+  margin-bottom: 80px;
+`;
+
+const VideoBadge = styled.div`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: #8B7355;
+  margin-bottom: 25px;
+`;
+
+const VideoTitle = styled.h2`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 400;
+  color: #1A1814;
+  
+  em {
+    font-style: italic;
+  }
+`;
+
+const VideoTimeline = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 60px;
+`;
+
+const TimelineItem = styled.div`
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 30px;
+  padding: 40px 0;
+  border-bottom: 1px solid rgba(139, 115, 85, 0.2);
+  opacity: 0;
+  animation: ${fadeInUp} 0.6s ease forwards;
+  
+  &:first-child {
+    border-top: 1px solid rgba(139, 115, 85, 0.2);
+  }
+  
+  @media (max-width: 600px) {
+    grid-template-columns: 50px 1fr;
+    gap: 20px;
+    padding: 30px 0;
+  }
+`;
+
+const TimelineYear = styled.div`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #8B7355;
+  line-height: 1;
+  
+  @media (max-width: 600px) {
+    font-size: 1.8rem;
+  }
+`;
+
+const TimelineContent = styled.div``;
+
+const TimelineTitle = styled.h3`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #1A1814;
+  margin-bottom: 12px;
+`;
+
+const TimelineText = styled.p`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.8;
+`;
+
+const VideoQuoteBox = styled.div`
+  background: #1A1814;
+  padding: 50px 40px;
+  text-align: center;
+  margin-bottom: 60px;
+  
+  @media (max-width: 600px) {
+    padding: 35px 25px;
+  }
+`;
+
+const VideoQuote = styled.blockquote`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  font-style: italic;
+  color: #FFFFFF;
+  line-height: 1.7;
+  margin: 0 0 20px;
+`;
+
+const VideoQuoteAuthor = styled.div`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: #8B7355;
+`;
+
+const VideoSignature = styled.div`
+  text-align: center;
+`;
+
+const SignatureLogo = styled.div`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1A1814;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+`;
+
+const SignatureTagline = styled.div`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  color: #8B7355;
 `;
