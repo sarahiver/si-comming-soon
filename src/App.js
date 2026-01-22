@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled, { createGlobalStyle, keyframes, css } from 'styled-components';
+import { Analytics } from '@vercel/analytics/react';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import Navigation from './components/Navigation';
 import HeroSection from './components/HeroSection';
@@ -110,6 +111,7 @@ function App() {
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/confirm" element={<ConfirmPage />} />
       </Routes>
+      <Analytics />
     </Router>
   );
 }

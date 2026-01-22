@@ -243,10 +243,21 @@ const Footer = () => {
                 </SectionText>
               </ModalSection>
               
+              <ModalSection>
+                <SectionTitle $theme={currentTheme}>7. Webanalyse</SectionTitle>
+                <SectionText $theme={currentTheme}>
+                  Wir nutzen Vercel Web Analytics zur anonymisierten Auswertung der Websitenutzung. 
+                  Es werden keine Cookies gesetzt und keine personenbezogenen Daten gespeichert. 
+                  Die Analyse erfolgt auf Basis aggregierter, nicht personenbeziehbarer Daten.<br /><br />
+                  <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse).<br /><br />
+                  Datenschutz: https://vercel.com/legal/privacy-policy
+                </SectionText>
+              </ModalSection>
+              
               <Divider $theme={currentTheme} />
               
               <ModalSection>
-                <SectionTitle $theme={currentTheme}>7. Deine Rechte</SectionTitle>
+                <SectionTitle $theme={currentTheme}>8. Deine Rechte</SectionTitle>
                 <SectionText $theme={currentTheme}>
                   Du hast jederzeit das Recht auf:<br /><br />
                   • Auskunft über deine gespeicherten Daten (Art. 15 DSGVO)<br />
@@ -261,7 +272,7 @@ const Footer = () => {
               </ModalSection>
               
               <ModalSection>
-                <SectionTitle $theme={currentTheme}>8. Beschwerderecht</SectionTitle>
+                <SectionTitle $theme={currentTheme}>9. Beschwerderecht</SectionTitle>
                 <SectionText $theme={currentTheme}>
                   Du hast das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren.<br /><br />
                   <strong>Zuständige Behörde:</strong><br />

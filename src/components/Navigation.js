@@ -35,11 +35,17 @@ const Navigation = () => {
         </LogoLink>
         
         <RightSection>
-          {/* Design Hint mit Animation */}
+          {/* Design Hint mit Animation - Desktop */}
           <DesignHint $theme={currentTheme} onClick={() => setShowThemeMenu(true)}>
             <HintText $theme={currentTheme} $scrolled={scrolled}>Entdecke unsere Designbeispiele</HintText>
             <HintArrow $theme={currentTheme} $scrolled={scrolled}>→</HintArrow>
           </DesignHint>
+          
+          {/* Mobile Hint */}
+          <MobileHint $theme={currentTheme} $scrolled={scrolled} onClick={() => setShowThemeMenu(true)}>
+            Designs
+            <MobileArrow>→</MobileArrow>
+          </MobileHint>
           
           {/* Theme Switcher */}
           <ThemeSwitcher>
@@ -102,6 +108,44 @@ const DesignHint = styled.button`
   @media (max-width: 600px) {
     display: none;
   }
+`;
+
+const MobileHint = styled.button`
+  display: none;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  
+  font-family: ${p => {
+    if (p.$theme === 'contemporary') return "'Space Grotesk', sans-serif";
+    if (p.$theme === 'editorial') return "'Inter', sans-serif";
+    if (p.$theme === 'video') return "'Montserrat', sans-serif";
+    if (p.$theme === 'botanical') return "'Lato', sans-serif";
+    if (p.$theme === 'luxe') return "'Montserrat', sans-serif";
+    return "'Space Grotesk', sans-serif";
+  }};
+  
+  color: ${p => {
+    if (p.$theme === 'contemporary') return '#FF6B6B';
+    if (p.$theme === 'editorial') return '#1A1A1A';
+    if (p.$theme === 'video') return p.$scrolled ? '#1A1A1A' : '#C9A962';
+    if (p.$theme === 'botanical') return '#4A7C59';
+    if (p.$theme === 'luxe') return p.$scrolled ? '#B8960B' : '#B8960B';
+    return '#FF6B6B';
+  }};
+  
+  @media (max-width: 600px) {
+    display: flex;
+  }
+`;
+
+const MobileArrow = styled.span`
+  animation: ${bounceRight} 1.5s ease-in-out infinite;
 `;
 
 const HintText = styled.span`
