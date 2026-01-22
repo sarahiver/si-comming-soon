@@ -166,6 +166,10 @@ const FooterSection = styled.footer`
   ${p => p.$theme === 'botanical' && css`
     background: #1E2E1F;
   `}
+  
+  ${p => p.$theme === 'luxe' && css`
+    background: #1A1A1A;
+  `}
 `;
 
 const Container = styled.div`
@@ -231,6 +235,13 @@ const SocialLink = styled.a`
     &:hover { color: #7BA889; }
   `}
   
+  ${p => p.$theme === 'luxe' && css`
+    font-family: 'Montserrat', sans-serif;
+    color: rgba(255, 255, 255, 0.5);
+    
+    &:hover { color: #B8960B; }
+  `}
+  
   span {
     @media (max-width: 400px) { display: none; }
   }
@@ -262,6 +273,11 @@ const Copyright = styled.p`
   ${p => p.$theme === 'botanical' && css`
     font-family: 'Lato', sans-serif;
     color: rgba(250, 249, 246, 0.5);
+  `}
+  
+  ${p => p.$theme === 'luxe' && css`
+    font-family: 'Montserrat', sans-serif;
+    color: rgba(255, 255, 255, 0.4);
   `}
 `;
 
@@ -306,6 +322,13 @@ const LegalLink = styled.button`
     color: rgba(250, 249, 246, 0.4);
     
     &:hover { color: #7BA889; }
+  `}
+  
+  ${p => p.$theme === 'luxe' && css`
+    font-family: 'Montserrat', sans-serif;
+    color: rgba(255, 255, 255, 0.3);
+    
+    &:hover { color: #B8960B; }
   `}
 `;
 
@@ -361,6 +384,10 @@ const ModalHeader = styled.div`
   ${p => p.$theme === 'botanical' && css`
     border-bottom: 1px solid #D4CFC4;
   `}
+  
+  ${p => p.$theme === 'luxe' && css`
+    border-bottom: 1px solid #E5E5E5;
+  `}
 `;
 
 const ModalTitle = styled.h2`
@@ -392,6 +419,14 @@ const ModalTitle = styled.h2`
     font-weight: 500;
     color: #2C3E2D;
   `}
+  
+  ${p => p.$theme === 'luxe' && css`
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    font-style: italic;
+    color: #1A1A1A;
+  `}
 `;
 
 const CloseButton = styled.button`
@@ -421,6 +456,11 @@ const CloseButton = styled.button`
   ${p => p.$theme === 'botanical' && css`
     color: #2C3E2D;
     &:hover { color: #4A7C59; }
+  `}
+  
+  ${p => p.$theme === 'luxe' && css`
+    color: #1A1A1A;
+    &:hover { color: #B8960B; }
   `}
 `;
 
@@ -472,6 +512,15 @@ const SectionTitle = styled.h3`
     letter-spacing: 0.15em;
     text-transform: uppercase;
   `}
+  
+  ${p => p.$theme === 'luxe' && css`
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #B8960B;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  `}
 `;
 
 const SectionText = styled.p`
@@ -501,6 +550,13 @@ const SectionText = styled.p`
     color: #2C3E2D;
   `}
   
+  ${p => p.$theme === 'luxe' && css`
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: #1A1A1A;
+  `}
+  
   strong { font-weight: 700; }
 `;
 
@@ -526,5 +582,10 @@ const Divider = styled.hr`
   ${p => p.$theme === 'botanical' && css`
     height: 1px;
     background: #D4CFC4;
+  `}
+  
+  ${p => p.$theme === 'luxe' && css`
+    height: 1px;
+    background: #E5E5E5;
   `}
 `;

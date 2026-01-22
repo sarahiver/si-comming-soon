@@ -6,7 +6,7 @@ import { useTheme } from '../context/ThemeContext';
 // ============================================
 // VIDEO BACKGROUND URL - HIER CLOUDINARY URL EINTRAGEN
 // ============================================
-const VIDEO_URL = ''; // z.B. 'https://res.cloudinary.com/demo/video/upload/v1234/wedding-video.mp4'
+const VIDEO_URL = 'https://res.cloudinary.com/si-weddings/video/upload/v1769070616/si_comming_soon_video_hero_xga2ia.mp4';
 const VIDEO_POSTER = ''; // Fallback-Bild wenn Video nicht lädt
 
 // Animations
@@ -58,6 +58,10 @@ const HeroSection = () => {
   const scrollToCountdown = () => {
     document.getElementById('countdown')?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  if (currentTheme === 'luxe') {
+    return <LuxeHero scrollToWaitlist={scrollToWaitlist} scrollToCountdown={scrollToCountdown} />;
+  }
 
   if (currentTheme === 'botanical') {
     return <BotanicalHero scrollToWaitlist={scrollToWaitlist} scrollToCountdown={scrollToCountdown} />;
@@ -230,6 +234,43 @@ const BotanicalHero = ({ scrollToWaitlist, scrollToCountdown }) => (
       <BotanicalScrollArrow>↓</BotanicalScrollArrow>
     </BotanicalScrollIndicator>
   </BotanicalSection>
+);
+
+// ============================================
+// LUXE HERO - Classic Elegance with B/W Image
+// ============================================
+const LUXE_BG_URL = ''; // Cloudinary URL für S/W Hintergrundbild
+
+const LuxeHero = ({ scrollToWaitlist, scrollToCountdown }) => (
+  <LuxeSection $hasBg={!!LUXE_BG_URL}>
+    {LUXE_BG_URL ? (
+      <LuxeBgImage style={{ backgroundImage: `url(${LUXE_BG_URL})` }} />
+    ) : (
+      <LuxeBgPlaceholder>
+        <span>S/W BILD</span>
+        <small>Cloudinary URL eintragen</small>
+      </LuxeBgPlaceholder>
+    )}
+    <LuxeOverlay />
+    
+    <LuxeContent>
+      <LuxeEyebrow>COMING SOON</LuxeEyebrow>
+      
+      <LuxeLogo>S&I.</LuxeLogo>
+      
+      <LuxeTagline>
+        Individuelle Hochzeitswebsites,<br />
+        die so einzigartig sind wie eure Liebe
+      </LuxeTagline>
+      
+      <LuxeDate>01. Oktober 2026</LuxeDate>
+    </LuxeContent>
+
+    <LuxeScrollIndicator onClick={scrollToCountdown}>
+      <span>ENTDECKEN</span>
+      <LuxeScrollArrow>↓</LuxeScrollArrow>
+    </LuxeScrollIndicator>
+  </LuxeSection>
 );
 
 export default HeroSection;
@@ -892,5 +933,138 @@ const BotanicalScrollIndicator = styled.button`
 const BotanicalScrollArrow = styled.span`
   font-size: 1rem;
   color: #4A7C59;
+  animation: ${scrollBounce} 1.5s ease-in-out infinite;
+`;
+
+// ============================================
+// LUXE THEME STYLES
+// ============================================
+const LuxeSection = styled.section`
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: ${p => p.$hasBg ? '#000' : '#1A1A1A'};
+`;
+
+const LuxeBgImage = styled.div`
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(100%);
+`;
+
+const LuxeBgPlaceholder = styled.div`
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #2a2a2a 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.15);
+  }
+  
+  small {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.1);
+    margin-top: 10px;
+  }
+`;
+
+const LuxeOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+`;
+
+const LuxeContent = styled.div`
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  animation: ${fadeInUp} 1s ease;
+`;
+
+const LuxeEyebrow = styled.div`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.4em;
+  color: #B8960B;
+  margin-bottom: 30px;
+`;
+
+const LuxeLogo = styled.h1`
+  font-family: 'Roboto', sans-serif;
+  font-size: clamp(5rem, 18vw, 12rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  background: #000000;
+  padding: 15px 40px;
+  display: inline-block;
+  margin-bottom: 30px;
+  
+  @media (max-width: 600px) {
+    font-size: 4rem;
+    padding: 10px 25px;
+  }
+`;
+
+const LuxeTagline = styled.p`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.8;
+  margin-bottom: 40px;
+`;
+
+const LuxeDate = styled.div`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  color: #B8960B;
+`;
+
+const LuxeScrollIndicator = styled.button`
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  
+  span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    color: rgba(255, 255, 255, 0.5);
+  }
+`;
+
+const LuxeScrollArrow = styled.span`
+  font-size: 1rem;
+  color: #B8960B;
   animation: ${scrollBounce} 1.5s ease-in-out infinite;
 `;

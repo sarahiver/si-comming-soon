@@ -29,6 +29,10 @@ const usps = [
 const USPsSection = () => {
   const { currentTheme } = useTheme();
 
+  if (currentTheme === 'luxe') {
+    return <LuxeUSPs />;
+  }
+
   if (currentTheme === 'botanical') {
     return <BotanicalUSPs />;
   }
@@ -215,6 +219,42 @@ const BotanicalUSPs = () => (
     </BotanicalUSPContainer>
   </BotanicalUSPSection>
 );
+
+// ============================================
+// LUXE USPs - Masonry-style Grid
+// ============================================
+const LuxeUSPs = () => {
+  // Pattern für unterschiedliche Kartengrößen
+  const sizePattern = ['large', 'small', 'small', 'medium', 'small', 'large', 'small', 'medium', 'small', 'small'];
+  
+  return (
+    <LuxeUSPSection id="usps">
+      <LuxeUSPContainer>
+        <LuxeUSPHeader>
+          <LuxeUSPBadge>WARUM S&I.</LuxeUSPBadge>
+          <LuxeUSPTitle>
+            <em>Was uns auszeichnet</em>
+          </LuxeUSPTitle>
+        </LuxeUSPHeader>
+        
+        <LuxeUSPGrid>
+          {usps.map((usp, index) => (
+            <LuxeUSPCard key={usp.num} $size={sizePattern[index]} $delay={index * 0.05}>
+              <LuxeUSPIcon>{usp.icon}</LuxeUSPIcon>
+              <LuxeUSPCardTitle>{usp.title}</LuxeUSPCardTitle>
+              <LuxeUSPCardText>{usp.text}</LuxeUSPCardText>
+            </LuxeUSPCard>
+          ))}
+        </LuxeUSPGrid>
+        
+        <LuxeDomainBox>
+          <LuxeDomainTitle>Eure eigene Domain – <em>inklusive</em></LuxeDomainTitle>
+          <LuxeDomainExample>www.sarah-und-thomas.de</LuxeDomainExample>
+        </LuxeDomainBox>
+      </LuxeUSPContainer>
+    </LuxeUSPSection>
+  );
+};
 
 export default USPsSection;
 
@@ -862,4 +902,135 @@ const BotanicalDomainSubtext = styled.p`
   font-size: 0.85rem;
   font-weight: 300;
   color: rgba(250, 249, 246, 0.6);
+`;
+
+// ============================================
+// LUXE THEME STYLES
+// ============================================
+const LuxeUSPSection = styled.section`
+  padding: 120px 5%;
+  background: #FAFAFA;
+`;
+
+const LuxeUSPContainer = styled.div`
+  max-width: 1100px;
+  margin: 0 auto;
+`;
+
+const LuxeUSPHeader = styled.div`
+  text-align: center;
+  margin-bottom: 60px;
+`;
+
+const LuxeUSPBadge = styled.div`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  color: #B8960B;
+  margin-bottom: 20px;
+`;
+
+const LuxeUSPTitle = styled.h2`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 300;
+  color: #1A1A1A;
+  
+  em {
+    font-style: italic;
+  }
+`;
+
+const LuxeUSPGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 60px;
+  
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const LuxeUSPCard = styled.div`
+  background: #FFFFFF;
+  border: 1px solid #E5E5E5;
+  padding: ${p => p.$size === 'large' ? '40px 30px' : p.$size === 'medium' ? '30px 25px' : '25px 20px'};
+  text-align: center;
+  transition: all 0.3s ease;
+  opacity: 0;
+  animation: ${fadeInUp} 0.6s ease forwards;
+  animation-delay: ${p => p.$delay}s;
+  
+  ${p => p.$size === 'large' && css`
+    grid-row: span 2;
+  `}
+  
+  &:hover {
+    border-color: #B8960B;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+  }
+  
+  @media (max-width: 900px) {
+    grid-row: span 1;
+    padding: 25px 20px;
+  }
+`;
+
+const LuxeUSPIcon = styled.div`
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+`;
+
+const LuxeUSPCardTitle = styled.h3`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  font-style: italic;
+  color: #1A1A1A;
+  margin-bottom: 12px;
+`;
+
+const LuxeUSPCardText = styled.p`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: #888;
+  line-height: 1.7;
+`;
+
+const LuxeDomainBox = styled.div`
+  text-align: center;
+  padding: 50px 30px;
+  border: 1px solid #E5E5E5;
+  background: #FFFFFF;
+`;
+
+const LuxeDomainTitle = styled.h3`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: #1A1A1A;
+  margin-bottom: 20px;
+  
+  em {
+    font-style: italic;
+    color: #B8960B;
+  }
+`;
+
+const LuxeDomainExample = styled.div`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: #888;
+  padding: 12px 25px;
+  border: 1px dashed #E5E5E5;
+  display: inline-block;
 `;

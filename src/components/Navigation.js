@@ -147,6 +147,11 @@ const ThemeButton = styled.button`
     color: #2C3E2D;
   `}
   
+  ${p => p.$theme === 'luxe' && css`
+    font-family: 'Montserrat', sans-serif;
+    color: #1A1A1A;
+  `}
+  
   &:hover {
     background: rgba(0, 0, 0, 0.08);
   }

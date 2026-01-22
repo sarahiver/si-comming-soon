@@ -38,6 +38,18 @@ const WaitlistSection = () => {
     setLoading(false);
   };
 
+  if (currentTheme === 'luxe') {
+    return (
+      <LuxeWaitlist 
+        email={email}
+        setEmail={setEmail}
+        status={status}
+        loading={loading}
+        handleSubmit={handleSubmit}
+      />
+    );
+  }
+
   if (currentTheme === 'botanical') {
     return (
       <BotanicalWaitlist 
@@ -298,6 +310,54 @@ const BotanicalWaitlist = ({ email, setEmail, status, loading, handleSubmit }) =
       </BotanicalBenefitsList>
     </BotanicalWaitlistContainer>
   </BotanicalWaitlistSection>
+);
+
+// ============================================
+// LUXE WAITLIST - Elegant Minimal Style
+// ============================================
+const LuxeWaitlist = ({ email, setEmail, status, loading, handleSubmit }) => (
+  <LuxeWaitlistSection id="waitlist">
+    <LuxeWaitlistContainer>
+      <LuxeWaitlistBadge>SEI DABEI</LuxeWaitlistBadge>
+      
+      <LuxeWaitlistTitle>
+        <em>Trag dich ein</em>
+      </LuxeWaitlistTitle>
+      
+      <LuxeWaitlistSubtitle>
+        Erhalte exklusiven Zugang zum Launch und sichere dir besondere Vorteile.
+      </LuxeWaitlistSubtitle>
+      
+      <LuxeFormWrapper>
+        <LuxeForm onSubmit={handleSubmit}>
+          <LuxeInput
+            type="email"
+            placeholder="deine@email.de"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={loading}
+          />
+          <LuxeSubmitButton type="submit" disabled={loading}>
+            {loading ? '...' : '→'}
+          </LuxeSubmitButton>
+        </LuxeForm>
+        
+        {status.message && (
+          <LuxeFormMessage $success={status.type === 'success'}>
+            {status.message}
+          </LuxeFormMessage>
+        )}
+      </LuxeFormWrapper>
+      
+      <LuxeBenefitsList>
+        <LuxeBenefitItem>Early Access</LuxeBenefitItem>
+        <LuxeBenefitDivider>·</LuxeBenefitDivider>
+        <LuxeBenefitItem>Exklusive Rabatte</LuxeBenefitItem>
+        <LuxeBenefitDivider>·</LuxeBenefitDivider>
+        <LuxeBenefitItem>Sneak Peeks</LuxeBenefitItem>
+      </LuxeBenefitsList>
+    </LuxeWaitlistContainer>
+  </LuxeWaitlistSection>
 );
 
 export default WaitlistSection;
@@ -912,4 +972,134 @@ const BotanicalBenefitItem = styled.span`
   font-size: 0.9rem;
   font-weight: 300;
   color: rgba(250, 249, 246, 0.8);
+`;
+
+// ============================================
+// LUXE THEME STYLES
+// ============================================
+const LuxeWaitlistSection = styled.section`
+  padding: 120px 5%;
+  background: #FAFAFA;
+  text-align: center;
+`;
+
+const LuxeWaitlistContainer = styled.div`
+  max-width: 500px;
+  margin: 0 auto;
+`;
+
+const LuxeWaitlistBadge = styled.div`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  color: #B8960B;
+  margin-bottom: 20px;
+`;
+
+const LuxeWaitlistTitle = styled.h2`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 300;
+  color: #1A1A1A;
+  margin-bottom: 15px;
+  
+  em {
+    font-style: italic;
+  }
+`;
+
+const LuxeWaitlistSubtitle = styled.p`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: #888;
+  line-height: 1.7;
+  margin-bottom: 40px;
+`;
+
+const LuxeFormWrapper = styled.div`
+  margin-bottom: 40px;
+`;
+
+const LuxeForm = styled.form`
+  display: flex;
+  border: 1px solid #E5E5E5;
+  background: #FFFFFF;
+  margin-bottom: 15px;
+`;
+
+const LuxeInput = styled.input`
+  flex: 1;
+  padding: 18px 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 300;
+  background: transparent;
+  border: none;
+  color: #1A1A1A;
+  
+  &:focus {
+    outline: none;
+  }
+  
+  &::placeholder {
+    color: #888;
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+  }
+`;
+
+const LuxeSubmitButton = styled.button`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.2rem;
+  padding: 18px 25px;
+  background: #1A1A1A;
+  color: #FFFFFF;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover:not(:disabled) {
+    background: #B8960B;
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+`;
+
+const LuxeFormMessage = styled.div`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  padding: 12px;
+  color: ${p => p.$success ? '#1A1A1A' : '#FF6B6B'};
+  font-style: italic;
+`;
+
+const LuxeBenefitsList = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+`;
+
+const LuxeBenefitItem = styled.span`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: #888;
+`;
+
+const LuxeBenefitDivider = styled.span`
+  color: #E5E5E5;
+  
+  @media (max-width: 400px) {
+    display: none;
+  }
 `;

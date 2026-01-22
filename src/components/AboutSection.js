@@ -37,6 +37,10 @@ const values = [
 const AboutSection = () => {
   const { currentTheme } = useTheme();
 
+  if (currentTheme === 'luxe') {
+    return <LuxeAbout />;
+  }
+
   if (currentTheme === 'botanical') {
     return <BotanicalAbout />;
   }
@@ -244,6 +248,56 @@ const BotanicalAbout = () => (
       </BotanicalPromiseBox>
     </BotanicalAboutContainer>
   </BotanicalAboutSection>
+);
+
+// ============================================
+// LUXE ABOUT - Classic White Space Design
+// ============================================
+const LUXE_ABOUT_IMAGE = ''; // Cloudinary URL für S/W Bild
+
+const LuxeAbout = () => (
+  <LuxeAboutSection id="about">
+    <LuxeAboutContainer>
+      <LuxeAboutGrid>
+        {/* Image Side */}
+        <LuxeAboutImageWrapper>
+          {LUXE_ABOUT_IMAGE ? (
+            <LuxeAboutImage style={{ backgroundImage: `url(${LUXE_ABOUT_IMAGE})` }} />
+          ) : (
+            <LuxeAboutImagePlaceholder>
+              <span>S/W BILD</span>
+            </LuxeAboutImagePlaceholder>
+          )}
+        </LuxeAboutImageWrapper>
+        
+        {/* Content Side */}
+        <LuxeAboutContent>
+          <LuxeAboutBadge>ÜBER UNS</LuxeAboutBadge>
+          
+          <LuxeAboutTitle>
+            <em>Hallo, wir sind Sarah & Iver</em>
+          </LuxeAboutTitle>
+          
+          <LuxeAboutText>
+            Wir glauben an echte Verbindungen – nicht nur zwischen euch als Paar, sondern auch zwischen uns und euch.
+          </LuxeAboutText>
+          
+          <LuxeAboutText>
+            Als wir selbst geheiratet haben, war uns eines besonders wichtig: Authentizität. Keine 08/15-Lösung, sondern etwas, das wirklich unsere Geschichte erzählt.
+          </LuxeAboutText>
+          
+          <LuxeAboutQuote>
+            „Jedes Paar verdient eine Website, die so einzigartig ist wie ihre Geschichte."
+          </LuxeAboutQuote>
+          
+          <LuxeAboutSignature>
+            <LuxeSignatureLogo>S&I.</LuxeSignatureLogo>
+            <LuxeSignatureText>Gründer von S&I.</LuxeSignatureText>
+          </LuxeAboutSignature>
+        </LuxeAboutContent>
+      </LuxeAboutGrid>
+    </LuxeAboutContainer>
+  </LuxeAboutSection>
 );
 
 export default AboutSection;
@@ -855,5 +909,134 @@ const BotanicalSignatureRole = styled.span`
   font-weight: 400;
   letter-spacing: 0.1em;
   color: #6B7B6C;
+  text-transform: uppercase;
+`;
+
+// ============================================
+// LUXE THEME STYLES
+// ============================================
+const LuxeAboutSection = styled.section`
+  padding: 120px 5%;
+  background: #FFFFFF;
+`;
+
+const LuxeAboutContainer = styled.div`
+  max-width: 1100px;
+  margin: 0 auto;
+`;
+
+const LuxeAboutGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+`;
+
+const LuxeAboutImageWrapper = styled.div`
+  aspect-ratio: 3/4;
+  
+  @media (max-width: 900px) {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+`;
+
+const LuxeAboutImage = styled.div`
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(100%);
+`;
+
+const LuxeAboutImagePlaceholder = styled.div`
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #E5E5E5 0%, #F5F5F5 50%, #E5E5E5 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    color: rgba(0,0,0,0.15);
+  }
+`;
+
+const LuxeAboutContent = styled.div`
+  
+`;
+
+const LuxeAboutBadge = styled.div`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  color: #B8960B;
+  margin-bottom: 25px;
+`;
+
+const LuxeAboutTitle = styled.h2`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 300;
+  color: #1A1A1A;
+  margin-bottom: 30px;
+  
+  em {
+    font-style: italic;
+  }
+`;
+
+const LuxeAboutText = styled.p`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: #666;
+  line-height: 1.9;
+  margin-bottom: 20px;
+`;
+
+const LuxeAboutQuote = styled.blockquote`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.2rem;
+  font-style: italic;
+  color: #1A1A1A;
+  padding: 25px 0;
+  border-top: 1px solid #E5E5E5;
+  border-bottom: 1px solid #E5E5E5;
+  margin: 30px 0;
+`;
+
+const LuxeAboutSignature = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
+`;
+
+const LuxeSignatureLogo = styled.div`
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  background: #000000;
+  padding: 6px 12px;
+`;
+
+const LuxeSignatureText = styled.span`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  color: #888;
   text-transform: uppercase;
 `;

@@ -82,9 +82,30 @@ export const themes = {
       border: '#D4CFC4',
     },
   },
+  luxe: {
+    id: 'luxe',
+    name: 'Luxe',
+    fonts: {
+      heading: "'Cormorant Garamond', Georgia, serif",
+      body: "'Montserrat', sans-serif",
+      script: "'Cormorant Garamond', Georgia, serif",
+    },
+    colors: {
+      bg: '#FFFFFF',
+      bgAlt: '#FAFAFA',
+      bgDark: '#1A1A1A',
+      text: '#1A1A1A',
+      textLight: '#888888',
+      textOnDark: '#FFFFFF',
+      accent: '#B8960B',
+      accentLight: '#D4AF37',
+      cream: '#F5F5F0',
+      border: '#E5E5E5',
+    },
+  },
 };
 
-export const themeOrder = ['contemporary', 'editorial', 'video', 'botanical'];
+export const themeOrder = ['contemporary', 'editorial', 'video', 'botanical', 'luxe'];
 
 export const ThemeProvider = ({ children }) => {
   const [currentTheme, setCurrentTheme] = useState('contemporary');

@@ -22,6 +22,10 @@ const CountdownSection = () => {
     document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  if (currentTheme === 'luxe') {
+    return <LuxeCountdown timeLeft={timeLeft} scrollToWaitlist={scrollToWaitlist} />;
+  }
+
   if (currentTheme === 'botanical') {
     return <BotanicalCountdown timeLeft={timeLeft} scrollToWaitlist={scrollToWaitlist} />;
   }
@@ -207,6 +211,79 @@ const BotanicalCountdown = ({ timeLeft, scrollToWaitlist }) => {
         </BotanicalCTA>
       </BotanicalContainer>
     </BotanicalSection>
+  );
+};
+
+// ============================================
+// LUXE COUNTDOWN - Classic with Timeline
+// ============================================
+const LuxeCountdown = ({ timeLeft, scrollToWaitlist }) => {
+  const units = [
+    { value: timeLeft.days, label: 'TAGE' },
+    { value: timeLeft.hours, label: 'STUNDEN' },
+    { value: timeLeft.minutes, label: 'MINUTEN' },
+    { value: timeLeft.seconds, label: 'SEKUNDEN' },
+  ];
+
+  // Calculate progress percentage (Jan 1, 2026 to Oct 1, 2026)
+  const startDate = new Date('2026-01-01');
+  const endDate = new Date('2026-10-01');
+  const now = new Date();
+  const totalDuration = endDate - startDate;
+  const elapsed = now - startDate;
+  const progress = Math.min(Math.max((elapsed / totalDuration) * 100, 0), 100);
+
+  return (
+    <LuxeSection id="countdown">
+      <LuxeContainer>
+        <LuxeBadge>DIE REISE</LuxeBadge>
+        
+        <LuxeTitle>
+          <em>Bis zum großen Tag</em>
+        </LuxeTitle>
+        
+        {/* Timeline */}
+        <LuxeTimeline>
+          <LuxeTimelineStart>
+            <span>JANUAR 2026</span>
+            <small>Beginn</small>
+          </LuxeTimelineStart>
+          
+          <LuxeTimelineTrack>
+            <LuxeTimelineProgress style={{ width: `${progress}%` }} />
+            <LuxeTimelineDot style={{ left: `${progress}%` }}>
+              <LuxeTimelineLabel>
+                <span>HEUTE</span>
+                <small>{new Date().toLocaleDateString('de-DE', { day: '2-digit', month: 'short' })}</small>
+              </LuxeTimelineLabel>
+            </LuxeTimelineDot>
+          </LuxeTimelineTrack>
+          
+          <LuxeTimelineEnd>
+            <span>01. OKTOBER 2026</span>
+            <small>Hochzeit</small>
+          </LuxeTimelineEnd>
+        </LuxeTimeline>
+        
+        {/* Countdown Numbers */}
+        <LuxeGrid>
+          {units.map((unit, index) => (
+            <LuxeUnit key={unit.label} $delay={index * 0.1}>
+              <LuxeNumber>{formatNumber(unit.value)}</LuxeNumber>
+              <LuxeLabel>{unit.label}</LuxeLabel>
+            </LuxeUnit>
+          ))}
+        </LuxeGrid>
+        
+        <LuxeMessage>
+          Jeder Tag bringt uns näher zusammen
+        </LuxeMessage>
+        
+        <LuxeCTA onClick={scrollToWaitlist}>
+          Jetzt eintragen →
+        </LuxeCTA>
+      </LuxeContainer>
+    </LuxeSection>
   );
 };
 
@@ -765,5 +842,251 @@ const BotanicalCTA = styled.button`
     background: #3A6249;
     transform: translateY(-2px);
     box-shadow: 0 10px 30px rgba(74, 124, 89, 0.3);
+  }
+`;
+
+// ============================================
+// LUXE THEME STYLES
+// ============================================
+const LuxeSection = styled.section`
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 120px 5%;
+  overflow: hidden;
+  background: #FFFFFF;
+`;
+
+const LuxeContainer = styled.div`
+  max-width: 900px;
+  width: 100%;
+  text-align: center;
+`;
+
+const LuxeBadge = styled.div`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  color: #B8960B;
+  margin-bottom: 20px;
+`;
+
+const LuxeTitle = styled.h2`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 300;
+  color: #1A1A1A;
+  margin-bottom: 60px;
+  
+  em {
+    font-style: italic;
+  }
+`;
+
+const LuxeTimeline = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 60px;
+  padding: 0 20px;
+  
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+`;
+
+const LuxeTimelineStart = styled.div`
+  text-align: left;
+  min-width: 100px;
+  
+  span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: #1A1A1A;
+    display: block;
+  }
+  
+  small {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.8rem;
+    font-style: italic;
+    color: #888;
+  }
+  
+  @media (max-width: 600px) {
+    text-align: center;
+  }
+`;
+
+const LuxeTimelineEnd = styled.div`
+  text-align: right;
+  min-width: 120px;
+  
+  span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: #1A1A1A;
+    display: block;
+  }
+  
+  small {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.8rem;
+    font-style: italic;
+    color: #B8960B;
+  }
+  
+  @media (max-width: 600px) {
+    text-align: center;
+  }
+`;
+
+const LuxeTimelineTrack = styled.div`
+  flex: 1;
+  height: 2px;
+  background: #E5E5E5;
+  position: relative;
+  margin-top: 8px;
+  
+  @media (max-width: 600px) {
+    height: 60px;
+    width: 2px;
+    margin: 0 auto;
+  }
+`;
+
+const LuxeTimelineProgress = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #B8960B 0%, #D4AF37 100%);
+  
+  @media (max-width: 600px) {
+    width: 100% !important;
+    height: auto;
+    top: 0;
+    bottom: auto;
+  }
+`;
+
+const LuxeTimelineDot = styled.div`
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  background: #B8960B;
+  border-radius: 50%;
+  border: 3px solid #FFFFFF;
+  box-shadow: 0 0 0 2px #B8960B;
+  
+  @media (max-width: 600px) {
+    top: auto;
+    left: 50% !important;
+    transform: translate(-50%, 0);
+  }
+`;
+
+const LuxeTimelineLabel = styled.div`
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  white-space: nowrap;
+  
+  span {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.55rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: #B8960B;
+    display: block;
+  }
+  
+  small {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.75rem;
+    font-style: italic;
+    color: #888;
+  }
+  
+  @media (max-width: 600px) {
+    top: auto;
+    left: 30px;
+    transform: none;
+  }
+`;
+
+const LuxeGrid = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin-bottom: 40px;
+  
+  @media (max-width: 600px) {
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+`;
+
+const LuxeUnit = styled.div`
+  text-align: center;
+  opacity: 0;
+  animation: ${fadeInUp} 0.6s ease forwards;
+  animation-delay: ${p => p.$delay}s;
+`;
+
+const LuxeNumber = styled.div`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(3rem, 8vw, 5rem);
+  font-weight: 300;
+  font-style: italic;
+  color: #1A1A1A;
+  line-height: 1;
+  margin-bottom: 10px;
+`;
+
+const LuxeLabel = styled.div`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  color: #888;
+`;
+
+const LuxeMessage = styled.p`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1rem;
+  font-style: italic;
+  color: #888;
+  margin-bottom: 40px;
+`;
+
+const LuxeCTA = styled.button`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+  padding: 16px 40px;
+  background: transparent;
+  color: #1A1A1A;
+  border: 1px solid #1A1A1A;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.1em;
+  
+  &:hover {
+    background: #1A1A1A;
+    color: #FFFFFF;
   }
 `;
