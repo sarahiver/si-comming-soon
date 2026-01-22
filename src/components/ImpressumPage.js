@@ -46,7 +46,7 @@ const ImpressumPage = () => {
           <Section>
             <SectionTitle>Kontakt</SectionTitle>
             <Text>
-              E-Mail: <EmailLink href="mailto:wedding@sarahiv.de">wedding@sarahiv.de</EmailLink>
+              E-Mail: <EmailLink href="mailto:wedding@sarahiver.de">wedding@sarahiver.de</EmailLink>
             </Text>
           </Section>
 

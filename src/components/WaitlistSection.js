@@ -6,9 +6,9 @@ import { addToWaitlist } from '../config/supabase';
 import emailjs from '@emailjs/browser';
 
 // EmailJS Konfiguration
-const EMAILJS_SERVICE_ID = 'service_si_wedding';
-const EMAILJS_TEMPLATE_ID = 'template_waitlist_confirm';
-const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY'; // Muss noch konfiguriert werden
+const EMAILJS_SERVICE_ID = 'service_cawl7af';
+const EMAILJS_TEMPLATE_ID = 'template_y6c73zs';
+const EMAILJS_PUBLIC_KEY = 'ME2poBnMRMUKod-o7';
 
 const fadeInUp = keyframes`
   from { opacity: 0; transform: translateY(30px); }
@@ -124,7 +124,7 @@ const PrivacyModal = ({ show, onClose, $theme }) => {
         <ModalBody $theme={$theme}>
           <h3>1. Verantwortlicher</h3>
           <p>Sarah & Iver GbR<br />
-          E-Mail: wedding@sarahiv.de</p>
+          E-Mail: wedding@sarahiver.de</p>
           
           <h3>2. Erhobene Daten</h3>
           <p>Bei der Anmeldung zur Warteliste erheben wir:</p>
@@ -148,7 +148,7 @@ const PrivacyModal = ({ show, onClose, $theme }) => {
           <p>Deine Daten werden gelöscht, sobald du dich von der Warteliste abmeldest oder der Zweck der Speicherung entfällt.</p>
           
           <h3>6. Deine Rechte</h3>
-          <p>Du hast das Recht auf Auskunft, Berichtigung, Löschung und Widerspruch. Kontaktiere uns jederzeit unter wedding@sarahiv.de.</p>
+          <p>Du hast das Recht auf Auskunft, Berichtigung, Löschung und Widerspruch. Kontaktiere uns jederzeit unter wedding@sarahiver.de.</p>
           
           <h3>7. Widerruf</h3>
           <p>Du kannst deine Einwilligung jederzeit widerrufen, indem du uns eine E-Mail sendest.</p>

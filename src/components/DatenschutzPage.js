@@ -76,7 +76,7 @@ const DatenschutzPage = () => {
               Sarah & Iver Bohnes<br />
               Große Freiheit 82<br />
               22767 Hamburg<br /><br />
-              E-Mail: <EmailLink href="mailto:wedding@sarahiv.de">wedding@sarahiv.de</EmailLink>
+              E-Mail: <EmailLink href="mailto:wedding@sarahiver.de">wedding@sarahiver.de</EmailLink>
             </Text>
             <Text>
               Verantwortliche Stelle ist die natürliche oder juristische Person, die allein oder 
@@ -210,7 +210,7 @@ const DatenschutzPage = () => {
             </List>
             <Text>
               Zur Ausübung deiner Rechte kontaktiere uns unter:{' '}
-              <EmailLink href="mailto:wedding@sarahiv.de">wedding@sarahiv.de</EmailLink>
+              <EmailLink href="mailto:wedding@sarahiver.de">wedding@sarahiver.de</EmailLink>
             </Text>
           </Section>
 

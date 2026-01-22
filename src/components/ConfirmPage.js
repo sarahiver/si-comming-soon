@@ -112,7 +112,7 @@ const ConfirmPage = () => {
             <Text>{message}</Text>
             <ErrorHint>
               Falls das Problem weiterhin besteht, kontaktiere uns unter{' '}
-              <EmailLink href="mailto:wedding@sarahiv.de">wedding@sarahiv.de</EmailLink>
+              <EmailLink href="mailto:wedding@sarahiver.de">wedding@sarahiver.de</EmailLink>
             </ErrorHint>
           </Content>
         )}
@@ -137,7 +137,7 @@ const ConfirmPage = () => {
 
         {/* Footer */}
         <Footer>
-          <FooterLink href="mailto:wedding@sarahiv.de">wedding@sarahiv.de</FooterLink>
+          <FooterLink href="mailto:wedding@sarahiver.de">wedding@sarahiver.de</FooterLink>
           <FooterCopy>© 2025 S&I.</FooterCopy>
         </Footer>
       </Container>

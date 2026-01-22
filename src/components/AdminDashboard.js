@@ -4,7 +4,7 @@ import styled, { keyframes } from 'styled-components';
 import { getWaitlist, updateWaitlistEntry, deleteWaitlistEntry, supabase } from '../config/supabase';
 
 // Admin Credentials (in Production besser als Environment Variables)
-const ADMIN_EMAIL = 'wedding@sarahiv.de';
+const ADMIN_EMAIL = 'wedding@sarahiver.de';
 const ADMIN_PASSWORD = 'LkwWalter#1985!';
 
 const AdminDashboard = () => {

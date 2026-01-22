@@ -39,17 +39,23 @@ export const addToWaitlist = async (email, themePreference = 'video') => {
   }
 };
 
-export const getWaitlist = async () => {
+export const getWaitlist = async (onlyConfirmed = true) => {
   if (!supabase) {
     console.warn('Supabase not configured');
     return { success: false, data: [], error: 'Supabase nicht konfiguriert' };
   }
 
   try {
-    const { data, error } = await supabase
+    let query = supabase
       .from('waitlist')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .select('*');
+    
+    // Nur bestätigte Einträge holen (Double Opt-In)
+    if (onlyConfirmed) {
+      query = query.eq('confirmed', true);
+    }
+    
+    const { data, error } = await query.order('created_at', { ascending: false });
 
     if (error) throw error;
     return { success: true, data };
