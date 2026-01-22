@@ -7,34 +7,31 @@ export const supabase = supabaseUrl && supabaseAnonKey
   ? createClient(supabaseUrl, supabaseAnonKey)
   : null;
 
-export const addToWaitlist = async (email, themePreference = 'contemporary') => {
+export const addToWaitlist = async (email, themePreference = 'video') => {
   if (!supabase) {
     console.warn('Supabase not configured - simulating success');
     return { success: true, data: { email } };
   }
 
   try {
-    const { data: existing } = await supabase
-      .from('waitlist')
-      .select('email')
-      .eq('email', email.toLowerCase())
-      .single();
-
-    if (existing) {
-      return { success: false, error: 'Diese E-Mail ist bereits auf der Warteliste.' };
-    }
-
+    // Direkt einfügen - Supabase wirft Fehler bei Duplicate (UNIQUE constraint)
     const { data, error } = await supabase
       .from('waitlist')
       .insert([{
         email: email.toLowerCase(),
         theme_preference: themePreference,
         source: 'coming-soon-page',
-        created_at: new Date().toISOString(),
       }])
       .select();
 
-    if (error) throw error;
+    if (error) {
+      // Duplicate Email Error (UNIQUE violation)
+      if (error.code === '23505') {
+        return { success: false, error: 'Diese E-Mail ist bereits auf der Warteliste.' };
+      }
+      throw error;
+    }
+    
     return { success: true, data };
   } catch (error) {
     console.error('Waitlist error:', error);
