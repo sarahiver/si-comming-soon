@@ -37,8 +37,8 @@ const Navigation = () => {
         <RightSection>
           {/* Design Hint mit Animation */}
           <DesignHint $theme={currentTheme} onClick={() => setShowThemeMenu(true)}>
-            <HintText $theme={currentTheme}>Entdecke unsere Designs</HintText>
-            <HintArrow $theme={currentTheme}>→</HintArrow>
+            <HintText $theme={currentTheme} $scrolled={scrolled}>Entdecke unsere Designbeispiele</HintText>
+            <HintArrow $theme={currentTheme} $scrolled={scrolled}>→</HintArrow>
           </DesignHint>
           
           {/* Theme Switcher */}
@@ -109,55 +109,38 @@ const HintText = styled.span`
   font-weight: 500;
   transition: color 0.3s ease;
   
-  ${p => p.$theme === 'contemporary' && css`
-    font-family: 'Space Grotesk', sans-serif;
-    color: #0D0D0D;
-  `}
+  font-family: ${p => {
+    if (p.$theme === 'contemporary') return "'Space Grotesk', sans-serif";
+    if (p.$theme === 'editorial') return "'Inter', sans-serif";
+    if (p.$theme === 'video') return "'Montserrat', sans-serif";
+    if (p.$theme === 'botanical') return "'Lato', sans-serif";
+    if (p.$theme === 'luxe') return "'Montserrat', sans-serif";
+    return "'Space Grotesk', sans-serif";
+  }};
   
-  ${p => p.$theme === 'editorial' && css`
-    font-family: 'Inter', sans-serif;
-    color: #1A1A1A;
-  `}
-  
-  ${p => p.$theme === 'video' && css`
-    font-family: 'Montserrat', sans-serif;
-    color: #FFFFFF;
-  `}
-  
-  ${p => p.$theme === 'botanical' && css`
-    font-family: 'Lato', sans-serif;
-    color: #2C3E2D;
-  `}
-  
-  ${p => p.$theme === 'luxe' && css`
-    font-family: 'Montserrat', sans-serif;
-    color: #FFFFFF;
-  `}
+  color: ${p => {
+    if (p.$theme === 'contemporary') return '#0D0D0D';
+    if (p.$theme === 'editorial') return '#1A1A1A';
+    if (p.$theme === 'video') return p.$scrolled ? '#1A1A1A' : '#FFFFFF';
+    if (p.$theme === 'botanical') return '#2C3E2D';
+    if (p.$theme === 'luxe') return p.$scrolled ? '#1A1A1A' : '#FFFFFF';
+    return '#0D0D0D';
+  }};
 `;
 
 const HintArrow = styled.span`
   font-size: 1rem;
   animation: ${bounceRight} 1.5s ease-in-out infinite;
+  transition: color 0.3s ease;
   
-  ${p => p.$theme === 'contemporary' && css`
-    color: #FF6B6B;
-  `}
-  
-  ${p => p.$theme === 'editorial' && css`
-    color: #1A1A1A;
-  `}
-  
-  ${p => p.$theme === 'video' && css`
-    color: #C9A962;
-  `}
-  
-  ${p => p.$theme === 'botanical' && css`
-    color: #4A7C59;
-  `}
-  
-  ${p => p.$theme === 'luxe' && css`
-    color: #B8960B;
-  `}
+  color: ${p => {
+    if (p.$theme === 'contemporary') return '#FF6B6B';
+    if (p.$theme === 'editorial') return '#1A1A1A';
+    if (p.$theme === 'video') return p.$scrolled ? '#1A1A1A' : '#C9A962';
+    if (p.$theme === 'botanical') return '#4A7C59';
+    if (p.$theme === 'luxe') return p.$scrolled ? '#1A1A1A' : '#B8960B';
+    return '#FF6B6B';
+  }};
 `;
 
 // Styles
