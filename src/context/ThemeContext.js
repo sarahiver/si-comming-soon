@@ -105,12 +105,31 @@ export const themes = {
   },
 };
 
-export const themeOrder = ['contemporary', 'editorial', 'video', 'botanical', 'luxe'];
+export const themeOrder = ['video', 'contemporary', 'editorial', 'botanical', 'luxe'];
 
 export const ThemeProvider = ({ children }) => {
-  const [currentTheme, setCurrentTheme] = useState('contemporary');
+  const [currentTheme, setCurrentThemeState] = useState('video');
+  const [isLoading, setIsLoading] = useState(false);
   
   const theme = themes[currentTheme];
+  
+  // Theme wechseln mit smooth scroll und kurzer Loading-Animation
+  const setCurrentTheme = (newTheme) => {
+    if (newTheme === currentTheme) return;
+    
+    setIsLoading(true);
+    
+    // Smooth scroll nach oben
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Kurze Verzögerung für Loading-Effekt
+    setTimeout(() => {
+      setCurrentThemeState(newTheme);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 300);
+    }, 400);
+  };
   
   const value = {
     currentTheme,
@@ -118,6 +137,7 @@ export const ThemeProvider = ({ children }) => {
     theme,
     themes,
     themeOrder,
+    isLoading,
   };
   
   return (

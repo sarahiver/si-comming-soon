@@ -4,7 +4,7 @@ import styled, { keyframes } from 'styled-components';
 import { getWaitlist, updateWaitlistEntry, deleteWaitlistEntry, supabase } from '../config/supabase';
 
 // Admin Credentials (in Production besser als Environment Variables)
-const ADMIN_EMAIL = 'wedding@sarahiver.de';
+const ADMIN_EMAIL = 'wedding@sarahiv.de';
 const ADMIN_PASSWORD = 'LkwWalter#1985!';
 
 const AdminDashboard = () => {
@@ -14,7 +14,8 @@ const AdminDashboard = () => {
   const [loginError, setLoginError] = useState('');
   const [waitlist, setWaitlist] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [stats, setStats] = useState({ total: 0, contacted: 0, today: 0 });
+  const [stats, setStats] = useState({ total: 0, contacted: 0, today: 0, open: 0 });
+  const [activeFilter, setActiveFilter] = useState('total'); // 'total', 'today', 'contacted', 'open'
 
   // Check if already logged in
   useEffect(() => {
@@ -64,10 +65,31 @@ const AdminDashboard = () => {
         total: result.data.length,
         contacted: contactedCount,
         today: todayCount,
+        open: result.data.length - contactedCount,
       });
     }
     setLoading(false);
   };
+
+  // Filter die Waitlist basierend auf aktivem Filter
+  const getFilteredWaitlist = () => {
+    const today = new Date().toDateString();
+    
+    switch (activeFilter) {
+      case 'today':
+        return waitlist.filter(entry => 
+          new Date(entry.created_at).toDateString() === today
+        );
+      case 'contacted':
+        return waitlist.filter(entry => entry.contacted);
+      case 'open':
+        return waitlist.filter(entry => !entry.contacted);
+      default:
+        return waitlist;
+    }
+  };
+
+  const filteredWaitlist = getFilteredWaitlist();
 
   const toggleContacted = async (id, currentStatus) => {
     const result = await updateWaitlistEntry(id, { contacted: !currentStatus });
@@ -76,8 +98,8 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleDelete = async (id, email) => {
-    if (window.confirm(`Wirklich "${email}" von der Liste entfernen?`)) {
+  const handleDelete = async (id, emailAddr) => {
+    if (window.confirm(`Wirklich "${emailAddr}" von der Liste entfernen?`)) {
       const result = await deleteWaitlistEntry(id);
       if (result.success) {
         loadWaitlist();
@@ -165,27 +187,52 @@ const AdminDashboard = () => {
       </Header>
 
       <StatsGrid>
-        <StatCard>
+        <StatCard 
+          $active={activeFilter === 'total'}
+          $color="default"
+          onClick={() => setActiveFilter('total')}
+        >
           <StatNumber>{stats.total}</StatNumber>
           <StatLabel>Gesamt</StatLabel>
+          {activeFilter === 'total' && <ActiveIndicator />}
         </StatCard>
-        <StatCard $highlight>
+        <StatCard 
+          $active={activeFilter === 'today'}
+          $color="today"
+          onClick={() => setActiveFilter('today')}
+        >
           <StatNumber>{stats.today}</StatNumber>
           <StatLabel>Heute</StatLabel>
+          {activeFilter === 'today' && <ActiveIndicator $color="#4ECDC4" />}
         </StatCard>
-        <StatCard>
+        <StatCard 
+          $active={activeFilter === 'contacted'}
+          $color="contacted"
+          onClick={() => setActiveFilter('contacted')}
+        >
           <StatNumber>{stats.contacted}</StatNumber>
           <StatLabel>Kontaktiert</StatLabel>
+          {activeFilter === 'contacted' && <ActiveIndicator $color="#2E7D32" />}
         </StatCard>
-        <StatCard>
-          <StatNumber>{stats.total - stats.contacted}</StatNumber>
+        <StatCard 
+          $active={activeFilter === 'open'}
+          $color="open"
+          onClick={() => setActiveFilter('open')}
+        >
+          <StatNumber>{stats.open}</StatNumber>
           <StatLabel>Offen</StatLabel>
+          {activeFilter === 'open' && <ActiveIndicator $color="#F57C00" />}
         </StatCard>
       </StatsGrid>
 
       <TableSection>
         <TableHeader>
-          <TableTitle>Anmeldungen ({waitlist.length})</TableTitle>
+          <TableTitle>
+            {activeFilter === 'total' && `Alle Anmeldungen (${filteredWaitlist.length})`}
+            {activeFilter === 'today' && `Heute (${filteredWaitlist.length})`}
+            {activeFilter === 'contacted' && `Kontaktiert (${filteredWaitlist.length})`}
+            {activeFilter === 'open' && `Offen (${filteredWaitlist.length})`}
+          </TableTitle>
           <ExportButton onClick={exportCSV}>
             ↓ CSV Export
           </ExportButton>
@@ -197,10 +244,10 @@ const AdminDashboard = () => {
             <p>Supabase nicht konfiguriert.</p>
             <small>Bitte .env Datei mit REACT_APP_SUPABASE_URL und REACT_APP_SUPABASE_ANON_KEY anlegen.</small>
           </NoDataMessage>
-        ) : waitlist.length === 0 ? (
+        ) : filteredWaitlist.length === 0 ? (
           <NoDataMessage>
             <span>📭</span>
-            <p>Noch keine Anmeldungen</p>
+            <p>Keine Einträge in dieser Kategorie</p>
           </NoDataMessage>
         ) : (
           <Table>
@@ -214,7 +261,7 @@ const AdminDashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {waitlist.map((entry) => (
+              {filteredWaitlist.map((entry) => (
                 <Tr key={entry.id} $contacted={entry.contacted}>
                   <Td>
                     <EmailLink href={`mailto:${entry.email}`}>{entry.email}</EmailLink>
@@ -470,28 +517,80 @@ const StatsGrid = styled.div`
 `;
 
 const StatCard = styled.div`
-  background: ${p => p.$highlight ? '#0D0D0D' : '#FFFFFF'};
+  position: relative;
   padding: 25px;
   text-align: center;
-  border: 1px solid ${p => p.$highlight ? '#0D0D0D' : '#E5E5E5'};
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: ${p => p.$active ? '#FFFFFF' : '#0D0D0D'};
+  
+  ${p => p.$color === 'default' && `
+    background: ${p.$active ? '#0D0D0D' : '#FFFFFF'};
+    border: 2px solid ${p.$active ? '#0D0D0D' : '#E5E5E5'};
+    
+    &:hover {
+      border-color: #0D0D0D;
+      background: ${p.$active ? '#0D0D0D' : '#F5F5F5'};
+    }
+  `}
+  
+  ${p => p.$color === 'today' && `
+    background: ${p.$active ? '#4ECDC4' : '#FFFFFF'};
+    border: 2px solid ${p.$active ? '#4ECDC4' : '#E5E5E5'};
+    
+    &:hover {
+      border-color: #4ECDC4;
+      background: ${p.$active ? '#4ECDC4' : '#E5FFFE'};
+    }
+  `}
+  
+  ${p => p.$color === 'contacted' && `
+    background: ${p.$active ? '#2E7D32' : '#FFFFFF'};
+    border: 2px solid ${p.$active ? '#2E7D32' : '#E5E5E5'};
+    
+    &:hover {
+      border-color: #2E7D32;
+      background: ${p.$active ? '#2E7D32' : '#E5FFE5'};
+    }
+  `}
+  
+  ${p => p.$color === 'open' && `
+    background: ${p.$active ? '#F57C00' : '#FFFFFF'};
+    border: 2px solid ${p.$active ? '#F57C00' : '#E5E5E5'};
+    
+    &:hover {
+      border-color: #F57C00;
+      background: ${p.$active ? '#F57C00' : '#FFF5E5'};
+    }
+  `}
 `;
 
 const StatNumber = styled.div`
   font-family: 'Space Grotesk', sans-serif;
   font-size: 2.5rem;
   font-weight: 700;
-  color: ${p => p.$highlight ? '#FFFFFF' : '#0D0D0D'};
   line-height: 1;
   margin-bottom: 8px;
+  color: inherit;
 `;
 
 const StatLabel = styled.div`
   font-family: 'Space Grotesk', sans-serif;
   font-size: 0.8rem;
   font-weight: 500;
-  color: ${p => p.$highlight ? 'rgba(255,255,255,0.7)' : '#888'};
   text-transform: uppercase;
   letter-spacing: 0.1em;
+  color: inherit;
+  opacity: 0.7;
+`;
+
+const ActiveIndicator = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: ${p => p.$color || '#0D0D0D'};
 `;
 
 const TableSection = styled.div`

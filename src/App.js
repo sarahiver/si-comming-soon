@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import styled, { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle, keyframes, css } from 'styled-components';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import Navigation from './components/Navigation';
 import HeroSection from './components/HeroSection';
@@ -38,7 +38,7 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 function MainPage() {
-  const { currentTheme } = useTheme();
+  const { currentTheme, isLoading, theme } = useTheme();
   
   // Load Google Fonts
   useEffect(() => {
@@ -59,6 +59,12 @@ function MainPage() {
 
   return (
     <AppWrapper $theme={currentTheme}>
+      {/* Loading Overlay */}
+      <LoadingOverlay $show={isLoading} $theme={currentTheme} $colors={theme.colors}>
+        <LoadingLogo>S&I.</LoadingLogo>
+        <LoadingText $theme={currentTheme}>Design wird geladen...</LoadingText>
+      </LoadingOverlay>
+      
       <Navigation />
       <HeroSection />
       <CountdownSection />
@@ -110,4 +116,93 @@ export default App;
 
 const AppWrapper = styled.div`
   min-height: 100vh;
+`;
+
+const fadeIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
+
+const pulse = keyframes`
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+`;
+
+const LoadingOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: ${p => p.$show ? 1 : 0};
+  visibility: ${p => p.$show ? 'visible' : 'hidden'};
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  
+  ${p => p.$theme === 'video' && css`
+    background: #1A1814;
+  `}
+  
+  ${p => p.$theme === 'contemporary' && css`
+    background: #0D0D0D;
+  `}
+  
+  ${p => p.$theme === 'editorial' && css`
+    background: #FFFFFF;
+  `}
+  
+  ${p => p.$theme === 'botanical' && css`
+    background: #F5F7F2;
+  `}
+  
+  ${p => p.$theme === 'luxe' && css`
+    background: #1A1A1A;
+  `}
+`;
+
+const LoadingLogo = styled.div`
+  font-family: 'Roboto', sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  background: #000000;
+  color: #FFFFFF;
+  padding: 12px 24px;
+  margin-bottom: 30px;
+  animation: ${pulse} 1.5s ease-in-out infinite;
+`;
+
+const LoadingText = styled.p`
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  animation: ${pulse} 1.5s ease-in-out infinite;
+  
+  ${p => p.$theme === 'video' && css`
+    font-family: 'Montserrat', sans-serif;
+    color: rgba(255, 255, 255, 0.6);
+  `}
+  
+  ${p => p.$theme === 'contemporary' && css`
+    font-family: 'Space Grotesk', sans-serif;
+    color: rgba(255, 255, 255, 0.6);
+  `}
+  
+  ${p => p.$theme === 'editorial' && css`
+    font-family: 'Inter', sans-serif;
+    color: rgba(0, 0, 0, 0.5);
+  `}
+  
+  ${p => p.$theme === 'botanical' && css`
+    font-family: 'Lato', sans-serif;
+    color: #4A7C59;
+  `}
+  
+  ${p => p.$theme === 'luxe' && css`
+    font-family: 'Montserrat', sans-serif;
+    color: rgba(255, 255, 255, 0.6);
+  `}
 `;

@@ -130,7 +130,12 @@ const EditorialUSPs = () => (
 // VIDEO USPs - Interactive Accordion
 // ============================================
 const VideoUSPs = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(null); // Alle geschlossen am Anfang
+  
+  const handleClick = (index) => {
+    // Toggle: wenn schon offen, schließen; sonst öffnen
+    setActiveIndex(activeIndex === index ? null : index);
+  };
   
   return (
     <VideoSection id="usps">
@@ -150,7 +155,7 @@ const VideoUSPs = () => {
             <VideoAccordionItem 
               key={usp.num}
               $active={activeIndex === index}
-              onClick={() => setActiveIndex(index)}
+              onClick={() => handleClick(index)}
             >
               <VideoAccordionHeader $active={activeIndex === index}>
                 <VideoAccordionNumber>{usp.num}</VideoAccordionNumber>
@@ -692,11 +697,12 @@ const VideoAccordionIcon = styled.span`
 `;
 
 const VideoAccordionContent = styled.div`
-  padding: 0 20px 25px 80px;
+  padding: 20px 20px 25px 80px;
   animation: ${fadeInUp} 0.3s ease;
   
   @media (max-width: 600px) {
     padding-left: 20px;
+    padding-top: 15px;
   }
 `;
 
@@ -706,7 +712,7 @@ const VideoAccordionSubtitle = styled.div`
   font-weight: 500;
   letter-spacing: 0.2em;
   color: #8B7355;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 `;
 
 const VideoAccordionText = styled.p`
