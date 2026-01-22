@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  const RESEND_API_KEY = 're_A6fcesYK_EfBFQb5qKSZUXbgZwYouCJ6r';
+  const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
   const emailHTML = `
 <!DOCTYPE html>
