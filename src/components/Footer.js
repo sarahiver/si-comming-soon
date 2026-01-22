@@ -182,7 +182,7 @@ const Logo = styled.div`
   font-family: 'Roboto', sans-serif;
   font-size: 2rem;
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.06em;
   color: #FFFFFF;
   background: #000000;
   display: inline-block;

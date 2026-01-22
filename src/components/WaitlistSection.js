@@ -424,7 +424,7 @@ const TitleAccent = styled.span`
     font-size: clamp(3rem, 10vw, 6rem);
     font-weight: 700;
     color: #0D0D0D;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.06em;
   `}
 `;
 

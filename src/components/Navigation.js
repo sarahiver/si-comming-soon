@@ -8,6 +8,11 @@ const fadeIn = keyframes`
   to { opacity: 1; transform: translateY(0); }
 `;
 
+const bounceRight = keyframes`
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(5px); }
+`;
+
 const Navigation = () => {
   const { currentTheme, setCurrentTheme, theme, themeOrder, themes } = useTheme();
   const [scrolled, setScrolled] = useState(false);
@@ -29,47 +34,131 @@ const Navigation = () => {
           <Logo $theme={currentTheme}>S&I.</Logo>
         </LogoLink>
         
-        {/* Theme Switcher */}
-        <ThemeSwitcher>
-          <ThemeButton 
-            onClick={() => setShowThemeMenu(!showThemeMenu)} 
-            $theme={currentTheme}
-          >
-            <ThemeDot $color={theme.colors.accent} />
-            <span>{themes[currentTheme].name}</span>
-            <Arrow $open={showThemeMenu}>▾</Arrow>
-          </ThemeButton>
+        <RightSection>
+          {/* Design Hint mit Animation */}
+          <DesignHint $theme={currentTheme} onClick={() => setShowThemeMenu(true)}>
+            <HintText $theme={currentTheme}>Entdecke unsere Designs</HintText>
+            <HintArrow $theme={currentTheme}>→</HintArrow>
+          </DesignHint>
           
-          {showThemeMenu && (
-            <>
-              <ThemeDropdown $theme={currentTheme}>
-                <DropdownLabel $theme={currentTheme}>Design wählen</DropdownLabel>
-                {themeOrder.map((themeId) => (
-                  <ThemeOption
-                    key={themeId}
-                    onClick={() => {
-                      setCurrentTheme(themeId);
-                      setShowThemeMenu(false);
-                    }}
-                    $active={currentTheme === themeId}
-                    $theme={currentTheme}
-                  >
-                    <ThemeDot $color={themes[themeId].colors.accent} />
-                    <span>{themes[themeId].name}</span>
-                    {currentTheme === themeId && <Check>✓</Check>}
-                  </ThemeOption>
-                ))}
-              </ThemeDropdown>
-              <Backdrop onClick={() => setShowThemeMenu(false)} />
-            </>
-          )}
-        </ThemeSwitcher>
+          {/* Theme Switcher */}
+          <ThemeSwitcher>
+            <ThemeButton 
+              onClick={() => setShowThemeMenu(!showThemeMenu)} 
+              $theme={currentTheme}
+            >
+              <ThemeDot $color={theme.colors.accent} />
+              <span>{themes[currentTheme].name}</span>
+              <Arrow $open={showThemeMenu}>▾</Arrow>
+            </ThemeButton>
+            
+            {showThemeMenu && (
+              <>
+                <ThemeDropdown $theme={currentTheme}>
+                  <DropdownLabel $theme={currentTheme}>Design wählen</DropdownLabel>
+                  {themeOrder.map((themeId) => (
+                    <ThemeOption
+                      key={themeId}
+                      onClick={() => {
+                        setCurrentTheme(themeId);
+                        setShowThemeMenu(false);
+                      }}
+                      $active={currentTheme === themeId}
+                      $theme={currentTheme}
+                    >
+                      <ThemeDot $color={themes[themeId].colors.accent} />
+                      <span>{themes[themeId].name}</span>
+                      {currentTheme === themeId && <Check>✓</Check>}
+                    </ThemeOption>
+                  ))}
+                </ThemeDropdown>
+                <Backdrop onClick={() => setShowThemeMenu(false)} />
+              </>
+            )}
+          </ThemeSwitcher>
+        </RightSection>
       </NavContainer>
     </Nav>
   );
 };
 
 export default Navigation;
+
+const RightSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
+`;
+
+const DesignHint = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 0;
+  
+  @media (max-width: 600px) {
+    display: none;
+  }
+`;
+
+const HintText = styled.span`
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  
+  ${p => p.$theme === 'contemporary' && css`
+    font-family: 'Space Grotesk', sans-serif;
+    color: #0D0D0D;
+  `}
+  
+  ${p => p.$theme === 'editorial' && css`
+    font-family: 'Inter', sans-serif;
+    color: #1A1A1A;
+  `}
+  
+  ${p => p.$theme === 'video' && css`
+    font-family: 'Montserrat', sans-serif;
+    color: #FFFFFF;
+  `}
+  
+  ${p => p.$theme === 'botanical' && css`
+    font-family: 'Lato', sans-serif;
+    color: #2C3E2D;
+  `}
+  
+  ${p => p.$theme === 'luxe' && css`
+    font-family: 'Montserrat', sans-serif;
+    color: #FFFFFF;
+  `}
+`;
+
+const HintArrow = styled.span`
+  font-size: 1rem;
+  animation: ${bounceRight} 1.5s ease-in-out infinite;
+  
+  ${p => p.$theme === 'contemporary' && css`
+    color: #FF6B6B;
+  `}
+  
+  ${p => p.$theme === 'editorial' && css`
+    color: #1A1A1A;
+  `}
+  
+  ${p => p.$theme === 'video' && css`
+    color: #C9A962;
+  `}
+  
+  ${p => p.$theme === 'botanical' && css`
+    color: #4A7C59;
+  `}
+  
+  ${p => p.$theme === 'luxe' && css`
+    color: #B8960B;
+  `}
+`;
 
 // Styles
 const Nav = styled.nav`
@@ -105,7 +194,7 @@ const Logo = styled.span`
   font-family: 'Roboto', sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.06em;
   background: #000000;
   color: #FFFFFF;
   padding: 6px 12px;
@@ -119,46 +208,73 @@ const ThemeButton = styled.button`
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 14px;
-  background: rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
+  padding: 10px 16px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: #0D0D0D;
+  font-size: 0.85rem;
+  font-weight: 600;
   transition: all 0.2s ease;
   
   ${p => p.$theme === 'editorial' && css`
     font-family: 'Inter', sans-serif;
+    background: #1A1A1A;
+    border: none;
+    color: #FFFFFF;
+    
+    &:hover {
+      background: #333;
+    }
   `}
   
   ${p => p.$theme === 'contemporary' && css`
     font-family: 'Space Grotesk', sans-serif;
+    background: #0D0D0D;
+    border: none;
+    color: #FFFFFF;
+    
+    &:hover {
+      background: #333;
+    }
   `}
   
   ${p => p.$theme === 'video' && css`
     font-family: 'Montserrat', sans-serif;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
     color: #1A1814;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    
+    &:hover {
+      background: #FFFFFF;
+    }
   `}
   
   ${p => p.$theme === 'botanical' && css`
     font-family: 'Lato', sans-serif;
-    color: #2C3E2D;
+    background: #2C3E2D;
+    border: none;
+    color: #FFFFFF;
+    
+    &:hover {
+      background: #3A5039;
+    }
   `}
   
   ${p => p.$theme === 'luxe' && css`
     font-family: 'Montserrat', sans-serif;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
     color: #1A1A1A;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    
+    &:hover {
+      background: #FFFFFF;
+    }
   `}
-  
-  &:hover {
-    background: rgba(0, 0, 0, 0.08);
-  }
   
   @media (max-width: 500px) {
     span { display: none; }
-    padding: 8px;
+    padding: 10px;
   }
 `;
 

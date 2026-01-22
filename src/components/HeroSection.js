@@ -130,17 +130,18 @@ const EditorialHero = ({ scrollToWaitlist, scrollToCountdown }) => (
     <EditorialContainer>
       <EditorialEyebrow>COMING SOON</EditorialEyebrow>
       
+      <EditorialMainTagline>
+        Individuelle Hochzeitswebsites
+      </EditorialMainTagline>
+      
+      <EditorialTagline>
+        <em>die so einzigartig sind wie eure Liebe</em>
+      </EditorialTagline>
+      
       <EditorialDivider />
       
       <EditorialDate>1. Oktober 2026</EditorialDate>
       <EditorialLocation>SIWEDDING.DE</EditorialLocation>
-      
-      <EditorialLogo>S&I.</EditorialLogo>
-      
-      <EditorialTagline>
-        Individuelle Hochzeitswebsites,<br />
-        <em>die so einzigartig sind wie eure Liebe</em>
-      </EditorialTagline>
     </EditorialContainer>
 
     <ScrollIndicator onClick={scrollToCountdown} $theme="editorial">
@@ -180,10 +181,11 @@ const VideoHero = ({ scrollToWaitlist, scrollToCountdown }) => (
     <VideoContent>
       <VideoEyebrow>COMING SOON</VideoEyebrow>
       
-      <VideoLogo>S&I.</VideoLogo>
+      <VideoMainTagline>
+        Individuelle Hochzeitswebsites
+      </VideoMainTagline>
       
       <VideoTagline>
-        Individuelle Hochzeitswebsites,<br />
         <em>die so einzigartig sind wie eure Liebe</em>
       </VideoTagline>
       
@@ -216,10 +218,11 @@ const BotanicalHero = ({ scrollToWaitlist, scrollToCountdown }) => (
     <BotanicalContent>
       <BotanicalEyebrow>COMING SOON</BotanicalEyebrow>
       
-      <BotanicalLogo>S&I.</BotanicalLogo>
+      <BotanicalMainTagline>
+        Individuelle Hochzeitswebsites
+      </BotanicalMainTagline>
       
       <BotanicalTagline>
-        Individuelle Hochzeitswebsites,<br />
         die so einzigartig sind wie eure Liebe
       </BotanicalTagline>
       
@@ -239,7 +242,7 @@ const BotanicalHero = ({ scrollToWaitlist, scrollToCountdown }) => (
 // ============================================
 // LUXE HERO - Classic Elegance with B/W Image
 // ============================================
-const LUXE_BG_URL = 'https://res.cloudinary.com/si-weddings/image/upload/v1769072318/si_cooming_soon_luxe_hero_wowu9v.jpg'; // Cloudinary URL für S/W Hintergrundbild
+const LUXE_BG_URL = 'https://res.cloudinary.com/si-weddings/image/upload/v1769072318/si_cooming_soon_luxe_hero_wowu9v.jpg';
 
 const LuxeHero = ({ scrollToWaitlist, scrollToCountdown }) => (
   <LuxeSection $hasBg={!!LUXE_BG_URL}>
@@ -256,10 +259,11 @@ const LuxeHero = ({ scrollToWaitlist, scrollToCountdown }) => (
     <LuxeContent>
       <LuxeEyebrow>COMING SOON</LuxeEyebrow>
       
-      <LuxeLogo>S&I.</LuxeLogo>
+      <LuxeMainTagline>
+        Individuelle Hochzeitswebsites
+      </LuxeMainTagline>
       
       <LuxeTagline>
-        Individuelle Hochzeitswebsites,<br />
         die so einzigartig sind wie eure Liebe
       </LuxeTagline>
       
@@ -404,7 +408,7 @@ const ContemporaryLogo = styled.h1`
   font-family: 'Roboto', sans-serif;
   font-size: clamp(5rem, 15vw, 9rem);
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.06em;
   line-height: 0.9;
   display: inline-block;
   background: #000000;
@@ -524,7 +528,7 @@ const EditorialLogo = styled.h1`
   font-family: 'Roboto', sans-serif;
   font-size: clamp(4rem, 12vw, 8rem);
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.06em;
   line-height: 0.9;
   display: inline-block;
   background: #000000;
@@ -538,12 +542,27 @@ const EditorialLogo = styled.h1`
   }
 `;
 
+const EditorialMainTagline = styled.h1`
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 400;
+  font-style: italic;
+  color: #1A1A1A;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  
+  @media (max-width: 600px) {
+    font-size: 2rem;
+  }
+`;
+
 const EditorialTagline = styled.p`
   font-family: 'Inter', sans-serif;
-  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-size: clamp(1rem, 2vw, 1.3rem);
   font-weight: 400;
   color: #666;
   line-height: 1.8;
+  margin-bottom: 40px;
   
   em {
     font-family: 'Instrument Serif', Georgia, serif;
@@ -693,12 +712,13 @@ const VideoLogo = styled.h1`
   font-size: clamp(5rem, 18vw, 12rem);
   font-weight: 700;
   color: #FFFFFF;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.06em;
   line-height: 0.85;
   margin-bottom: 30px;
   display: inline-block;
-  background: #000000;
+  background: rgba(0, 0, 0, 0.7);
   padding: 15px 40px;
+  backdrop-filter: blur(2px);
   
   @media (max-width: 600px) {
     font-size: 4rem;
@@ -706,9 +726,24 @@ const VideoLogo = styled.h1`
   }
 `;
 
+const VideoMainTagline = styled.h1`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 300;
+  font-style: italic;
+  color: #FFFFFF;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  
+  @media (max-width: 600px) {
+    font-size: 2rem;
+  }
+`;
+
 const VideoTagline = styled.p`
   font-family: 'Montserrat', sans-serif;
-  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-size: clamp(1rem, 2vw, 1.3rem);
   font-weight: 300;
   color: rgba(255, 255, 255, 0.9);
   line-height: 1.8;
@@ -854,7 +889,7 @@ const BotanicalLogo = styled.h1`
   font-family: 'Roboto', sans-serif;
   font-size: clamp(4rem, 15vw, 10rem);
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.06em;
   color: #FFFFFF;
   background: #000000;
   padding: 15px 35px;
@@ -864,6 +899,20 @@ const BotanicalLogo = styled.h1`
   @media (max-width: 600px) {
     font-size: 3.5rem;
     padding: 10px 25px;
+  }
+`;
+
+const BotanicalMainTagline = styled.h1`
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2.2rem, 7vw, 4rem);
+  font-weight: 400;
+  font-style: italic;
+  color: #2C3E2D;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  
+  @media (max-width: 600px) {
+    font-size: 1.8rem;
   }
 `;
 
@@ -877,7 +926,7 @@ const BotanicalAmpersand = styled.div`
 
 const BotanicalTagline = styled.p`
   font-family: 'Lato', sans-serif;
-  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  font-size: clamp(1rem, 2vw, 1.2rem);
   font-weight: 300;
   color: #6B7B6C;
   line-height: 1.8;
@@ -1009,16 +1058,32 @@ const LuxeLogo = styled.h1`
   font-family: 'Roboto', sans-serif;
   font-size: clamp(5rem, 18vw, 12rem);
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.06em;
   color: #FFFFFF;
-  background: #000000;
+  background: rgba(0, 0, 0, 0.7);
   padding: 15px 40px;
   display: inline-block;
   margin-bottom: 30px;
+  backdrop-filter: blur(2px);
   
   @media (max-width: 600px) {
     font-size: 4rem;
     padding: 10px 25px;
+  }
+`;
+
+const LuxeMainTagline = styled.h1`
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 300;
+  font-style: italic;
+  color: #FFFFFF;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  
+  @media (max-width: 600px) {
+    font-size: 2rem;
   }
 `;
 
@@ -1027,7 +1092,7 @@ const LuxeTagline = styled.p`
   font-size: clamp(1.1rem, 2.5vw, 1.4rem);
   font-weight: 300;
   font-style: italic;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.8);
   line-height: 1.8;
   margin-bottom: 40px;
 `;

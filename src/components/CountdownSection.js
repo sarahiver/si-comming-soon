@@ -14,6 +14,11 @@ const pulse = keyframes`
   50% { opacity: 0.06; }
 `;
 
+const slideRight = keyframes`
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+`;
+
 const CountdownSection = () => {
   const { currentTheme } = useTheme();
   const timeLeft = useCountdown();
@@ -448,9 +453,22 @@ const ContemporaryLabel = styled.span`
 `;
 
 const ContemporaryDivider = styled.div`
-  height: 1px;
+  height: 2px;
   background: rgba(255, 255, 255, 0.1);
   margin: 0 30px;
+  position: relative;
+  overflow: hidden;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, #FF6B6B, #4ECDC4, transparent);
+    animation: ${slideRight} 2s ease-in-out infinite;
+  }
   
   @media (max-width: 500px) {
     margin: 0 15px;

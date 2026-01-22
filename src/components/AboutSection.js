@@ -335,7 +335,7 @@ const BackgroundText = styled.div`
   font-family: 'Roboto', sans-serif;
   font-size: clamp(15rem, 40vw, 35rem);
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.06em;
   color: #000000;
   opacity: 0.03;
   pointer-events: none;
@@ -528,7 +528,7 @@ const PlaceholderLogo = styled.div`
   font-family: 'Roboto', sans-serif;
   font-size: 4rem;
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.06em;
   color: #FFFFFF;
   background: #000000;
   padding: 15px 25px;
@@ -742,7 +742,7 @@ const SignatureLogo = styled.div`
   font-family: 'Roboto', sans-serif;
   font-size: 2rem;
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.06em;
   color: #FFFFFF;
   background: #000000;
   padding: 8px 16px;
@@ -843,7 +843,7 @@ const PlaceholderContent = styled.div`
   font-family: 'Roboto', sans-serif;
   font-size: 3rem;
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.06em;
   color: #FFFFFF;
   background: #000000;
   padding: 12px 20px;
@@ -1026,7 +1026,7 @@ const LuxeSignatureLogo = styled.div`
   font-family: 'Roboto', sans-serif;
   font-size: 1.2rem;
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.06em;
   color: #FFFFFF;
   background: #000000;
   padding: 6px 12px;
