@@ -1,74 +1,67 @@
-# S&I. Weddings — Coming Soon
+# S&I Wedding - Marketing Website
 
-Premium Coming Soon Seite im Contemporary Design.
+Premium Hochzeitswebsites, die so einzigartig sind wie eure Liebe.
 
-## Features
-
-- **Hero**: Split-Layout mit animierten geometrischen Elementen
-- **Countdown**: "TIME IS TICKING" mit horizontalem Layout → 01.10.2026
-- **USPs**: 10 nummerierte Feature-Karten mit Hover-Animationen
-- **About**: "WE ARE SARAH & IVER" mit Werte-Karten
-- **Waitlist**: Großer CTA mit Supabase-Integration
-- **Footer**: Social Links (Instagram, Pinterest) + Impressum Modal
-
-## Installation
+## 🚀 Quick Start
 
 ```bash
 npm install
 npm start
 ```
 
-## Supabase Setup
+## 📦 Deployment
 
-```sql
-CREATE TABLE waitlist (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  theme_preference VARCHAR(50) DEFAULT 'contemporary',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
-ALTER TABLE waitlist ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Allow anonymous inserts" ON waitlist
-  FOR INSERT WITH CHECK (true);
+```bash
+npm run build
 ```
 
-## Environment Variables
-
-```env
-REACT_APP_SUPABASE_URL=https://your-project.supabase.co
-REACT_APP_SUPABASE_ANON_KEY=your-anon-key
+Deploy to Vercel:
+```bash
+vercel --prod
 ```
 
-## Vercel Deployment
+## 🎨 6 Themes
 
-1. Push zu GitHub
-2. Vercel → Import Repository
-3. Environment Variables hinzufügen
-4. Deploy
+- **Video** - Cineastisch mit Video-Hintergrund
+- **Editorial** - Minimalistisch & Modern
+- **Botanical** - Natürlich & Organisch
+- **Contemporary** - Bold & Playful
+- **Luxe** - Opulent & Glamourös
+- **Neon** - Futuristisch & Elektrisierend
 
-### Custom Domain (siwedding.de)
+## 💰 Pakete
 
-In Vercel: Settings → Domains → siwedding.de hinzufügen
+| Paket | Preis | Komponenten | Hosting |
+|-------|-------|-------------|---------|
+| Klassik | 1.490€ | 10 | 8 Monate |
+| Signature | 2.190€ | 16 | 12 Monate |
+| Couture | 2.990€+ | 18 | 12 Monate |
 
-Bei Strato DNS:
-- A Record: @ → 76.76.21.21
-- CNAME: www → cname.vercel-dns.com
+## 🔧 Tech Stack
 
-## Design
+- React 18
+- Styled Components
+- React Router
+- Vercel Hosting
 
-- **Font**: Space Grotesk
-- **Colors**: 
-  - Primary: #0D0D0D (Schwarz)
-  - Accent: #FF6B6B (Coral)
-  - Accent 2: #4ECDC4 (Teal)
-  - Accent 3: #FFE66D (Gelb)
+## 📁 Struktur
 
-## Social Links
+```
+src/
+├── components/marketing/    # Marketing Komponenten
+├── context/                 # Theme Context
+├── pages/                   # Seiten
+└── styles/                  # Global Styles
+```
 
-- Instagram: @sarah.iver.wedding
-- Pinterest: S&I.
+## 🌐 URLs
+
+- `/` - Marketing Homepage
+- `/admin` - Admin Dashboard
+- `/demo?theme=video` - Theme Demo
+- `/impressum` - Impressum
+- `/datenschutz` - Datenschutz
 
 ---
-© 2026 S&I. Weddings
+
+Made with 💕 by Sarah & Iver
