@@ -216,7 +216,7 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'S&I. Wedding <onboarding@resend.dev>',
+        from: 'S&I. Wedding <wedding@sarahiver.de>',
         to: [to],
         subject: 'Bitte bestätige deine Anmeldung – S&I.',
         html: emailHTML,
