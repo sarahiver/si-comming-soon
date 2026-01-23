@@ -1,5 +1,5 @@
 // Waitlist Section - Multi-Theme (Contemporary, Editorial & Video)
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { useTheme } from '../context/ThemeContext';
 import { addToWaitlist } from '../config/supabase';
@@ -16,9 +16,33 @@ const WaitlistSection = () => {
   const [loading, setLoading] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  
+  // Honeypot - verstecktes Feld das Bots ausfüllen
+  const [website, setWebsite] = useState('');
+  
+  // Timing-Check - speichert wann Komponente geladen wurde
+  const loadTime = useRef(Date.now());
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Honeypot Check - wenn ausgefüllt, ist es ein Bot
+    if (website) {
+      // Fake Success für Bots (sie denken es hat geklappt)
+      console.log('Honeypot triggered - bot detected');
+      setStatus({ type: 'success', message: '🎉 Perfekt! Du bist auf der Warteliste.' });
+      setEmail('');
+      return;
+    }
+    
+    // Timing Check - wenn weniger als 3 Sekunden vergangen sind, ist es verdächtig
+    const timeSinceLoad = Date.now() - loadTime.current;
+    if (timeSinceLoad < 3000) {
+      console.log('Timing check failed - too fast:', timeSinceLoad, 'ms');
+      setStatus({ type: 'success', message: '🎉 Perfekt! Du bist auf der Warteliste.' });
+      setEmail('');
+      return;
+    }
     
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setStatus({ type: 'error', message: 'Bitte gib eine gültige E-Mail-Adresse ein.' });
@@ -90,6 +114,9 @@ const WaitlistSection = () => {
     setPrivacyAccepted,
     showPrivacyModal,
     setShowPrivacyModal,
+    // Honeypot
+    website,
+    setWebsite,
   };
 
   if (currentTheme === 'luxe') {

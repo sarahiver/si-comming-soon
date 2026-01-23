@@ -65,10 +65,14 @@ export default async function handler(req, res) {
 
     // GET - Alle Waitlist Einträge
     if (action === 'getAll') {
-      const response = await fetch(
-        `${SUPABASE_URL}/rest/v1/waitlist?select=*&confirmed=eq.true&order=created_at.desc`,
-        { headers }
-      );
+      // Optional: nur bestätigte oder alle
+      const confirmedOnly = req.body.confirmedOnly !== false; // Default: true
+      let url = `${SUPABASE_URL}/rest/v1/waitlist?select=*&order=created_at.desc`;
+      if (confirmedOnly) {
+        url += '&confirmed=eq.true';
+      }
+      
+      const response = await fetch(url, { headers });
       const data = await response.json();
       return res.status(200).json({ success: true, data });
     }

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled, { createGlobalStyle, keyframes, css } from 'styled-components';
 import { Analytics } from '@vercel/analytics/react';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
+import ErrorBoundary from './components/ErrorBoundary';
 import Navigation from './components/Navigation';
 import HeroSection from './components/HeroSection';
 import CountdownSection from './components/CountdownSection';
@@ -100,19 +101,21 @@ function AdminPage() {
 
 function App() {
   return (
-    <Router>
-      <GlobalStyles />
-      <Routes>
-        <Route path="/" element={
-          <ThemeProvider>
-            <MainPage />
-          </ThemeProvider>
-        } />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/confirm" element={<ConfirmPage />} />
-      </Routes>
-      <Analytics />
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <GlobalStyles />
+        <Routes>
+          <Route path="/" element={
+            <ThemeProvider>
+              <MainPage />
+            </ThemeProvider>
+          } />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/confirm" element={<ConfirmPage />} />
+        </Routes>
+        <Analytics />
+      </Router>
+    </ErrorBoundary>
   );
 }
 
