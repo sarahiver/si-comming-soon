@@ -75,6 +75,10 @@ const HeroSection = () => {
     return <EditorialHero scrollToWaitlist={scrollToWaitlist} scrollToCountdown={scrollToCountdown} />;
   }
 
+  if (currentTheme === 'neon') {
+    return <NeonHero scrollToWaitlist={scrollToWaitlist} scrollToCountdown={scrollToCountdown} />;
+  }
+
   return <ContemporaryHero scrollToWaitlist={scrollToWaitlist} scrollToCountdown={scrollToCountdown} />;
 };
 
@@ -1132,4 +1136,413 @@ const LuxeScrollArrow = styled.span`
   font-size: 1rem;
   color: #B8960B;
   animation: ${scrollBounce} 1.5s ease-in-out infinite;
+`;
+
+// ============================================
+// NEON HERO
+// ============================================
+
+const glitch = keyframes`
+  0%, 100% { 
+    transform: translate(0);
+    text-shadow: 
+      2px 0 #ff00ff,
+      -2px 0 #00ffff;
+  }
+  20% { 
+    transform: translate(-2px, 2px);
+    text-shadow: 
+      4px 0 #ff00ff,
+      -4px 0 #00ffff;
+  }
+  40% { 
+    transform: translate(-2px, -2px);
+    text-shadow: 
+      2px 0 #00ffff,
+      -2px 0 #ff00ff;
+  }
+  60% { 
+    transform: translate(2px, 2px);
+    text-shadow: 
+      -2px 0 #ff00ff,
+      2px 0 #00ffff;
+  }
+  80% { 
+    transform: translate(2px, -2px);
+    text-shadow: 
+      4px 0 #00ffff,
+      -4px 0 #ff00ff;
+  }
+`;
+
+const neonPulse = keyframes`
+  0%, 100% { 
+    opacity: 1;
+    filter: drop-shadow(0 0 10px currentColor);
+  }
+  50% { 
+    opacity: 0.8;
+    filter: drop-shadow(0 0 20px currentColor);
+  }
+`;
+
+const geometricFloat = keyframes`
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(20px, -30px) rotate(90deg); }
+  50% { transform: translate(-10px, -50px) rotate(180deg); }
+  75% { transform: translate(-30px, -20px) rotate(270deg); }
+`;
+
+const geometricFloat2 = keyframes`
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(-40px, 20px) rotate(-120deg); }
+  66% { transform: translate(30px, -40px) rotate(120deg); }
+`;
+
+const scanline = keyframes`
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+`;
+
+const NeonHero = ({ scrollToWaitlist, scrollToCountdown }) => (
+  <NeonHeroWrapper>
+    {/* Scanline Effect */}
+    <NeonScanline />
+    
+    {/* Grid Background */}
+    <NeonGrid />
+    
+    {/* Geometric Elements */}
+    <NeonGeometricElements>
+      <NeonSquare style={{ top: '10%', left: '5%' }} $delay="0s" />
+      <NeonSquare style={{ top: '20%', right: '10%' }} $delay="0.5s" $size="80px" />
+      <NeonCircle style={{ bottom: '20%', left: '8%' }} $delay="1s" />
+      <NeonCircle style={{ top: '15%', right: '5%' }} $delay="0.3s" $size="60px" />
+      <NeonTriangle style={{ bottom: '30%', right: '15%' }} $delay="0.7s" />
+      <NeonTriangle style={{ top: '40%', left: '3%' }} $delay="1.2s" $size="40px" />
+    </NeonGeometricElements>
+    
+    <NeonHeroContent>
+      {/* Coming Soon Badge */}
+      <NeonComingSoonBadge>
+        <span>//</span> COMING SOON <span>//</span>
+      </NeonComingSoonBadge>
+      
+      {/* Main Title with Glitch Effect */}
+      <NeonTitleWrapper>
+        <NeonTitle>
+          S&I.
+        </NeonTitle>
+        <NeonTitleGlitch aria-hidden="true">
+          S&I.
+        </NeonTitleGlitch>
+        <NeonTitleGlitch2 aria-hidden="true">
+          S&I.
+        </NeonTitleGlitch2>
+      </NeonTitleWrapper>
+      
+      {/* Subtitle */}
+      <NeonSubtitle>
+        Individuelle Hochzeitswebsites
+      </NeonSubtitle>
+      <NeonSubtitleSmall>
+        die so einzigartig sind wie eure Liebe
+      </NeonSubtitleSmall>
+      
+      {/* Date Badge */}
+      <NeonDateBadge>
+        <NeonDateLine />
+        <NeonDate>01. OKTOBER 2026</NeonDate>
+        <NeonDateLine />
+      </NeonDateBadge>
+      
+      {/* CTA */}
+      <NeonCTA onClick={scrollToWaitlist}>
+        Let's make it epic
+        <NeonCTAArrow>→</NeonCTAArrow>
+      </NeonCTA>
+    </NeonHeroContent>
+    
+    {/* Scroll Indicator */}
+    <NeonScrollIndicator onClick={scrollToCountdown}>
+      <span>SCROLL TO EXPLORE</span>
+      <NeonScrollArrow>↓</NeonScrollArrow>
+    </NeonScrollIndicator>
+  </NeonHeroWrapper>
+);
+
+const NeonHeroWrapper = styled.section`
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0a0f;
+  overflow: hidden;
+`;
+
+const NeonScanline = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.3), transparent);
+  animation: ${scanline} 8s linear infinite;
+  z-index: 1;
+  pointer-events: none;
+`;
+
+const NeonGrid = styled.div`
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index: 0;
+`;
+
+const NeonGeometricElements = styled.div`
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+`;
+
+const NeonSquare = styled.div`
+  position: absolute;
+  width: ${p => p.$size || '60px'};
+  height: ${p => p.$size || '60px'};
+  border: 2px solid #00ffff;
+  opacity: 0.4;
+  animation: ${geometricFloat} 15s ease-in-out infinite;
+  animation-delay: ${p => p.$delay || '0s'};
+  
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px solid rgba(255, 0, 255, 0.5);
+  }
+`;
+
+const NeonCircle = styled.div`
+  position: absolute;
+  width: ${p => p.$size || '80px'};
+  height: ${p => p.$size || '80px'};
+  border: 2px solid #ff00ff;
+  border-radius: 50%;
+  opacity: 0.4;
+  animation: ${geometricFloat2} 18s ease-in-out infinite;
+  animation-delay: ${p => p.$delay || '0s'};
+`;
+
+const NeonTriangle = styled.div`
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: ${p => p.$size ? `${parseInt(p.$size)/2}px` : '30px'} solid transparent;
+  border-right: ${p => p.$size ? `${parseInt(p.$size)/2}px` : '30px'} solid transparent;
+  border-bottom: ${p => p.$size || '60px'} solid transparent;
+  border-bottom-color: rgba(0, 255, 136, 0.3);
+  opacity: 0.5;
+  animation: ${geometricFloat} 20s ease-in-out infinite reverse;
+  animation-delay: ${p => p.$delay || '0s'};
+`;
+
+const NeonHeroContent = styled.div`
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 0 20px;
+`;
+
+const NeonComingSoonBadge = styled.div`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  color: #00ffff;
+  margin-bottom: 30px;
+  animation: ${fadeIn} 1s ease;
+  
+  span {
+    color: #ff00ff;
+  }
+`;
+
+const NeonTitleWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+  margin-bottom: 30px;
+`;
+
+const NeonTitle = styled.h1`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(4rem, 15vw, 10rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+  line-height: 1;
+  position: relative;
+  animation: ${fadeInUp} 1s ease;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -10px -20px;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+    z-index: -1;
+  }
+`;
+
+const NeonTitleGlitch = styled.span`
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(4rem, 15vw, 10rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #00ffff;
+  line-height: 1;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+  animation: ${glitch} 3s infinite;
+  opacity: 0.8;
+`;
+
+const NeonTitleGlitch2 = styled.span`
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(4rem, 15vw, 10rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #ff00ff;
+  line-height: 1;
+  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+  animation: ${glitch} 3s infinite reverse;
+  animation-delay: 0.1s;
+  opacity: 0.8;
+`;
+
+const NeonSubtitle = styled.p`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: #FFFFFF;
+  margin-bottom: 8px;
+  animation: ${fadeInUp} 1s ease 0.2s both;
+`;
+
+const NeonSubtitleSmall = styled.p`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 40px;
+  animation: ${fadeInUp} 1s ease 0.3s both;
+`;
+
+const NeonDateBadge = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 50px;
+  animation: ${fadeInUp} 1s ease 0.4s both;
+`;
+
+const NeonDateLine = styled.div`
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #00ffff, transparent);
+`;
+
+const NeonDate = styled.span`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: #00ffff;
+`;
+
+const NeonCTA = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 40px;
+  background: transparent;
+  border: 2px solid #00ffff;
+  color: #00ffff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: ${fadeInUp} 1s ease 0.5s both;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+  }
+  
+  &:hover {
+    background: rgba(0, 255, 255, 0.1);
+    box-shadow: 
+      0 0 20px rgba(0, 255, 255, 0.3),
+      inset 0 0 20px rgba(0, 255, 255, 0.1);
+    
+    &::before {
+      transform: translateX(100%);
+    }
+  }
+`;
+
+const NeonCTAArrow = styled.span`
+  transition: transform 0.3s ease;
+  
+  ${NeonCTA}:hover & {
+    transform: translateX(5px);
+  }
+`;
+
+const NeonScrollIndicator = styled.button`
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  
+  span {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    color: rgba(255, 255, 255, 0.4);
+  }
+`;
+
+const NeonScrollArrow = styled.span`
+  font-size: 1.2rem;
+  color: #00ffff;
+  animation: ${scrollBounce} 1.5s ease-in-out infinite;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
 `;

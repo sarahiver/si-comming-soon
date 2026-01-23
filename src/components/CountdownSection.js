@@ -43,6 +43,10 @@ const CountdownSection = () => {
     return <EditorialCountdown timeLeft={timeLeft} scrollToWaitlist={scrollToWaitlist} />;
   }
 
+  if (currentTheme === 'neon') {
+    return <NeonCountdown timeLeft={timeLeft} scrollToWaitlist={scrollToWaitlist} />;
+  }
+
   return <ContemporaryCountdown timeLeft={timeLeft} scrollToWaitlist={scrollToWaitlist} />;
 };
 
@@ -1106,5 +1110,234 @@ const LuxeCTA = styled.button`
   &:hover {
     background: #1A1A1A;
     color: #FFFFFF;
+  }
+`;
+
+// ============================================
+// NEON COUNTDOWN
+// ============================================
+
+const neonGlow = keyframes`
+  0%, 100% { filter: drop-shadow(0 0 5px currentColor); }
+  50% { filter: drop-shadow(0 0 15px currentColor); }
+`;
+
+const rotateCircle = keyframes`
+  from { transform: rotate(-90deg); }
+  to { transform: rotate(270deg); }
+`;
+
+// Berechnet den Fortschritt der Tage seit Start (01.01.2026) bis Ende (01.10.2026)
+const calculateDaysProgress = (daysLeft) => {
+  const totalDays = 274; // Tage von 01.01.2026 bis 01.10.2026
+  const daysElapsed = totalDays - daysLeft;
+  return Math.min(Math.max(daysElapsed / totalDays, 0), 1);
+};
+
+const NeonCountdown = ({ timeLeft, scrollToWaitlist }) => {
+  // Berechne Progress für jeden Ring (0-1)
+  const secondsProgress = timeLeft.seconds / 60;
+  const minutesProgress = timeLeft.minutes / 60;
+  const hoursProgress = timeLeft.hours / 24;
+  const daysProgress = calculateDaysProgress(timeLeft.days);
+  
+  // SVG Circle Eigenschaften
+  const radius = 45;
+  const circumference = 2 * Math.PI * radius;
+  
+  const units = [
+    { value: timeLeft.days, label: 'Days', progress: daysProgress, color: '#00ffff' },
+    { value: timeLeft.hours, label: 'Hours', progress: hoursProgress, color: '#ff00ff' },
+    { value: timeLeft.minutes, label: 'Minutes', progress: minutesProgress, color: '#00ff88' },
+    { value: timeLeft.seconds, label: 'Seconds', progress: secondsProgress, color: '#00ffff' },
+  ];
+
+  return (
+    <NeonSection id="countdown">
+      <NeonGrid />
+      <NeonContainer>
+        <NeonCountdownGrid>
+          {units.map((unit, index) => (
+            <NeonCountdownItem key={unit.label} $delay={index * 0.1}>
+              <NeonCircleSVG viewBox="0 0 100 100">
+                {/* Background Circle */}
+                <circle
+                  cx="50"
+                  cy="50"
+                  r={radius}
+                  fill="none"
+                  stroke="rgba(255,255,255,0.1)"
+                  strokeWidth="2"
+                />
+                {/* Progress Circle */}
+                <NeonProgressCircle
+                  cx="50"
+                  cy="50"
+                  r={radius}
+                  fill="none"
+                  stroke={unit.color}
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  $circumference={circumference}
+                  $progress={unit.progress}
+                  $color={unit.color}
+                />
+              </NeonCircleSVG>
+              <NeonCountdownValue $color={unit.color}>
+                {formatNumber(unit.value)}
+              </NeonCountdownValue>
+              <NeonCountdownLabel>{unit.label}</NeonCountdownLabel>
+            </NeonCountdownItem>
+          ))}
+        </NeonCountdownGrid>
+        
+        <NeonCTAButton onClick={scrollToWaitlist}>
+          LET'S MAKE IT EPIC
+          <NeonCTAArrow>→</NeonCTAArrow>
+        </NeonCTAButton>
+      </NeonContainer>
+    </NeonSection>
+  );
+};
+
+const NeonSection = styled.section`
+  position: relative;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 5%;
+  background: #0a0a0f;
+  overflow: hidden;
+`;
+
+const NeonGrid = styled.div`
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(0, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+`;
+
+const NeonContainer = styled.div`
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  max-width: 900px;
+  width: 100%;
+`;
+
+const NeonCountdownGrid = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 60px;
+  
+  @media (max-width: 600px) {
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+`;
+
+const NeonCountdownItem = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: ${fadeInUp} 0.8s ease forwards;
+  animation-delay: ${p => p.$delay}s;
+  opacity: 0;
+`;
+
+const NeonCircleSVG = styled.svg`
+  width: 120px;
+  height: 120px;
+  transform: rotate(-90deg);
+  
+  @media (max-width: 600px) {
+    width: 80px;
+    height: 80px;
+  }
+`;
+
+const NeonProgressCircle = styled.circle`
+  stroke-dasharray: ${p => p.$circumference};
+  stroke-dashoffset: ${p => p.$circumference * (1 - p.$progress)};
+  transition: stroke-dashoffset 0.5s ease;
+  filter: drop-shadow(0 0 8px ${p => p.$color});
+`;
+
+const NeonCountdownValue = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: ${p => p.$color};
+  text-shadow: 0 0 10px ${p => p.$color};
+  
+  @media (max-width: 600px) {
+    font-size: 1.3rem;
+  }
+`;
+
+const NeonCountdownLabel = styled.div`
+  margin-top: 15px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+`;
+
+const NeonCTAButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 50px;
+  background: transparent;
+  border: 2px solid #00ffff;
+  color: #00ffff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+  }
+  
+  &:hover {
+    background: rgba(0, 255, 255, 0.1);
+    box-shadow: 
+      0 0 30px rgba(0, 255, 255, 0.3),
+      inset 0 0 30px rgba(0, 255, 255, 0.1);
+    
+    &::before {
+      left: 100%;
+    }
+  }
+`;
+
+const NeonCTAArrow = styled.span`
+  transition: transform 0.3s ease;
+  
+  ${NeonCTAButton}:hover & {
+    transform: translateX(5px);
   }
 `;

@@ -56,6 +56,10 @@ const AboutSection = () => {
     return <EditorialAbout />;
   }
 
+  if (currentTheme === 'neon') {
+    return <NeonAbout />;
+  }
+
   return <ContemporaryAbout />;
 };
 
@@ -1089,4 +1093,269 @@ const LuxeSignatureText = styled.span`
   letter-spacing: 0.15em;
   color: #888;
   text-transform: uppercase;
+`;
+
+// ============================================
+// NEON ABOUT
+// ============================================
+
+const codeBlink = keyframes`
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+`;
+
+const NeonAbout = () => (
+  <NeonAboutSection id="about">
+    <NeonAboutGrid />
+    <NeonAboutContainer>
+      <NeonAboutLayout>
+        {/* Left Side - Content */}
+        <NeonAboutContent>
+          <NeonAboutBadge>// ABOUT_US.EXE</NeonAboutBadge>
+          <NeonAboutTitle>SARAH & IVER</NeonAboutTitle>
+          
+          <NeonAboutText>
+            Wir sind keine anonyme Agentur. Wir sind <NeonHighlight>zwei Menschen</NeonHighlight>, die glauben,
+            dass eure Hochzeitswebsite mehr verdient als ein 08/15-Template.
+          </NeonAboutText>
+          
+          <NeonAboutText>
+            Bei uns gibt es keine Ticket-Nummern und keine automatischen
+            Antworten. Ihr bekommt <NeonHighlight>uns</NeonHighlight> – mit voller Aufmerksamkeit und
+            Leidenschaft für Design.
+          </NeonAboutText>
+          
+          <NeonAboutText>
+            Eure Geschichte ist einzigartig. Zeit, dass eure Website das auch ist.
+          </NeonAboutText>
+          
+          <NeonAboutDivider />
+          
+          <NeonAboutSignature>
+            <NeonSignatureLogo>S&I</NeonSignatureLogo>
+            <NeonSignatureText>// Human connection in a digital world</NeonSignatureText>
+          </NeonAboutSignature>
+        </NeonAboutContent>
+        
+        {/* Right Side - JSON Terminal */}
+        <NeonAboutTerminal>
+          <NeonTerminalHeader>
+            <NeonTerminalDots>
+              <span style={{background: '#ff5f56'}} />
+              <span style={{background: '#ffbd2e'}} />
+              <span style={{background: '#27ca40'}} />
+            </NeonTerminalDots>
+            <NeonTerminalTitle>founders.json</NeonTerminalTitle>
+          </NeonTerminalHeader>
+          <NeonTerminalBody>
+            <NeonCodeLine><NeonCodeComment>// Das sind wir</NeonCodeComment></NeonCodeLine>
+            <NeonCodeLine>{'{'}</NeonCodeLine>
+            <NeonCodeLine indent>
+              <NeonCodeKey>"names"</NeonCodeKey>: <NeonCodeString>"Sarah & Iver"</NeonCodeString>,
+            </NeonCodeLine>
+            <NeonCodeLine indent>
+              <NeonCodeKey>"mission"</NeonCodeKey>: <NeonCodeString>"Einzigartige Websites"</NeonCodeString>,
+            </NeonCodeLine>
+            <NeonCodeLine indent>
+              <NeonCodeKey>"approach"</NeonCodeKey>: <NeonCodeString>"100% persönlich"</NeonCodeString>,
+            </NeonCodeLine>
+            <NeonCodeLine indent>
+              <NeonCodeKey>"templates"</NeonCodeKey>: <NeonCodeBool>false</NeonCodeBool>,
+            </NeonCodeLine>
+            <NeonCodeLine indent>
+              <NeonCodeKey>"chatbots"</NeonCodeKey>: <NeonCodeBool>false</NeonCodeBool>,
+            </NeonCodeLine>
+            <NeonCodeLine indent>
+              <NeonCodeKey>"callbacks"</NeonCodeKey>: <NeonCodeBool>false</NeonCodeBool>,
+            </NeonCodeLine>
+            <NeonCodeLine indent>
+              <NeonCodeKey>"passion"</NeonCodeKey>: <NeonCodeBool>true</NeonCodeBool>,
+            </NeonCodeLine>
+            <NeonCodeLine indent>
+              <NeonCodeKey>"love"</NeonCodeKey>: <NeonCodeString>Infinity</NeonCodeString>
+            </NeonCodeLine>
+            <NeonCodeLine>{'}'}<NeonCursor /></NeonCodeLine>
+          </NeonTerminalBody>
+        </NeonAboutTerminal>
+      </NeonAboutLayout>
+    </NeonAboutContainer>
+  </NeonAboutSection>
+);
+
+const NeonAboutSection = styled.section`
+  position: relative;
+  padding: 120px 5%;
+  background: #0a0a0f;
+  overflow: hidden;
+`;
+
+const NeonAboutGrid = styled.div`
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(0, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+`;
+
+const NeonAboutContainer = styled.div`
+  position: relative;
+  z-index: 10;
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+const NeonAboutLayout = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+`;
+
+const NeonAboutContent = styled.div`
+  animation: ${fadeInUp} 0.8s ease;
+`;
+
+const NeonAboutBadge = styled.div`
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: #00ff88;
+  margin-bottom: 20px;
+`;
+
+const NeonAboutTitle = styled.h2`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 700;
+  background: linear-gradient(90deg, #ff00ff, #00ffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 30px;
+`;
+
+const NeonAboutText = styled.p`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.8;
+  margin-bottom: 20px;
+`;
+
+const NeonHighlight = styled.span`
+  color: #ff00ff;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 0, 255, 0.3);
+  text-underline-offset: 3px;
+`;
+
+const NeonAboutDivider = styled.div`
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, #00ffff, transparent);
+  margin: 30px 0;
+`;
+
+const NeonAboutSignature = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
+`;
+
+const NeonSignatureLogo = styled.div`
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  color: #00ffff;
+  background: transparent;
+  border: 2px solid #00ffff;
+  padding: 6px 12px;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+`;
+
+const NeonSignatureText = styled.span`
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+`;
+
+const NeonAboutTerminal = styled.div`
+  background: rgba(10, 10, 15, 0.9);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.1);
+  animation: ${fadeInUp} 0.8s ease 0.2s both;
+`;
+
+const NeonTerminalHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+`;
+
+const NeonTerminalDots = styled.div`
+  display: flex;
+  gap: 6px;
+  
+  span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+`;
+
+const NeonTerminalTitle = styled.span`
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+`;
+
+const NeonTerminalBody = styled.div`
+  padding: 25px;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.9rem;
+  line-height: 1.8;
+`;
+
+const NeonCodeLine = styled.div`
+  padding-left: ${p => p.indent ? '25px' : '0'};
+  color: #FFFFFF;
+`;
+
+const NeonCodeComment = styled.span`
+  color: rgba(255, 255, 255, 0.3);
+  font-style: italic;
+`;
+
+const NeonCodeKey = styled.span`
+  color: #ff00ff;
+`;
+
+const NeonCodeString = styled.span`
+  color: #00ff88;
+`;
+
+const NeonCodeBool = styled.span`
+  color: #00ffff;
+`;
+
+const NeonCursor = styled.span`
+  display: inline-block;
+  width: 8px;
+  height: 1em;
+  background: #00ffff;
+  margin-left: 5px;
+  animation: ${codeBlink} 1s infinite;
 `;

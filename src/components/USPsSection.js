@@ -45,6 +45,10 @@ const USPsSection = () => {
     return <EditorialUSPs />;
   }
 
+  if (currentTheme === 'neon') {
+    return <NeonUSPs />;
+  }
+
   return <ContemporaryUSPs />;
 };
 
@@ -1039,4 +1043,276 @@ const LuxeDomainExample = styled.div`
   padding: 12px 25px;
   border: 1px dashed #E5E5E5;
   display: inline-block;
+`;
+
+// ============================================
+// NEON USPs
+// ============================================
+
+const terminalBlink = keyframes`
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+`;
+
+const typeIn = keyframes`
+  from { width: 0; }
+  to { width: 100%; }
+`;
+
+const NeonUSPs = () => {
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+  
+  return (
+    <NeonUSPsSection id="usps">
+      <NeonUSPsGrid />
+      <NeonUSPsContainer>
+        {/* Header */}
+        <NeonUSPsHeader>
+          <NeonUSPsBadge>// WARUM S&I //</NeonUSPsBadge>
+          <NeonUSPsTitle>10 REASONS TO CHOOSE US</NeonUSPsTitle>
+          <NeonUSPsSubtitle>
+            Premium-Features für Paare, die keine Kompromisse eingehen. Jede Website ist ein Unikat.
+          </NeonUSPsSubtitle>
+        </NeonUSPsHeader>
+        
+        {/* Terminal Style Feature Grid */}
+        <NeonTerminalWindow>
+          <NeonTerminalHeader>
+            <NeonTerminalDots>
+              <span style={{background: '#ff5f56'}} />
+              <span style={{background: '#ffbd2e'}} />
+              <span style={{background: '#27ca40'}} />
+            </NeonTerminalDots>
+            <NeonTerminalTitle>usp_features.exe — 10 modules loaded</NeonTerminalTitle>
+          </NeonTerminalHeader>
+          
+          <NeonTerminalBody>
+            <NeonUSPsGridLayout>
+              {usps.map((usp, index) => (
+                <NeonUSPCard 
+                  key={usp.num}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  $isHovered={hoveredIndex === index}
+                  $delay={index * 0.05}
+                >
+                  <NeonUSPCardHeader>
+                    <NeonUSPNum>//MODULE_{usp.num}</NeonUSPNum>
+                  </NeonUSPCardHeader>
+                  <NeonUSPTitle $color={usp.color}>{usp.title}</NeonUSPTitle>
+                  <NeonUSPText>{usp.text}</NeonUSPText>
+                  <NeonUSPButton $color={usp.color}>{usp.subtitle}</NeonUSPButton>
+                </NeonUSPCard>
+              ))}
+            </NeonUSPsGridLayout>
+          </NeonTerminalBody>
+        </NeonTerminalWindow>
+        
+        {/* Domain Highlight */}
+        <NeonDomainBox>
+          <NeonDomainIcon>🌐</NeonDomainIcon>
+          <NeonDomainTitle>Eure eigene Domain – inklusive</NeonDomainTitle>
+          <NeonDomainExample>www.sarah-und-thomas.de</NeonDomainExample>
+          <NeonDomainText>Keine kryptischen URLs. Eure Hochzeitswebsite, eure Domain. Setup und erstes Jahr inklusive.</NeonDomainText>
+        </NeonDomainBox>
+      </NeonUSPsContainer>
+    </NeonUSPsSection>
+  );
+};
+
+const NeonUSPsSection = styled.section`
+  position: relative;
+  padding: 120px 5%;
+  background: #0a0a0f;
+  overflow: hidden;
+`;
+
+const NeonUSPsGrid = styled.div`
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(0, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+`;
+
+const NeonUSPsContainer = styled.div`
+  position: relative;
+  z-index: 10;
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+const NeonUSPsHeader = styled.div`
+  text-align: center;
+  margin-bottom: 60px;
+`;
+
+const NeonUSPsBadge = styled.div`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: #ff00ff;
+  margin-bottom: 20px;
+`;
+
+const NeonUSPsTitle = styled.h2`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  color: #00ffff;
+  text-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+  margin-bottom: 20px;
+`;
+
+const NeonUSPsSubtitle = styled.p`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 600px;
+  margin: 0 auto;
+`;
+
+const NeonTerminalWindow = styled.div`
+  background: rgba(10, 10, 15, 0.8);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.1);
+`;
+
+const NeonTerminalHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+`;
+
+const NeonTerminalDots = styled.div`
+  display: flex;
+  gap: 6px;
+  
+  span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+`;
+
+const NeonTerminalTitle = styled.span`
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+`;
+
+const NeonTerminalBody = styled.div`
+  padding: 30px;
+`;
+
+const NeonUSPsGridLayout = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const NeonUSPCard = styled.div`
+  padding: 25px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  animation: ${fadeInUp} 0.6s ease forwards;
+  animation-delay: ${p => p.$delay}s;
+  opacity: 0;
+  
+  &:hover {
+    background: rgba(0, 255, 255, 0.05);
+    border-color: rgba(0, 255, 255, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 255, 255, 0.1);
+  }
+`;
+
+const NeonUSPCardHeader = styled.div`
+  margin-bottom: 15px;
+`;
+
+const NeonUSPNum = styled.span`
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.7rem;
+  color: #00ff88;
+`;
+
+const NeonUSPTitle = styled.h3`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: ${p => p.$color || '#00ffff'};
+  margin-bottom: 10px;
+`;
+
+const NeonUSPText = styled.p`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+  margin-bottom: 15px;
+`;
+
+const NeonUSPButton = styled.span`
+  display: inline-block;
+  padding: 6px 12px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: ${p => p.$color || '#00ffff'};
+  border: 1px solid ${p => p.$color || '#00ffff'};
+  cursor: default;
+`;
+
+const NeonDomainBox = styled.div`
+  margin-top: 60px;
+  padding: 50px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+`;
+
+const NeonDomainIcon = styled.div`
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+`;
+
+const NeonDomainTitle = styled.h3`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #00ffff;
+  margin-bottom: 20px;
+`;
+
+const NeonDomainExample = styled.div`
+  display: inline-block;
+  padding: 12px 25px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  color: #FFFFFF;
+  background: rgba(0, 255, 255, 0.1);
+  border: 1px dashed rgba(0, 255, 255, 0.3);
+  margin-bottom: 20px;
+`;
+
+const NeonDomainText = styled.p`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 500px;
+  margin: 0 auto;
 `;

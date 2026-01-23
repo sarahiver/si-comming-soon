@@ -3,10 +3,6 @@ import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { getWaitlist, updateWaitlistEntry, deleteWaitlistEntry, supabase } from '../config/supabase';
 
-// Admin Credentials (in Production besser als Environment Variables)
-const ADMIN_EMAIL = 'wedding@sarahiver.de';
-const ADMIN_PASSWORD = 'LkwWalter#1985!';
-
 const AdminDashboard = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [email, setEmail] = useState('');
@@ -15,13 +11,19 @@ const AdminDashboard = () => {
   const [waitlist, setWaitlist] = useState([]);
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState({ total: 0, contacted: 0, today: 0, open: 0 });
-  const [activeFilter, setActiveFilter] = useState('total'); // 'total', 'today', 'contacted', 'open'
+  const [activeFilter, setActiveFilter] = useState('total');
+  
+  // Store credentials for API calls
+  const [adminCredentials, setAdminCredentials] = useState({ email: '', password: '' });
 
   // Check if already logged in
   useEffect(() => {
     const auth = sessionStorage.getItem('si_admin_auth');
-    if (auth === 'true') {
+    const savedEmail = sessionStorage.getItem('si_admin_email');
+    const savedPassword = sessionStorage.getItem('si_admin_password');
+    if (auth === 'true' && savedEmail && savedPassword) {
       setIsAuthenticated(true);
+      setAdminCredentials({ email: savedEmail, password: savedPassword });
     }
   }, []);
 
@@ -32,43 +34,97 @@ const AdminDashboard = () => {
     }
   }, [isAuthenticated]);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-      setIsAuthenticated(true);
-      sessionStorage.setItem('si_admin_auth', 'true');
-      setLoginError('');
-    } else {
-      setLoginError('Ungültige Anmeldedaten');
+    setLoading(true);
+    
+    try {
+      // Verify credentials via API
+      const response = await fetch('/api/admin-waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          adminEmail: email,
+          adminPassword: password,
+          action: 'getAll'
+        })
+      });
+      
+      if (response.ok) {
+        setIsAuthenticated(true);
+        setAdminCredentials({ email, password });
+        sessionStorage.setItem('si_admin_auth', 'true');
+        sessionStorage.setItem('si_admin_email', email);
+        sessionStorage.setItem('si_admin_password', password);
+        setLoginError('');
+      } else {
+        setLoginError('Ungültige Anmeldedaten');
+      }
+    } catch (err) {
+      setLoginError('Verbindungsfehler');
     }
+    setLoading(false);
   };
 
   const handleLogout = () => {
     setIsAuthenticated(false);
+    setAdminCredentials({ email: '', password: '' });
     sessionStorage.removeItem('si_admin_auth');
+    sessionStorage.removeItem('si_admin_email');
+    sessionStorage.removeItem('si_admin_password');
   };
 
   const loadWaitlist = async () => {
     setLoading(true);
+    
+    // Try API first, fallback to direct Supabase
+    try {
+      const response = await fetch('/api/admin-waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          adminEmail: adminCredentials.email || sessionStorage.getItem('si_admin_email'),
+          adminPassword: adminCredentials.password || sessionStorage.getItem('si_admin_password'),
+          action: 'getAll'
+        })
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          setWaitlist(result.data || []);
+          calculateStats(result.data || []);
+          setLoading(false);
+          return;
+        }
+      }
+    } catch (err) {
+      console.warn('API fallback to direct Supabase');
+    }
+    
+    // Fallback to direct Supabase (wenn RLS nicht aktiv)
     const result = await getWaitlist();
     if (result.success) {
       setWaitlist(result.data);
-      
-      // Calculate stats
-      const today = new Date().toDateString();
-      const todayCount = result.data.filter(
-        entry => new Date(entry.created_at).toDateString() === today
-      ).length;
-      const contactedCount = result.data.filter(entry => entry.contacted).length;
-      
-      setStats({
-        total: result.data.length,
-        contacted: contactedCount,
-        today: todayCount,
-        open: result.data.length - contactedCount,
-      });
+      calculateStats(result.data);
     }
     setLoading(false);
+  };
+  
+  const calculateStats = (data) => {
+    const today = new Date().toDateString();
+    const todayCount = data.filter(
+      entry => new Date(entry.created_at).toDateString() === today
+    ).length;
+    const contactedCount = data.filter(entry => entry.contacted).length;
+    const openCount = data.filter(entry => !entry.contacted).length;
+    
+    setStats({
+      total: data.length,
+      today: todayCount,
+      contacted: contactedCount,
+      open: openCount
+    });
   };
 
   // Filter die Waitlist basierend auf aktivem Filter

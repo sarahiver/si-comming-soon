@@ -115,5 +115,5 @@ export const themes = {
   },
 };
 
-export const themeOrder = ['editorial', 'gold', 'botanical', 'contemporary', 'luxe', 'neon'];
+export const themeOrder = ['video', 'editorial', 'botanical', 'contemporary', 'luxe', 'neon'];
 export const isDarkTheme = (id) => ['gold', 'luxe', 'neon'].includes(id);

@@ -103,9 +103,29 @@ export const themes = {
       border: '#E5E5E5',
     },
   },
+  neon: {
+    id: 'neon',
+    name: 'Neon',
+    fonts: {
+      heading: "'Space Grotesk', sans-serif",
+      body: "'Space Grotesk', sans-serif",
+    },
+    colors: {
+      bg: '#0a0a0f',
+      bgAlt: '#0f0a15',
+      bgDark: '#050508',
+      text: '#FFFFFF',
+      textLight: 'rgba(255,255,255,0.6)',
+      textOnDark: '#FFFFFF',
+      accent: '#00ffff',
+      accent2: '#ff00ff',
+      accent3: '#00ff88',
+      border: 'rgba(0, 255, 255, 0.3)',
+    },
+  },
 };
 
-export const themeOrder = ['video', 'contemporary', 'editorial', 'botanical', 'luxe'];
+export const themeOrder = ['video', 'editorial', 'botanical', 'contemporary', 'luxe', 'neon'];
 
 export const ThemeProvider = ({ children }) => {
   const [currentTheme, setCurrentThemeState] = useState('video');

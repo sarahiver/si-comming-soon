@@ -340,6 +340,10 @@ const FooterSection = styled.footer`
   ${p => p.$theme === 'luxe' && css`
     background: #1A1A1A;
   `}
+  
+  ${p => p.$theme === 'neon' && css`
+    background: #05050a;
+  `}
 `;
 
 const Container = styled.div`
@@ -407,6 +411,12 @@ const SocialLink = styled.a`
     &:hover { color: #B8960B; }
   `}
   
+  ${p => p.$theme === 'neon' && css`
+    font-family: 'Space Grotesk', sans-serif;
+    color: rgba(255, 255, 255, 0.5);
+    &:hover { color: #00ffff; text-shadow: 0 0 10px rgba(0, 255, 255, 0.5); }
+  `}
+  
   span {
     @media (max-width: 400px) { display: none; }
   }
@@ -442,6 +452,11 @@ const Copyright = styled.p`
   
   ${p => p.$theme === 'luxe' && css`
     font-family: 'Montserrat', sans-serif;
+    color: rgba(255, 255, 255, 0.4);
+  `}
+  
+  ${p => p.$theme === 'neon' && css`
+    font-family: 'Space Grotesk', sans-serif;
     color: rgba(255, 255, 255, 0.4);
   `}
 `;
@@ -489,6 +504,12 @@ const LegalLink = styled.button`
     font-family: 'Montserrat', sans-serif;
     color: rgba(255, 255, 255, 0.3);
     &:hover { color: #B8960B; }
+  `}
+  
+  ${p => p.$theme === 'neon' && css`
+    font-family: 'Space Grotesk', sans-serif;
+    color: rgba(255, 255, 255, 0.3);
+    &:hover { color: #ff00ff; text-shadow: 0 0 10px rgba(255, 0, 255, 0.5); }
   `}
 `;
 

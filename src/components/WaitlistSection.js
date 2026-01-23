@@ -108,6 +108,10 @@ const WaitlistSection = () => {
     return <EditorialWaitlist {...commonProps} />;
   }
 
+  if (currentTheme === 'neon') {
+    return <NeonWaitlist {...commonProps} />;
+  }
+
   return <ContemporaryWaitlist {...commonProps} />;
 };
 
@@ -126,7 +130,7 @@ const PrivacyModal = ({ show, onClose, $theme }) => {
         </ModalHeader>
         <ModalBody $theme={$theme}>
           <h3>1. Verantwortlicher</h3>
-          <p>Sarah & Iver GbR<br />
+          <p>Sarah & Iver Bohnes<br />
           E-Mail: wedding@sarahiver.de</p>
           
           <h3>2. Erhobene Daten</h3>
@@ -1474,5 +1478,338 @@ const LuxePrivacyLink = styled.button`
   
   &:hover {
     opacity: 0.8;
+  }
+`;
+
+// ============================================
+// NEON WAITLIST
+// ============================================
+
+const glowPulse = keyframes`
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(0, 255, 255, 0.5); }
+`;
+
+const NeonWaitlist = ({ email, setEmail, status, loading, handleSubmit, privacyAccepted, setPrivacyAccepted, showPrivacyModal, setShowPrivacyModal }) => (
+  <NeonWaitlistSection id="waitlist">
+    <NeonWaitlistGrid />
+    
+    {/* Geometric decorations */}
+    <NeonWaitlistDecor>
+      <NeonDecorLine style={{ top: '20%', left: '5%', width: '100px' }} />
+      <NeonDecorLine style={{ bottom: '30%', right: '5%', width: '150px' }} $vertical />
+      <NeonDecorCorner style={{ top: '10%', right: '10%' }} />
+      <NeonDecorCorner style={{ bottom: '15%', left: '8%' }} $flip />
+    </NeonWaitlistDecor>
+    
+    <NeonWaitlistContainer>
+      <NeonWaitlistContent>
+        <NeonWaitlistBadge>// JOIN_WAITLIST</NeonWaitlistBadge>
+        <NeonWaitlistTitle>
+          BE <NeonWaitlistHighlight>FIRST</NeonWaitlistHighlight> IN LINE
+        </NeonWaitlistTitle>
+        <NeonWaitlistSubtitle>
+          Sichere dir jetzt deinen Platz auf unserer exklusiven Warteliste 
+          und erhalte als Erster Zugang zu unseren einzigartigen Hochzeitswebsites.
+        </NeonWaitlistSubtitle>
+        
+        <NeonWaitlistForm onSubmit={handleSubmit}>
+          <NeonInputWrapper>
+            <NeonInputIcon>@</NeonInputIcon>
+            <NeonInput
+              type="email"
+              placeholder="deine@email.de"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
+            />
+          </NeonInputWrapper>
+          
+          <NeonCheckboxWrapper>
+            <NeonCheckbox
+              type="checkbox"
+              id="neon-privacy"
+              checked={privacyAccepted}
+              onChange={(e) => setPrivacyAccepted(e.target.checked)}
+            />
+            <NeonCheckboxLabel htmlFor="neon-privacy">
+              Ich akzeptiere die{' '}
+              <NeonPrivacyLink type="button" onClick={() => setShowPrivacyModal(true)}>
+                Datenschutzerklärung
+              </NeonPrivacyLink>
+            </NeonCheckboxLabel>
+          </NeonCheckboxWrapper>
+          
+          <NeonSubmitButton type="submit" disabled={loading}>
+            {loading ? (
+              <>PROCESSING<NeonLoadingDots>...</NeonLoadingDots></>
+            ) : (
+              <>INITIALIZE<NeonButtonArrow>→</NeonButtonArrow></>
+            )}
+          </NeonSubmitButton>
+          
+          {status.message && (
+            <NeonStatusMessage $type={status.type}>
+              {status.type === 'success' ? '✓' : '!'} {status.message}
+            </NeonStatusMessage>
+          )}
+        </NeonWaitlistForm>
+        
+        <NeonWaitlistBonus>
+          <NeonBonusIcon>🎁</NeonBonusIcon>
+          <NeonBonusText>
+            <strong>EARLY_ACCESS_BONUS:</strong> 15% Launch-Rabatt für alle Wartelisten-Member
+          </NeonBonusText>
+        </NeonWaitlistBonus>
+      </NeonWaitlistContent>
+    </NeonWaitlistContainer>
+    
+    <PrivacyModal 
+      show={showPrivacyModal} 
+      onClose={() => setShowPrivacyModal(false)} 
+      $theme="neon" 
+    />
+  </NeonWaitlistSection>
+);
+
+const NeonWaitlistSection = styled.section`
+  position: relative;
+  padding: 120px 5%;
+  background: linear-gradient(180deg, #0a0a0f 0%, #0f0a18 50%, #0a0a0f 100%);
+  overflow: hidden;
+`;
+
+const NeonWaitlistGrid = styled.div`
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 0, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 0, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+`;
+
+const NeonWaitlistDecor = styled.div`
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+`;
+
+const NeonDecorLine = styled.div`
+  position: absolute;
+  height: ${p => p.$vertical ? '100px' : '2px'};
+  width: ${p => p.$vertical ? '2px' : '100px'};
+  background: linear-gradient(${p => p.$vertical ? '180deg' : '90deg'}, #00ffff, transparent);
+  opacity: 0.3;
+`;
+
+const NeonDecorCorner = styled.div`
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(0, 255, 255, 0.2);
+  border-right: none;
+  border-bottom: none;
+  transform: ${p => p.$flip ? 'rotate(180deg)' : 'none'};
+`;
+
+const NeonWaitlistContainer = styled.div`
+  position: relative;
+  z-index: 10;
+  max-width: 600px;
+  margin: 0 auto;
+`;
+
+const NeonWaitlistContent = styled.div`
+  text-align: center;
+  animation: ${fadeInUp} 0.8s ease;
+`;
+
+const NeonWaitlistBadge = styled.div`
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: #00ff88;
+  margin-bottom: 20px;
+`;
+
+const NeonWaitlistTitle = styled.h2`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 20px;
+`;
+
+const NeonWaitlistHighlight = styled.span`
+  color: #00ffff;
+  text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+`;
+
+const NeonWaitlistSubtitle = styled.p`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.7;
+  margin-bottom: 40px;
+`;
+
+const NeonWaitlistForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+`;
+
+const NeonInputWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+`;
+
+const NeonInputIcon = styled.span`
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  color: #00ffff;
+`;
+
+const NeonInput = styled.input`
+  width: 100%;
+  padding: 18px 20px 18px 50px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(0, 255, 255, 0.3);
+  color: #FFFFFF;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+  
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+  
+  &:focus {
+    border-color: #00ffff;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+  }
+`;
+
+const NeonCheckboxWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+const NeonCheckbox = styled.input`
+  width: 18px;
+  height: 18px;
+  accent-color: #00ffff;
+  cursor: pointer;
+`;
+
+const NeonCheckboxLabel = styled.label`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+`;
+
+const NeonPrivacyLink = styled.button`
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
+  color: #00ffff;
+  text-decoration: underline;
+  cursor: pointer;
+  
+  &:hover {
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  }
+`;
+
+const NeonSubmitButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 50px;
+  background: transparent;
+  border: 2px solid #ff00ff;
+  color: #ff00ff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover:not(:disabled) {
+    background: rgba(255, 0, 255, 0.1);
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+const NeonLoadingDots = styled.span`
+  animation: ${keyframes`
+    0%, 20% { content: '.'; }
+    40% { content: '..'; }
+    60%, 100% { content: '...'; }
+  `} 1s infinite;
+`;
+
+const NeonButtonArrow = styled.span`
+  transition: transform 0.3s ease;
+  
+  ${NeonSubmitButton}:hover:not(:disabled) & {
+    transform: translateX(5px);
+  }
+`;
+
+const NeonStatusMessage = styled.div`
+  padding: 15px 25px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  background: ${p => p.$type === 'success' 
+    ? 'rgba(0, 255, 136, 0.1)' 
+    : 'rgba(255, 0, 100, 0.1)'};
+  border: 1px solid ${p => p.$type === 'success' 
+    ? 'rgba(0, 255, 136, 0.3)' 
+    : 'rgba(255, 0, 100, 0.3)'};
+  color: ${p => p.$type === 'success' ? '#00ff88' : '#ff0064'};
+`;
+
+const NeonWaitlistBonus = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 40px;
+  padding: 20px;
+  background: rgba(0, 255, 255, 0.05);
+  border: 1px dashed rgba(0, 255, 255, 0.2);
+`;
+
+const NeonBonusIcon = styled.span`
+  font-size: 1.5rem;
+`;
+
+const NeonBonusText = styled.span`
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  
+  strong {
+    color: #00ffff;
   }
 `;

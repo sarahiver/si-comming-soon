@@ -127,6 +127,7 @@ const MobileHint = styled.button`
     if (p.$theme === 'video') return "'Montserrat', sans-serif";
     if (p.$theme === 'botanical') return "'Lato', sans-serif";
     if (p.$theme === 'luxe') return "'Montserrat', sans-serif";
+    if (p.$theme === 'neon') return "'Space Grotesk', sans-serif";
     return "'Space Grotesk', sans-serif";
   }};
   
@@ -136,6 +137,7 @@ const MobileHint = styled.button`
     if (p.$theme === 'video') return p.$scrolled ? '#1A1A1A' : '#FFFFFF';
     if (p.$theme === 'botanical') return '#4A7C59';
     if (p.$theme === 'luxe') return p.$scrolled ? '#1A1A1A' : '#FFFFFF';
+    if (p.$theme === 'neon') return '#00ffff';
     return '#FF6B6B';
   }};
   
@@ -159,6 +161,7 @@ const HintText = styled.span`
     if (p.$theme === 'video') return "'Montserrat', sans-serif";
     if (p.$theme === 'botanical') return "'Lato', sans-serif";
     if (p.$theme === 'luxe') return "'Montserrat', sans-serif";
+    if (p.$theme === 'neon') return "'Space Grotesk', sans-serif";
     return "'Space Grotesk', sans-serif";
   }};
   
@@ -168,6 +171,7 @@ const HintText = styled.span`
     if (p.$theme === 'video') return p.$scrolled ? '#1A1A1A' : '#FFFFFF';
     if (p.$theme === 'botanical') return '#2C3E2D';
     if (p.$theme === 'luxe') return p.$scrolled ? '#1A1A1A' : '#FFFFFF';
+    if (p.$theme === 'neon') return p.$scrolled ? '#0a0a0f' : '#FFFFFF';
     return '#0D0D0D';
   }};
 `;
@@ -183,6 +187,7 @@ const HintArrow = styled.span`
     if (p.$theme === 'video') return p.$scrolled ? '#1A1A1A' : '#C9A962';
     if (p.$theme === 'botanical') return '#4A7C59';
     if (p.$theme === 'luxe') return p.$scrolled ? '#1A1A1A' : '#B8960B';
+    if (p.$theme === 'neon') return '#00ffff';
     return '#FF6B6B';
   }};
 `;
@@ -296,6 +301,19 @@ const ThemeButton = styled.button`
     
     &:hover {
       background: #FFFFFF;
+    }
+  `}
+  
+  ${p => p.$theme === 'neon' && css`
+    font-family: 'Space Grotesk', sans-serif;
+    background: transparent;
+    border: 2px solid #00ffff;
+    color: #00ffff;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+    
+    &:hover {
+      background: rgba(0, 255, 255, 0.1);
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
     }
   `}
   

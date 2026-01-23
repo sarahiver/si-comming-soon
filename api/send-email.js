@@ -1,9 +1,20 @@
 // Vercel Serverless Function für Resend E-Mail
 export default async function handler(req, res) {
-  // CORS Headers
+  // Erlaubte Origins
+  const allowedOrigins = [
+    'https://siwedding.de',
+    'https://www.siwedding.de',
+    'https://si-comming-soon.vercel.app',
+    'http://localhost:3000' // Für lokale Entwicklung
+  ];
+  
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  
   res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   // Handle preflight
