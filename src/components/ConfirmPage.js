@@ -1,7 +1,6 @@
 // Confirm Page - Double Opt-In Bestätigung (Editorial Style)
 import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { confirmWaitlistEntry } from '../config/supabase';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -21,32 +20,43 @@ const ConfirmPage = () => {
 
     document.title = 'Bestätigung – S&I.';
 
-    // Get token from URL
+    // Get email from URL
     const params = new URLSearchParams(window.location.search);
-    const token = params.get('token');
     const email = params.get('email');
 
-    if (!token && !email) {
+    if (!email) {
       setStatus('error');
       setMessage('Ungültiger Bestätigungslink.');
       return;
     }
 
-    // Confirm in Supabase
+    // Confirm via Brevo API
     const confirm = async () => {
-      const result = await confirmWaitlistEntry(token, email);
-      
-      if (result.success) {
-        if (result.alreadyConfirmed) {
-          setStatus('already');
-          setMessage('Du hast deine E-Mail bereits bestätigt.');
+      try {
+        const response = await fetch('/api/brevo-confirm', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+          if (data.alreadyConfirmed) {
+            setStatus('already');
+            setMessage('Du hast deine E-Mail bereits bestätigt.');
+          } else {
+            setStatus('success');
+            setMessage('Deine E-Mail wurde erfolgreich bestätigt!');
+          }
         } else {
-          setStatus('success');
-          setMessage('Deine E-Mail wurde erfolgreich bestätigt!');
+          setStatus('error');
+          setMessage(data.error || 'Ein Fehler ist aufgetreten.');
         }
-      } else {
+      } catch (error) {
+        console.error('Confirm error:', error);
         setStatus('error');
-        setMessage(result.error || 'Ein Fehler ist aufgetreten.');
+        setMessage('Ein Fehler ist aufgetreten.');
       }
     };
 
@@ -138,7 +148,7 @@ const ConfirmPage = () => {
         {/* Footer */}
         <Footer>
           <FooterLink href="mailto:wedding@sarahiver.de">wedding@sarahiver.de</FooterLink>
-          <FooterCopy>© 2025 S&I.</FooterCopy>
+          <FooterCopy>© 2026 S&I.</FooterCopy>
         </Footer>
       </Container>
     </PageWrapper>

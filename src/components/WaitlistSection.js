@@ -1,8 +1,7 @@
 // Waitlist Section - Multi-Theme (Contemporary, Editorial & Video)
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import styled, { keyframes, css } from 'styled-components';
 import { useTheme } from '../context/ThemeContext';
-import { addToWaitlist } from '../config/supabase';
 
 const fadeInUp = keyframes`
   from { opacity: 0; transform: translateY(30px); }
@@ -28,7 +27,6 @@ const WaitlistSection = () => {
     
     // Honeypot Check - wenn ausgefüllt, ist es ein Bot
     if (website) {
-      // Fake Success für Bots (sie denken es hat geklappt)
       console.log('Honeypot triggered - bot detected');
       setStatus({ type: 'success', message: '🎉 Perfekt! Du bist auf der Warteliste.' });
       setEmail('');
@@ -56,49 +54,35 @@ const WaitlistSection = () => {
     
     setLoading(true);
     try {
-      // 1. In Supabase speichern (noch nicht bestätigt)
-      const result = await addToWaitlist(email, currentTheme);
+      // Brevo API - Kontakt erstellen + Opt-In Mail senden
+      const response = await fetch('/api/brevo-signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          themePreference: currentTheme,
+        }),
+      });
       
-      if (result.success) {
-        // 2. Bestätigungsmail senden via API Route
-        const confirmLink = `https://siwedding.de/confirm?email=${encodeURIComponent(email)}&token=${result.data?.[0]?.id || 'pending'}`;
-        
-        try {
-          const response = await fetch('/api/send-email', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              to: email,
-              confirmLink: confirmLink,
-            }),
-          });
-          
-          if (response.ok) {
-            setStatus({ 
-              type: 'success', 
-              message: '📧 Fast geschafft! Bitte bestätige deine E-Mail-Adresse über den Link in deinem Postfach.' 
-            });
-          } else {
-            const errorData = await response.json();
-            console.warn('Email API error:', errorData);
-            throw new Error(errorData.error || 'E-Mail konnte nicht gesendet werden');
-          }
-        } catch (emailError) {
-          console.warn('Email error:', emailError);
-          // Fallback
-          setStatus({ 
-            type: 'success', 
-            message: '🎉 Perfekt! Du bist auf der Warteliste. Wir melden uns bei dir!' 
-          });
-        }
+      const data = await response.json();
+      
+      if (response.ok && data.success) {
+        setStatus({ 
+          type: 'success', 
+          message: '📧 Fast geschafft! Bitte bestätige deine E-Mail-Adresse über den Link in deinem Postfach.' 
+        });
         setEmail('');
         setPrivacyAccepted(false);
       } else {
-        setStatus({ type: 'error', message: result.error || 'Etwas ist schiefgelaufen.' });
+        setStatus({ 
+          type: 'error', 
+          message: data.error || 'Etwas ist schiefgelaufen. Versuch es später noch einmal.' 
+        });
       }
     } catch (err) {
+      console.error('Waitlist error:', err);
       setStatus({ type: 'error', message: 'Etwas ist schiefgelaufen. Versuch es später noch einmal.' });
     }
     setLoading(false);

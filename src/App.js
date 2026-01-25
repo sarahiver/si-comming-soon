@@ -11,7 +11,6 @@ import USPsSection from './components/USPsSection';
 import AboutSection from './components/AboutSection';
 import WaitlistSection from './components/WaitlistSection';
 import Footer from './components/Footer';
-import AdminDashboard from './components/AdminDashboard';
 import ConfirmPage from './components/ConfirmPage';
 
 const GlobalStyles = createGlobalStyle`
@@ -79,26 +78,6 @@ function MainPage() {
   );
 }
 
-function AdminPage() {
-  useEffect(() => {
-    // Load fonts for admin
-    const link = document.createElement('link');
-    link.href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@700&family=Space+Grotesk:wght@400;500;600;700&display=swap';
-    link.rel = 'stylesheet';
-    document.head.appendChild(link);
-    
-    document.title = 'S&I. wedding — Admin Dashboard';
-    
-    return () => {
-      if (link.parentNode) {
-        document.head.removeChild(link);
-      }
-    };
-  }, []);
-
-  return <AdminDashboard />;
-}
-
 function App() {
   return (
     <ErrorBoundary>
@@ -110,7 +89,6 @@ function App() {
               <MainPage />
             </ThemeProvider>
           } />
-          <Route path="/admin" element={<AdminPage />} />
           <Route path="/confirm" element={<ConfirmPage />} />
         </Routes>
         <Analytics />

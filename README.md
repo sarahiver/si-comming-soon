@@ -1,74 +1,73 @@
-# S&I. Weddings — Coming Soon
+# S&I. Wedding - Coming Soon
 
-Premium Coming Soon Seite im Contemporary Design.
+Premium Wedding Website Service - Coming Soon Page
 
 ## Features
 
-- **Hero**: Split-Layout mit animierten geometrischen Elementen
-- **Countdown**: "TIME IS TICKING" mit horizontalem Layout → 01.10.2026
-- **USPs**: 10 nummerierte Feature-Karten mit Hover-Animationen
-- **About**: "WE ARE SARAH & IVER" mit Werte-Karten
-- **Waitlist**: Großer CTA mit Supabase-Integration
-- **Footer**: Social Links (Instagram, Pinterest) + Impressum Modal
+- ✅ 6 Theme-Previews (Video, Editorial, Contemporary, Botanical, Luxe, Gold)
+- ✅ Waitlist mit Double Opt-In (Brevo)
+- ✅ Bot-Schutz (Honeypot + Timing)
+- ✅ Responsive Design
+- ✅ Vercel Analytics
 
-## Installation
+## Tech Stack
+
+- React 19
+- Styled Components
+- Brevo (E-Mail + Kontakte)
+- Vercel Hosting
+
+## Setup
+
+### 1. Environment Variable (Vercel)
+
+```
+BREVO_API_KEY=xkeysib-your-api-key
+```
+
+### 2. Brevo Setup
+
+1. Account erstellen auf brevo.com
+2. Domain verifizieren (DNS Records)
+3. Kontakt-Attribute erstellen:
+   - `WAITLIST_STATUS` (Text)
+   - `THEME_PREFERENCE` (Text)
+   - `SIGNUP_DATE` (Date)
+   - `CONFIRMED_DATE` (Date)
+   - `CONFIRM_TOKEN` (Text)
+
+### 3. Deploy
 
 ```bash
 npm install
-npm start
+npm run build
+vercel --prod
 ```
 
-## Supabase Setup
+## Kontakt-Verwaltung
 
-```sql
-CREATE TABLE waitlist (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  theme_preference VARCHAR(50) DEFAULT 'contemporary',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+Alle Waitlist-Kontakte werden in Brevo verwaltet:
+- Dashboard: app.brevo.com → Kontakte
+- Filter nach `WAITLIST_STATUS = confirmed` für bestätigte Kontakte
+- Launch-Mail direkt über Brevo Kampagnen senden
 
-ALTER TABLE waitlist ENABLE ROW LEVEL SECURITY;
+## Struktur
 
-CREATE POLICY "Allow anonymous inserts" ON waitlist
-  FOR INSERT WITH CHECK (true);
+```
+coming-soon/
+├── api/
+│   ├── brevo-signup.js    # Waitlist Anmeldung
+│   └── brevo-confirm.js   # Double Opt-In Bestätigung
+├── src/
+│   ├── components/
+│   │   ├── HeroSection.js
+│   │   ├── WaitlistSection.js
+│   │   ├── ConfirmPage.js
+│   │   └── ...
+│   ├── context/
+│   │   └── ThemeContext.js
+│   └── App.js
+└── public/
 ```
 
-## Environment Variables
-
-```env
-REACT_APP_SUPABASE_URL=https://your-project.supabase.co
-REACT_APP_SUPABASE_ANON_KEY=your-anon-key
-```
-
-## Vercel Deployment
-
-1. Push zu GitHub
-2. Vercel → Import Repository
-3. Environment Variables hinzufügen
-4. Deploy
-
-### Custom Domain (siwedding.de)
-
-In Vercel: Settings → Domains → siwedding.de hinzufügen
-
-Bei Strato DNS:
-- A Record: @ → 76.76.21.21
-- CNAME: www → cname.vercel-dns.com
-
-## Design
-
-- **Font**: Space Grotesk
-- **Colors**: 
-  - Primary: #0D0D0D (Schwarz)
-  - Accent: #FF6B6B (Coral)
-  - Accent 2: #4ECDC4 (Teal)
-  - Accent 3: #FFE66D (Gelb)
-
-## Social Links
-
-- Instagram: @sarah.iver.wedding
-- Pinterest: S&I.
-
----
-© 2026 S&I. Weddings
+© 2026 S&I. Wedding Websites
