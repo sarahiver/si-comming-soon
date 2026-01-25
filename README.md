@@ -32,8 +32,9 @@ BREVO_API_KEY=xkeysib-your-api-key
 3. Kontakt-Attribute erstellen:
    - `WAITLIST_STATUS` (Text)
    - `THEME_PREFERENCE` (Text)
-   - `SIGNUP_DATE` (Date)
-   - `CONFIRMED_DATE` (Date)
+   - `SIGNUP_DATE` (Text)
+   - `CONFIRMED_DATE` (Text)
+   - `UNSUBSCRIBE_DATE` (Text)
    - `CONFIRM_TOKEN` (Text)
 
 ### 3. Deploy

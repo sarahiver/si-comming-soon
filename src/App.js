@@ -12,6 +12,7 @@ import AboutSection from './components/AboutSection';
 import WaitlistSection from './components/WaitlistSection';
 import Footer from './components/Footer';
 import ConfirmPage from './components/ConfirmPage';
+import UnsubscribePage from './components/UnsubscribePage';
 
 const GlobalStyles = createGlobalStyle`
   *, *::before, *::after {
@@ -90,6 +91,7 @@ function App() {
             </ThemeProvider>
           } />
           <Route path="/confirm" element={<ConfirmPage />} />
+          <Route path="/unsubscribe" element={<UnsubscribePage />} />
         </Routes>
         <Analytics />
       </Router>

@@ -43,9 +43,58 @@ export default async function handler(req, res) {
   const emailLower = email.toLowerCase();
   const confirmToken = Buffer.from(`${emailLower}:${Date.now()}`).toString('base64');
   const confirmLink = `https://siwedding.de/confirm?token=${encodeURIComponent(confirmToken)}&email=${encodeURIComponent(emailLower)}`;
+  const unsubscribeLink = `https://siwedding.de/unsubscribe?email=${encodeURIComponent(emailLower)}`;
 
   try {
-    // 1. Kontakt in Brevo erstellen/updaten
+    // 1. Prüfen ob Kontakt bereits existiert
+    const checkResponse = await fetch(`https://api.brevo.com/v3/contacts/${encodeURIComponent(emailLower)}`, {
+      method: 'GET',
+      headers: {
+        'api-key': BREVO_API_KEY,
+        'Accept': 'application/json',
+      },
+    });
+
+    if (checkResponse.ok) {
+      // Kontakt existiert bereits
+      const existingContact = await checkResponse.json();
+      const status = existingContact.attributes?.WAITLIST_STATUS;
+      
+      if (status === 'confirmed') {
+        return res.status(400).json({ 
+          error: 'Diese E-Mail-Adresse ist bereits auf der Warteliste.' 
+        });
+      } else if (status === 'pending') {
+        // Noch nicht bestätigt - neue Opt-In Mail senden
+        const emailHTML = generateOptInEmail(confirmLink, unsubscribeLink);
+        
+        await fetch('https://api.brevo.com/v3/smtp/email', {
+          method: 'POST',
+          headers: {
+            'api-key': BREVO_API_KEY,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            sender: { name: 'S&I. Wedding', email: 'wedding@sarahiver.de' },
+            replyTo: { email: 'wedding@sarahiver.de' },
+            to: [{ email: emailLower }],
+            subject: 'Bitte bestätige deine Anmeldung – S&I.',
+            htmlContent: emailHTML,
+          }),
+        });
+        
+        return res.status(200).json({ 
+          success: true, 
+          message: 'Neue Bestätigungsmail gesendet' 
+        });
+      } else if (status === 'unsubscribed') {
+        return res.status(400).json({ 
+          error: 'Diese E-Mail-Adresse wurde abgemeldet. Bitte kontaktiere uns, wenn du dich erneut anmelden möchtest.' 
+        });
+      }
+    }
+
+    // 2. Neuen Kontakt in Brevo erstellen
     const contactResponse = await fetch('https://api.brevo.com/v3/contacts', {
       method: 'POST',
       headers: {
@@ -54,7 +103,6 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         email: emailLower,
-        updateEnabled: true,
         attributes: {
           WAITLIST_STATUS: 'pending',
           THEME_PREFERENCE: themePreference || 'video',
@@ -64,14 +112,14 @@ export default async function handler(req, res) {
       }),
     });
 
-    // 409 = Kontakt existiert bereits
-    if (!contactResponse.ok && contactResponse.status !== 409) {
+    if (!contactResponse.ok && contactResponse.status !== 201) {
       const error = await contactResponse.json();
       console.error('Brevo contact error:', error);
+      return res.status(500).json({ error: 'Anmeldung fehlgeschlagen. Bitte versuche es erneut.' });
     }
 
-    // 2. Double Opt-In E-Mail senden
-    const emailHTML = generateOptInEmail(confirmLink);
+    // 3. Double Opt-In E-Mail senden
+    const emailHTML = generateOptInEmail(confirmLink, unsubscribeLink);
     
     const emailResponse = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
@@ -116,7 +164,7 @@ export default async function handler(req, res) {
 }
 
 // E-Mail Template
-function generateOptInEmail(confirmLink) {
+function generateOptInEmail(confirmLink, unsubscribeLink) {
   return `
 <!DOCTYPE html>
 <html lang="de">
@@ -277,7 +325,7 @@ function generateOptInEmail(confirmLink) {
             <td align="center" style="padding-top: 40px;">
               <p style="margin: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 1.6; color: #CCCCCC;">
                 Du hast dich nicht angemeldet?<br>
-                Ignoriere diese E-Mail einfach – du wirst nicht hinzugefügt.
+                <a href="${unsubscribeLink}" style="color: #999999; text-decoration: underline;">Von der Warteliste entfernen</a>
               </p>
             </td>
           </tr>
