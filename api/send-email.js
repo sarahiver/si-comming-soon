@@ -1,4 +1,4 @@
-// Vercel Serverless Function für Resend E-Mail
+// Vercel Serverless Function für Brevo E-Mail
 export default async function handler(req, res) {
   // Erlaubte Origins
   const allowedOrigins = [
@@ -33,7 +33,12 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
-  const RESEND_API_KEY = process.env.RESEND_API_KEY;
+  const BREVO_API_KEY = process.env.BREVO_API_KEY;
+
+  if (!BREVO_API_KEY) {
+    console.error('BREVO_API_KEY not configured');
+    return res.status(500).json({ error: 'E-Mail Service nicht konfiguriert' });
+  }
 
   const emailHTML = `
 <!DOCTYPE html>
@@ -185,7 +190,7 @@ export default async function handler(req, res) {
                 <a href="mailto:wedding@sarahiver.de" style="color: #999999; text-decoration: none;">wedding@sarahiver.de</a>
               </p>
               <p style="margin: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; color: #CCCCCC;">
-                © 2025 S&I.
+                © 2026 S&I.
               </p>
             </td>
           </tr>
@@ -209,18 +214,25 @@ export default async function handler(req, res) {
 `;
 
   try {
-    const response = await fetch('https://api.resend.com/emails', {
+    // Brevo API für transaktionale E-Mails
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${RESEND_API_KEY}`,
+        'api-key': BREVO_API_KEY,
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
       body: JSON.stringify({
-        from: 'S&I. Wedding <hallo@siwedding.de>',
-        reply_to: 'wedding@sarahiver.de',
-        to: [to],
+        sender: {
+          name: 'S&I. Wedding',
+          email: 'wedding@sarahiver.de',
+        },
+        replyTo: {
+          email: 'wedding@sarahiver.de',
+        },
+        to: [{ email: to }],
         subject: 'Bitte bestätige deine Anmeldung – S&I.',
-        html: emailHTML,
+        htmlContent: emailHTML,
       }),
     });
 
@@ -229,10 +241,11 @@ export default async function handler(req, res) {
     if (response.ok) {
       return res.status(200).json({ success: true, data });
     } else {
+      console.error('Brevo error:', data);
       return res.status(400).json({ success: false, error: data });
     }
   } catch (error) {
-    console.error('Resend error:', error);
+    console.error('Brevo error:', error);
     return res.status(500).json({ success: false, error: error.message });
   }
 }
